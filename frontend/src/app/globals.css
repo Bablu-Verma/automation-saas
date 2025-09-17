@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --dark: #06202B;
+  --light: #ffffff;
+  --secondary: #131D4F;
+  --primary: #E6521F;
+}
+
+@theme inline {
+
+  --color-primary: #E6521F;   /* Dark Blue */
+  --color-secondary: #131D4F; /* Orange Accent */
+  --color-dark: #06202B;      /* Black Shade */
+
+  /* Gradient */
+  --color-gradient-brand: linear-gradient(90deg, #131D4F, #E6521F);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+
+
+body {
+  @apply min-h-screen text-[var(--color-foreground)];
+  background: linear-gradient(135deg, #131D4F 0%, #06202B 40%, #E6521F 100%);
+  background-attachment: fixed; /* makes gradient fixed on scroll */
+  background-size: cover;
+  color: var(--secondary);
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: none;
+}
+
+::-moz-selection { /* Code for Firefox */
+  color: #E6521F;
+  background: #fff;
+}
+
+::selection {
+  color: #E6521F;
+  background: #fff;
+}
+
+/* Custom cursor */
+.cursor {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #E6521F; 
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+  z-index: 9999;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: #E6521F;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
