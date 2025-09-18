@@ -2,7 +2,8 @@ import { email_transporter, sender_email } from "../lib/nodemailer";
 
 export const send_password_reset_email = async (resetLink: string, user_email: string) => {
 
-  console.log('email fun run')
+
+  console.log("resetLink==",resetLink)
 
     try {
       const info = await email_transporter.sendMail({
@@ -33,7 +34,7 @@ export const send_password_reset_email = async (resetLink: string, user_email: s
               </div>
             `
         });
-        console.log(`Message sent`, info);
+        // console.log(`Message sent`, info);
     } catch (error) {
         console.log(`Error sending email:`, error);
     }

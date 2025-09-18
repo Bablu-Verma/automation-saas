@@ -10,8 +10,7 @@ import { createHashedPassword } from '../../utils/utils';
 
 const changePassword = async (req: Request, res: Response) => {
     const { password } = req.body;
-
-
+  
     try {
 
         const decoded = await jsonwebtoken_decoded(req, res) as JwtPayload

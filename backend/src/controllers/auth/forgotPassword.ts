@@ -9,8 +9,6 @@ import { emailRegex } from '../../utils/constant';
 const forgotPassword = async (req: Request, res: Response) => {
     const { email } = req.body;
 
-    console.log("email",email)
-
     if (!email || !emailRegex.test(email)) {
         return res.status(400).json({ success: false, msg: 'Please enter a valid email address.' });
     }
@@ -36,11 +34,9 @@ const forgotPassword = async (req: Request, res: Response) => {
         );
 
 
-        let resetURL = `${process.env.FRONTEND_URL}auth/change-password?userid=${token}`
+        let resetURL = `${process.env.CLIENT_URL}/change-password?userid=${token}`
 
          await send_password_reset_email(resetURL, user.email)
-        
-
 
         return res.status(200).json({
             success: true,
