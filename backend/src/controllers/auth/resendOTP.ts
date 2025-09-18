@@ -9,8 +9,6 @@ import { NEW_OTP } from '../../utils/utils';
 
 const resendOtpController = async (req: Request, res: Response) => {
 
-
-
     try {
 
         const decoded = await jsonwebtoken_decoded(req, res) as JwtPayload

@@ -3,22 +3,83 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
 import Link from "next/link"
-import { FcGoogle } from "react-icons/fc"
+import axios from "axios"
+import { login_api } from "@/api"
+import { useDispatch } from "react-redux"
+import { login } from "@/redux-store/slice/userSlice"
+import { setClientCookie } from "@/helpers/client"
+import WithGoogle from "@/components/ContinueWithGoogle"
+import toast from "react-hot-toast"
+import validator from "validator"
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const dispatch = useDispatch();
+
+ const validateInputs = () => {
+  if (!validator.isEmail(email)) {
+    toast.error("Please enter a valid email")
+    return false
+  }
+
+  const passwordOptions = {
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+  }
+
+  if (!validator.isStrongPassword(password, passwordOptions)) {
+    toast.error(
+      "Password must be 8+ chars, include uppercase, lowercase, number & special char"
+    )
+    return false
+  }
+
+  return true
+}
+
+
+
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: integrate with your auth system (Firebase, NextAuth, Supabase etc.)
-    console.log("Login with", { email, password })
+    if (!validateInputs()) return
+    setLoading(true)
+
+    try {
+      const { data } = await axios.post(
+        login_api,
+        { email, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+
+          },
+        }
+      )
+
+      toast.success("Login successful ✅")
+      // console.log("Response:", data)
+
+      dispatch(login({ user: data.user, token: data.token }))
+      setClientCookie("token", data.token, 60 * 24 * 15)
+      setClientCookie("user", JSON.stringify(data.user), 60 * 24 * 15)
+    } catch (err: any) {
+      // console.log("Error response:", err.response) // 👈 debugging ke liye add karo
+      toast.error(err.response?.data?.msg || "Something went wrong ❌")
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleGoogleLogin = () => {
-    // TODO: integrate Google login
-    console.log("Login with Google")
-  }
+
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-gradient-to-b from-primary/10 to-secondary/10 px-6 py-32">
@@ -28,7 +89,6 @@ export default function LoginPage() {
         transition={{ duration: 0.8 }}
         className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-xl"
       >
-        {/* Title */}
         <h1 className="text-3xl md:text-4xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
           Login
         </h1>
@@ -36,7 +96,6 @@ export default function LoginPage() {
           Welcome back! Please login to your account.
         </p>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div>
             <label className="block text-white/80 mb-2">Email</label>
@@ -45,7 +104,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              required
+              
               className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -57,12 +116,11 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              required
+      
               className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
-          {/* Forgot password */}
           <div className="flex justify-end">
             <Link
               href="/forgot-password"
@@ -72,32 +130,24 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
-            className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition"
+            disabled={loading}
+            className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition disabled:opacity-50"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
+
         </form>
 
-        {/* Or divider */}
         <div className="flex items-center my-6">
           <div className="flex-1 h-px bg-white/20"></div>
           <span className="px-4 text-white/50 text-sm">OR</span>
           <div className="flex-1 h-px bg-white/20"></div>
         </div>
 
-        {/* Google login */}
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-3 py-2 rounded-xl bg-white text-gray-800 font-semibold shadow hover:shadow-lg transition"
-        >
-          <FcGoogle className="text-xl" />
-          Login with Google
-        </button>
+        <WithGoogle title="Login" />
 
-        {/* Signup link */}
         <p className="text-center text-white/70 mt-6">
           Don’t have an account?{" "}
           <Link href="/signup" className="text-primary font-semibold hover:underline">

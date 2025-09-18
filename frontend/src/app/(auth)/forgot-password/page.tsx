@@ -3,19 +3,47 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
 import Link from "next/link"
+import toast from "react-hot-toast"
+import axios from "axios"
+import { forgot_password_api } from "@/api"
+import validator from "validator"
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email) {
-      alert("Please enter your email.")
-      return
+  const validateInputs = () => {
+    if (!validator.isEmail(email)) {
+      toast.error("Please enter a valid email")
+      return false
     }
-    // TODO: integrate with backend to send reset link
-    console.log("Reset link sent to:", email)
-    alert("If this email is registered, you will receive a reset link.")
+    return true
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!validateInputs()) return
+
+    setLoading(true)
+    try {
+      const { data } = await axios.post(
+        forgot_password_api,
+        { email },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+
+      console.log("data", data)
+      toast.success(data.msg || "Password reset link sent ✅")
+      setEmail("") // clear input after success
+    } catch (err: any) {
+      toast.error(err.response?.data?.msg || "Something went wrong ❌")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -51,9 +79,10 @@ export default function ForgotPasswordPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition"
+            disabled={loading}
+            className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition disabled:opacity-50"
           >
-            Send Reset Link
+            {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
 

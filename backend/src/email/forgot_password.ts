@@ -1,12 +1,14 @@
 import { email_transporter, sender_email } from "../lib/nodemailer";
 
 export const send_password_reset_email = async (resetLink: string, user_email: string) => {
+
+  console.log('email fun run')
+
     try {
-        await email_transporter.sendMail({
+      const info = await email_transporter.sendMail({
             from: sender_email,
             to: user_email,
             subject: "Password Reset Request",
-          
             text: `
               Dear User,
 
@@ -31,7 +33,7 @@ export const send_password_reset_email = async (resetLink: string, user_email: s
               </div>
             `
         });
-        // console.log(`Message sent`, info);
+        console.log(`Message sent`, info);
     } catch (error) {
         console.log(`Error sending email:`, error);
     }

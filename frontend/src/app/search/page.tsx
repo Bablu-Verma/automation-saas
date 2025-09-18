@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
-import { ServiceCard, ServiceCardProps } from "@/components/Services"
+import { ServiceCard, ServiceCardProps } from "@/components/ServiceCard"
+
 
 // Mock data
 const mockServices: ServiceCardProps[] = [

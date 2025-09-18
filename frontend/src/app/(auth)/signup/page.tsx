@@ -3,7 +3,13 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
 import Link from "next/link"
-import { FcGoogle } from "react-icons/fc"
+import WithGoogle from "@/components/ContinueWithGoogle"
+import validator from "validator"
+import toast from "react-hot-toast"
+import axios from "axios"
+import { register_api } from "@/api"
+import { useRouter } from "next/navigation"
+
 
 export default function SignupPage() {
   const [form, setForm] = useState({
@@ -13,6 +19,8 @@ export default function SignupPage() {
     confirmPassword: "",
     agree: false,
   })
+   const [loading, setLoading] = useState(false)
+   const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -22,24 +30,77 @@ export default function SignupPage() {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!form.agree) {
-      alert("You must agree to the Privacy Policy & Terms.")
-      return
+
+  const validateInputs = () => {
+     if (!validator.trim(form.name)) {
+      toast.error("Please enter a valid Name")
+      return false
+    }
+  
+    if (!validator.isEmail(form.email)) {
+      toast.error("Please enter a valid email")
+      return false
+    }
+  
+    const passwordOptions = {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    }
+  
+    if (!validator.isStrongPassword(form.password, passwordOptions)) {
+      toast.error(
+        "Password must be 8+ chars, include uppercase, lowercase, number & special char"
+      )
+      return false
+    }
+
+     if (!form.agree) {
+      toast.error("You must agree to the Privacy Policy & Terms.")
+      return false
     }
     if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match.")
-      return
+      toast.error("Passwords do not match.")
+      return  false
     }
-    // TODO: integrate with auth system
-    console.log("Signup with", form)
+  
+    return true
   }
 
-  const handleGoogleSignup = () => {
-    // TODO: integrate Google signup
-    console.log("Signup with Google")
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+   
+    if (!validateInputs()) return
+    setLoading(true)
+
+    try {
+      const { data } = await axios.post(
+        register_api,
+        {...form},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+
+      toast.success(data.msg)
+     
+
+      setTimeout(()=>{
+        router.push(`/otp-verification?userid=${data.token}`)
+      },500)
+
+    } catch (err: any) {
+      // console.log("Error response:", err.response) // 👈 debugging ke liye add karo
+      toast.error(err.response?.data?.msg || "Something went wrong ❌")
+    } finally {
+      setLoading(false)
+    }
   }
+
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-gradient-to-b from-primary/10 to-secondary/10 px-6 py-32">
@@ -67,7 +128,7 @@ export default function SignupPage() {
               value={form.name}
               onChange={handleChange}
               placeholder="John Doe"
-              required
+             
               className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -80,7 +141,7 @@ export default function SignupPage() {
               value={form.email}
               onChange={handleChange}
               placeholder="you@example.com"
-              required
+            
               className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -93,7 +154,7 @@ export default function SignupPage() {
               value={form.password}
               onChange={handleChange}
               placeholder="••••••••"
-              required
+             
               className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -106,7 +167,7 @@ export default function SignupPage() {
               value={form.confirmPassword}
               onChange={handleChange}
               placeholder="••••••••"
-              required
+             
               className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -138,7 +199,10 @@ export default function SignupPage() {
             type="submit"
             className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition"
           >
-            Sign Up
+            {
+              loading ? "Working..": 'Sign Up'
+            }
+            
           </button>
         </form>
 
@@ -149,14 +213,7 @@ export default function SignupPage() {
           <div className="flex-1 h-px bg-white/20"></div>
         </div>
 
-        {/* Google signup */}
-        <button
-          onClick={handleGoogleSignup}
-          className="w-full flex items-center justify-center gap-3 py-2 rounded-xl bg-white text-gray-800 font-semibold shadow hover:shadow-lg transition"
-        >
-          <FcGoogle className="text-xl" />
-          Sign Up with Google
-        </button>
+        <WithGoogle title="Sign Up" />
 
         {/* Login link */}
         <p className="text-center text-white/70 mt-6">

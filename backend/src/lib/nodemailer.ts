@@ -1,18 +1,18 @@
 import nodemailer from 'nodemailer';
 
 
-
+export const sender_email = `"Saas app" saas@automation.com`
 
 export const email_transporter = nodemailer.createTransport({
- host: 'smtp.ethereal.email',
- port: 587,
-  secure: false,
+  host: "smtp.ethereal.email",
+  port: 587,
+  secure: false, 
   auth: {
-    user: 'hulda.gaylord@ethereal.email',
-    pass: 'KEkHTqgSxu7e5f2MhX',
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_KEY,
   },
 });
 
 
-export const sender_email = `"Saas app" saas@automation.com`
+
 

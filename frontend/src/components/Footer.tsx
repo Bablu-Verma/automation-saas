@@ -1,9 +1,22 @@
 "use client"
 
+import { RootState } from "@/redux-store/redux_store";
+import { IUser } from "@/types";
 import Link from "next/link"
 import { FiFacebook, FiTwitter, FiLinkedin, FiMail } from "react-icons/fi"
+import { useSelector } from "react-redux";
 
 export default function Footer() {
+
+
+    const user = useSelector(
+    (state: RootState) => state.user.user
+  ) as IUser | null;
+
+  const loggedIn = Boolean(user)
+
+
+
   return (
     <footer className="bg-dark text-gray-300">
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
@@ -26,6 +39,9 @@ export default function Footer() {
         <div>
           <h2 className="text-lg font-semibold text-white mb-4">Navigation</h2>
           <ul className="space-y-2">
+            {
+           loggedIn &&  <li><Link href="/dashboard" className="hover:text-secondary">Dashboard</Link></li>
+            }
             <li><Link href="/" className="hover:text-secondary">Home</Link></li>
             <li><Link href="/about" className="hover:text-secondary">About Us</Link></li>
             <li><Link href="/services" className="hover:text-secondary">Services</Link></li>

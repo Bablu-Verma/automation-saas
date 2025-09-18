@@ -1,10 +1,11 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ServiceCard, ServiceCardProps } from "@/components/Services"
+
 import NewsletterSection from "@/components/Newsletter"
 import Features from "@/components/Features"
 import AppIntegrationSlider from "@/components/IntegratesWith"
+import { ServiceCard, ServiceCardProps } from "@/components/ServiceCard"
 
 // Example services data (replace with API/db data)
 const services: ServiceCardProps[] = [
@@ -72,7 +73,7 @@ const services: ServiceCardProps[] = [
 
 export default function ServicesPage() {
   return (
-    <section className="py-28 px-6 max-w-7xl mx-auto">
+    <section className="pt-28 px-6 max-w-7xl mx-auto">
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}

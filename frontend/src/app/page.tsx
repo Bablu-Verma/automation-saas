@@ -2,13 +2,13 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 
-import HomeHero from "@/components/Hero_Section"
+import HomeHero from "@/components/home/Hero_Section"
 import Features from "@/components/Features"
 import Services from "@/components/Services"
 import AboutUs from "@/components/Aboutus"
 import AppIntegrationSlider from "@/components/IntegratesWith"
 import Testimonials from "@/components/Testimonial_Section"
-import FAQSection from "@/components/FAQ_section"
+import FAQSection from "@/components/home/FAQ_section"
 import { FiAward, FiClock, FiStar, FiTrendingUp, FiUsers } from "react-icons/fi"
 import NewsletterSection from "@/components/Newsletter"
 

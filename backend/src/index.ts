@@ -1,20 +1,27 @@
-import express from 'express'
 import dotenv from 'dotenv'
+dotenv.config();
 
-
+import express from 'express'
 import connectDB from './config/db';
 import authRoute from './router/authRoute';
 import userRoute from './router/userRoute';
 import masterWorkflowRoute from './router/masterWorkflowRoute';
 import automationRoute from './router/automation';
+import cors from 'cors';
 
-dotenv.config();
+
 connectDB();
 
-
 const app = express();
-app.use(express.json());
 
+app.use(cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
+
+
+app.use(express.json());
 
 
 // Main "Hello World" route

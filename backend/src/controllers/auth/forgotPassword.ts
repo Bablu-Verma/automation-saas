@@ -1,27 +1,23 @@
 
 import User from '../../models/User';
 import { Request, Response } from 'express';
-import { JwtPayload } from '../../types/types';
-import { passwordRegex } from '../../utils/constant';
-import { jsonwebtoken_decoded } from '../../lib/jsonwebtoken_';
-import { createHashedPassword } from '../../utils/utils';
-
+import { send_password_reset_email } from '../../email/forgot_password';
+import { jsonwebtoken_create } from '../../lib/jsonwebtoken_';
+import { emailRegex } from '../../utils/constant';
 
 
 const forgotPassword = async (req: Request, res: Response) => {
-    const { password } = req.body;
+    const { email } = req.body;
 
+    console.log("email",email)
+
+    if (!email || !emailRegex.test(email)) {
+        return res.status(400).json({ success: false, msg: 'Please enter a valid email address.' });
+    }
 
     try {
 
-        const decoded = await jsonwebtoken_decoded(req, res) as JwtPayload
-
-        if (!password || !passwordRegex.test(password)) {
-            return res.status(400).json({ success: false, msg: 'Password is not strong enough. It must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*).' });
-        }
-
-        // Find user from token payload
-        const user = await User.findById(decoded.id);
+        const user = await User.findOne({ email });
 
         if (!user || user.status !== 'active') {
             return res.status(200).json({
@@ -30,15 +26,25 @@ const forgotPassword = async (req: Request, res: Response) => {
             });
         }
 
+        const token = jsonwebtoken_create(
+            {
+                _id: user._id.toString(),
+                email: user.email,
+                role: user.role,
+            },
+            "30m"
+        );
 
-        const hashedPassword = await createHashedPassword(password)
-        user.password = hashedPassword
 
-        await user.save()
+        let resetURL = `${process.env.FRONTEND_URL}auth/change-password?userid=${token}`
+
+         await send_password_reset_email(resetURL, user.email)
+        
+
 
         return res.status(200).json({
             success: true,
-            msg: 'Password has been reset successfully. Login Using New Password'
+            msg: 'Check your email password reset link has been sent.'
         });
 
     } catch (err: any) {

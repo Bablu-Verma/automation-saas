@@ -4,14 +4,24 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { FiMenu, FiX, FiSearch, FiUser } from "react-icons/fi"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux-store/redux_store"
+import { IUser } from "@/types"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [loggedIn, setLoggedIn] = useState(false)
+
   const [visible, setVisible] = useState(true)
   const [lastScroll, setLastScroll] = useState(0)
   const [atTop, setAtTop] = useState(true)
 
+
+
+   const user = useSelector(
+    (state: RootState) => state.user.user
+  ) as IUser | null;
+
+  const loggedIn = Boolean(user)
 
   const router = useRouter()
 
@@ -72,7 +82,7 @@ export default function Navbar() {
             </div>
 
             {loggedIn ? (
-              <Link href="/dashboard" className="bg-primary text-white hover:text-primary px-8 py-1.5 rounded-full font-medium hover:bg-transparent border-primary border-2 transition flex items-center gap-2">
+              <Link href="/dashboard" title={user?.email} className="bg-primary text-white hover:text-primary px-8 py-1.5 rounded-full font-medium hover:bg-transparent border-primary border-2 transition flex items-center gap-2">
                 Dashboard
               </Link>
             ) : (
@@ -88,7 +98,7 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <div className="md:hidden text-white flex items-center gap-4">
 
-            {loggedIn && <Link href="/dashboard" className="block hover:text-primary text-white">Dashboard</Link>}
+            {loggedIn && <Link href="/dashboard" title={user?.email} className="block hover:text-primary text-white">Dashboard</Link>}
             {
               !loggedIn && <Link
                 href="/login"

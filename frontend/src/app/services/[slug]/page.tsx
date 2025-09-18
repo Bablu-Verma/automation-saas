@@ -13,9 +13,6 @@ type ServiceDetailsProps = {
   benefits: string[]
 }
 
-
-
-
 let desc = `"use client"
 
 import { motion } from "framer-motion"

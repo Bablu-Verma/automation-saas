@@ -13,7 +13,7 @@ const loginUser = async (req: Request, res: Response) => {
     }
 
     if (!password || !passwordRegex.test(password)) {
-        return res.status(400).json({ success: false, msg: 'Password is not strong enough. It must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*).' });
+        return res.status(400).json({ success: false, msg: 'Password is not strong enough. It must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character'});
     }
     try {
 

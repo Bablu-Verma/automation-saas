@@ -3,7 +3,7 @@ import { email_transporter, sender_email } from "../lib/nodemailer";
 export const user_verify_email = async (otp:string, user_email:string) => {
   
   try {
-    await email_transporter.sendMail({
+   const info =  await email_transporter.sendMail({
     from: sender_email,
     to: user_email,
     subject: "Signup Verification Code",
@@ -20,7 +20,7 @@ export const user_verify_email = async (otp:string, user_email:string) => {
       automation app Team
       `
   })
-  // console.log(`Message sent`, info);
+  console.log(`Message sent`, info);
   } catch (error) {
     console.log(`error sent`, error);
   }
