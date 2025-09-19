@@ -1,10 +1,12 @@
 
-import User from '../../models/User'
-import { user_verify_email } from '../../email/user_verify';
+
 import { Request, Response } from 'express';
-import { jsonwebtoken_decoded } from '../../lib/jsonwebtoken_';
-import { JwtPayload } from '../../types/types';
-import { NEW_OTP } from '../../utils/utils';
+import { jsonwebtoken_decoded } from '../../../lib/jsonwebtoken_';
+import { JwtPayload } from '../../../types/types';
+import User from '../../../models/User';
+import { NEW_OTP } from '../../../utils/utils';
+import { user_verify_email } from '../../../email/user_verify';
+
 
 
 const resendOtpController = async (req: Request, res: Response) => {

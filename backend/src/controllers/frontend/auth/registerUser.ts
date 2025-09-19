@@ -1,10 +1,11 @@
 
-import User from '../../models/User'
-import { user_verify_email } from '../../email/user_verify';
+
 import { Request, Response } from 'express';
-import { jsonwebtoken_create } from '../../lib/jsonwebtoken_';
-import { emailRegex, passwordRegex } from '../../utils/constant';
-import { createHashedPassword, NEW_OTP } from '../../utils/utils';
+import { emailRegex, passwordRegex } from '../../../utils/constant';
+import User from '../../../models/User';
+import { createHashedPassword, NEW_OTP } from '../../../utils/utils';
+import { jsonwebtoken_create } from '../../../lib/jsonwebtoken_';
+import { user_verify_email } from '../../../email/user_verify';
 
 
 const registerUser = async (req: Request, res: Response) => {

@@ -1,10 +1,11 @@
 
-import User from '../../models/User';
 import { Request, Response } from 'express';
-import { JwtPayload } from '../../types/types';
-import { passwordRegex } from '../../utils/constant';
-import { jsonwebtoken_decoded } from '../../lib/jsonwebtoken_';
-import { createHashedPassword } from '../../utils/utils';
+import { jsonwebtoken_decoded } from '../../../lib/jsonwebtoken_';
+import { JwtPayload } from '../../../types/types';
+import User from '../../../models/User';
+import { createHashedPassword } from '../../../utils/utils';
+import { passwordRegex } from '../../../utils/constant';
+
 
 
 

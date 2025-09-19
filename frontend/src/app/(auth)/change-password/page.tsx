@@ -3,27 +3,80 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
 import Link from "next/link"
+import toast from "react-hot-toast"
+import { change_password_api } from "@/api"
+import axios from "axios"
+import validator from "validator"
+import { useRouter, useSearchParams } from "next/navigation"
+
+
+
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+   const token = searchParams.get("userid")
 
-    if (!password || !confirmPassword) {
-      alert("Please fill all fields.")
-      return
+  const validateInputs = () => {
+
+    const passwordOptions = {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
     }
+
+    if (!validator.isStrongPassword(password, passwordOptions)) {
+      toast.error(
+        "Password must be 8+ chars, include uppercase, lowercase, number & special char"
+      )
+      return false
+    }
+
     if (password !== confirmPassword) {
-      alert("Passwords do not match.")
-      return
+      toast.error(
+        "Password & Confirm Password not match"
+      )
+      return false
     }
 
-    // TODO: integrate with backend to reset password
-    console.log("Password changed:", password)
-    alert("Your password has been reset successfully.")
+    return true
   }
+
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!validateInputs()) return
+
+    setLoading(true)
+    try {
+      const { data } = await axios.post(
+        change_password_api,
+        { password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      toast.success(data.msg || "Password reset link sent")
+      setTimeout(()=>{
+        router.push('/login')
+      },4000)
+    } catch (err: any) {
+      toast.error(err.response?.data?.msg || "Something went wrong ")
+    } finally {
+      setLoading(false)
+    }
+  }
+
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-gradient-to-b from-primary/10 to-secondary/10 py-32 px-6">
@@ -72,7 +125,11 @@ export default function ResetPasswordPage() {
             type="submit"
             className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition"
           >
-            Change Password
+
+            {
+              loading ? 'Loading..' : 'Change Password'
+            }
+
           </button>
         </form>
 

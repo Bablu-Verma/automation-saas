@@ -11,11 +11,16 @@ import { useDispatch, useSelector } from "react-redux"
 
 const links = [
   { href: "/dashboard", label: "Home", icon: <FaHome size={18} /> },
-  { href: "/dashboard/requests", label: "My Requests", icon: <FaFileAlt size={18} /> },
-  { href: "/dashboard/messages", label: "Messages", icon: <FaEnvelope size={18} /> },
   { href: "/dashboard/profile", label: "Profile", icon: <FaUser size={18} /> },
+  { href: "/dashboard/requests", label: "My Requests", icon: <FaFileAlt size={18} /> },
+  { href: "/dashboard/billing", label: "Billing", icon: <FaEnvelope size={18} /> },
   { href: "/dashboard/settings", label: "Settings", icon: <FaCog size={18} /> },
   { href: "/dashboard/help", label: "Help & Support", icon: <FaLifeRing size={18} /> },
+
+
+
+
+
 ]
 
 export default function Sidebar() {
@@ -36,14 +41,13 @@ export default function Sidebar() {
 
 
   return (
-    <aside className="w-64 h-screen border-r border-white/20 bg-white/5 backdrop-blur-lg p-6 flex flex-col">
+    <aside className="w-64  sticky top-0  h-screen border-r border-white/20 bg-white/5 backdrop-blur-lg p-6 flex flex-col">
       {/* Logo / Title */}
       <h2 className="text-2xl  font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mb-8">
         Dashboard
       </h2>
 
-      {/* Nav Links */}
-      <nav className="flex flex-col gap-2 flex-1">
+      <nav className="flex flex-col sidebar_ gap-2 flex-1 overflow-auto">
         {links.map((link, i) => (
           <Link
             key={i}

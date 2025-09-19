@@ -1,7 +1,10 @@
-import User from "../../models/User"
+
 import { Request, Response } from "express"
-import { jsonwebtoken_create } from "../../lib/jsonwebtoken_"
-import admin from "../../config/firebase_admin"
+import admin from "../../../config/firebase_admin"
+import User from "../../../models/User"
+import { jsonwebtoken_create } from "../../../lib/jsonwebtoken_"
+
+
 
 
 const loginWithGoogle = async (req: Request, res: Response) => {

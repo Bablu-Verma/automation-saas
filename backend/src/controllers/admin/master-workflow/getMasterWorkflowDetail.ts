@@ -1,11 +1,19 @@
 import { Response } from "express";
-import { AuthenticatedRequest } from "../../../../middlewares/loginCheck";
-import MasterWorkflow from "../../../../models/MasterWorkflow";
-
+import { AuthenticatedRequest } from "../../../middlewares/loginCheck";
+import MasterWorkflow from "../../../models/MasterWorkflow";
 
 export const getMasterWorkflowDetail = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const requestUser = req.user;
+
+    if (requestUser?.role !== "admin" && requestUser?.role !== "developer") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Only administrators and developers can edit master workflows.",
+      });
+    }
+
+
 
     const { id } = req.params;
 
@@ -17,7 +25,7 @@ export const getMasterWorkflowDetail = async (req: AuthenticatedRequest, res: Re
     }
 
     // 🔍 Fetch workflow
-    const workflow = await MasterWorkflow.findOne({id,isPublished: "ACTIVE"} );
+    const workflow = await MasterWorkflow.findById(id);
 
     if (!workflow) {
       return res.status(404).json({
@@ -26,6 +34,15 @@ export const getMasterWorkflowDetail = async (req: AuthenticatedRequest, res: Re
       });
     }
 
+    if (
+      requestUser?.role !== "admin" &&
+      requestUser?.role !== "developer" 
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. This workflow is not published.",
+      });
+    }
 
     return res.status(200).json({
       success: true,

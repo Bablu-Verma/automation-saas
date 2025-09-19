@@ -1,9 +1,11 @@
 
-import User from '../../models/User';
+
 import { Request, Response } from 'express';
-import { send_password_reset_email } from '../../email/forgot_password';
-import { jsonwebtoken_create } from '../../lib/jsonwebtoken_';
-import { emailRegex } from '../../utils/constant';
+import { emailRegex } from '../../../utils/constant';
+import User from '../../../models/User';
+import { jsonwebtoken_create } from '../../../lib/jsonwebtoken_';
+import { send_password_reset_email } from '../../../email/forgot_password';
+
 
 
 const forgotPassword = async (req: Request, res: Response) => {

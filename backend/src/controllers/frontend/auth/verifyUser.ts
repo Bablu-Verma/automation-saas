@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
-
-import User from "../../models/User";
-import {jsonwebtoken_create, jsonwebtoken_decoded} from "../../lib/jsonwebtoken_";
-import { JwtPayload } from "../../types/types";
-
-
+import { jsonwebtoken_create, jsonwebtoken_decoded } from "../../../lib/jsonwebtoken_";
+import { JwtPayload } from "../../../types/types";
+import User from "../../../models/User";
 
 
 const verifyUser = async (req: Request, res: Response) => {

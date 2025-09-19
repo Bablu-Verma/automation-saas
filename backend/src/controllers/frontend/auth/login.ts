@@ -1,8 +1,10 @@
 import bcrypt from 'bcryptjs'
-import User from '../../models/User'
+
 import { Request, Response } from 'express';
-import { jsonwebtoken_create } from '../../lib/jsonwebtoken_';
-import { emailRegex, passwordRegex } from '../../utils/constant';
+import { emailRegex, passwordRegex } from '../../../utils/constant';
+import User from '../../../models/User';
+import { jsonwebtoken_create } from '../../../lib/jsonwebtoken_';
+
 
 
 const loginUser = async (req: Request, res: Response) => {

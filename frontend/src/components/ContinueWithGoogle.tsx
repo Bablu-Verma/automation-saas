@@ -28,9 +28,7 @@ const WithGoogle: React.FC<WithGoogleProps> = ({title}) => {
         const user = result.user;
         const idToken = await user.getIdToken();
 
-        // console.log("User idToken:", idToken);
-
-
+    
         const { data } = await axios.post(
             google_login_api,
             {
@@ -43,10 +41,7 @@ const WithGoogle: React.FC<WithGoogleProps> = ({title}) => {
             }
         );
 
-        // console.log("login responce data",data)
-    
         dispatch(login({ user: data.user, token: data.token }));
-
         setTimeout(() => {
             window.location.href = "/";
         }, 1000);

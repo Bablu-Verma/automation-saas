@@ -19,9 +19,10 @@ export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response
       description,
       workflowJsonTemplate,
       serviceIconUrl,
-      isPublished,
+      isPublished, // should be "ACTIVE" | "PAUSE"
       requiredInputs,
       requiredCredentials,
+      category,
     } = req.body;
 
     // ✅ Manual validation
@@ -47,9 +48,10 @@ export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response
       description,
       workflowJsonTemplate,
       serviceIconUrl,
-      isPublished: isPublished ?? false,
+      isPublished: isPublished ?? "PAUSE", // default string
       requiredInputs: requiredInputs ?? [],
       requiredCredentials: requiredCredentials ?? [],
+      category: category ?? "general",
     });
 
     const savedWorkflow = await newWorkflow.save();
@@ -67,3 +69,4 @@ export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response
     });
   }
 };
+

@@ -1,11 +1,12 @@
 import express from 'express'
-import registerUser from '../controllers/auth/registerUser'
-import verifyUser from '../controllers/auth/verifyUser';
-import loginUser from '../controllers/auth/login';
-import resendOtpController from '../controllers/auth/resendOTP';
-import forgotPassword from '../controllers/auth/forgotPassword';
-import changePassword from '../controllers/auth/changePassword';
-import loginWithGoogle from '../controllers/auth/loginWithGoogle';
+import registerUser from '../controllers/frontend/auth/registerUser';
+import verifyUser from '../controllers/frontend/auth/verifyUser';
+import loginUser from '../controllers/frontend/auth/login';
+import resendOtpController from '../controllers/frontend/auth/resendOTP';
+import forgotPassword from '../controllers/frontend/auth/forgotPassword';
+import changePassword from '../controllers/frontend/auth/changePassword';
+import loginWithGoogle from '../controllers/frontend/auth/loginWithGoogle';
+
 
 const authRoute = express.Router();
 

@@ -23,7 +23,6 @@ app.use(cors({
 
 app.use(express.json());
 
-
 // Main "Hello World" route
 app.get('/', (req, res) => {
     res.send('Hello server');
@@ -32,8 +31,9 @@ app.get('/', (req, res) => {
 // Auth Routes
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRoute);
-app.use('/api/v1/workflow-instance', automationRoute);
 app.use('/api/v1/master-workflow', masterWorkflowRoute);
+app.use('/api/v1/automation-instance', automationRoute);
+
 
 
 

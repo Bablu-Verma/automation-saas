@@ -4,22 +4,43 @@ import MasterWorkflow from "../../../models/MasterWorkflow";
 
 export const listMasterWorkflows = async (req: AuthenticatedRequest, res: Response) => {
   try {
-  
-     const requestuser = req.user
+    const requestUser = req.user;
 
-  if (requestuser?.role !== 'admin' && requestuser?.role !== 'developer') {
-    return res.status(403).json({ success: false,  message: 'Access denied. Only administrators and developers can delete master workflows.' });
-  }
+    // Pagination params
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
 
-    
-  const workflows = await MasterWorkflow.find().sort({ name: 1 });
-    res.status(200).json({
-      message: 'Master workflows fetched successfully.',
+    let filter: Record<string, any> = {};
+
+    if (requestUser?.role !== "admin" && requestUser?.role !== "developer") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Only administrators and developers can edit master workflows.",
+      });
+    }
+
+    const workflows = await MasterWorkflow.find(filter)
+      .sort({ name: 1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await MasterWorkflow.countDocuments(filter);
+
+    return res.status(200).json({
+      success: true,
+      message: "Master workflows fetched successfully.",
       count: workflows.length,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
       workflows,
     });
   } catch (error) {
-    console.error('Error listing master workflows:', error);
-    res.status(500).json({ message: 'Server error while fetching master workflows.', success: false, });
+    console.error("Error listing master workflows:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while fetching master workflows.",
+    });
   }
 };

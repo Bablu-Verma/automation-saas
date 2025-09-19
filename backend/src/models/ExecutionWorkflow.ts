@@ -1,34 +1,17 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const executionSchema = new Schema({
+const ExecutionSchema = new Schema({
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
+  automationId: { type: Schema.Types.ObjectId, ref: "AutomationInstance", required: true, index: true },
 
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-        index: true
-    },
-    
-    automationId: {
-        type: Schema.Types.ObjectId, 
-        required: true,
-        index: true
-    },
-    status: {
-        type: String,
-        enum: ['success', 'failed', 'running'],
-        default: 'running'
-    },
-    finishedAt: {
-        type: Date
-    },
-    executionData: {
-        type: Object 
-    }
+  n8nExecutionId: { type: String, index: true },
+  status: { type: String, enum: ["success", "failed", "running"], default: "running" },
+
+  executionData: { type: Object },
+  finishedAt: { type: Date },
 }, {
-    timestamps: { createdAt: 'startedAt', updatedAt: false }
+  timestamps: { createdAt: "startedAt", updatedAt: false }
 });
 
-const Execution = mongoose.model('Execution', executionSchema);
-export default Execution;
+export default mongoose.model("Execution", ExecutionSchema);

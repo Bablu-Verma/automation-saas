@@ -35,10 +35,8 @@ export default function ForgotPasswordPage() {
           },
         }
       )
-
-      console.log("data", data)
       toast.success(data.msg || "Password reset link sent ✅")
-      setEmail("") // clear input after success
+      setEmail("") 
     } catch (err: any) {
       toast.error(err.response?.data?.msg || "Something went wrong ❌")
     } finally {

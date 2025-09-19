@@ -4,32 +4,61 @@ import MasterWorkflow from "../../../models/MasterWorkflow";
 
 export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const requestuser = req.user;
+    const requestUser = req.user;
 
-    if (requestuser?.role !== 'admin' && requestuser?.role !== 'developer') {
-      return res.status(403).json({ success: false, message: 'Access denied. Only administrators and developers can edit master workflows.' });
+    // ✅ Role check
+    if (requestUser?.role !== "admin" && requestUser?.role !== "developer") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Only administrators and developers can edit master workflows.",
+      });
     }
 
-    const { id, name, description, workflowJsonTemplate, serviceIconUrl, isPublished } = req.body;
+    const { id } = req.params; 
+    const { name, description, workflowJsonTemplate, serviceIconUrl, isPublished } = req.body;
 
-    // Validate that a document ID is provided
     if (!id) {
-        return res.status(400).json({ success: false, message: 'Master workflow ID is required for editing.' });
+      return res.status(400).json({
+        success: false,
+        message: "Master workflow ID is required for editing.",
+      });
     }
 
-    // Create an object with only the fields that are allowed to be updated.
-    const updateFields: any = {};
+    // ✅ Validate isPublished against allowed values
+    if (isPublished && !["ACTIVE", "PAUSE"].includes(isPublished)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid value for isPublished. Allowed values: ACTIVE, PAUSE.",
+      });
+    }
+
+    // ✅ Build update fields
+    const updateFields: Record<string, any> = {};
     if (name !== undefined) updateFields.name = name;
     if (description !== undefined) updateFields.description = description;
     if (workflowJsonTemplate !== undefined) updateFields.workflowJsonTemplate = workflowJsonTemplate;
     if (serviceIconUrl !== undefined) updateFields.serviceIconUrl = serviceIconUrl;
     if (isPublished !== undefined) updateFields.isPublished = isPublished;
 
-    // Check if there are any fields to update
     if (Object.keys(updateFields).length === 0) {
-        return res.status(400).json({ success: false, message: 'No valid fields provided for update.' });
+      return res.status(400).json({
+        success: false,
+        message: "No valid fields provided for update.",
+      });
     }
 
+    // ✅ Check duplicate name (only if name is being updated)
+    if (name) {
+      const existing = await MasterWorkflow.findOne({ name, _id: { $ne: id } });
+      if (existing) {
+        return res.status(409).json({
+          success: false,
+          message: "Another workflow with this name already exists.",
+        });
+      }
+    }
+
+    // ✅ Update workflow
     const updatedWorkflow = await MasterWorkflow.findByIdAndUpdate(
       id,
       { $set: updateFields },
@@ -37,16 +66,22 @@ export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Respons
     );
 
     if (!updatedWorkflow) {
-      return res.status(404).json({ success: false, message: 'Master workflow not found.' });
+      return res.status(404).json({
+        success: false,
+        message: "Master workflow not found.",
+      });
     }
 
-    res.status(200).json({
-      message: 'Master workflow updated successfully.',
-      workflow: updatedWorkflow,
+    return res.status(200).json({
       success: true,
+      message: "Master workflow updated successfully.",
+      workflow: updatedWorkflow,
     });
   } catch (error) {
-    console.error('Error updating master workflow:', error);
-    res.status(500).json({ message: 'Server error while updating master workflow.', success: false });
+    console.error("Error updating master workflow:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while updating master workflow.",
+    });
   }
 };

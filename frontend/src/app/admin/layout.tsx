@@ -5,9 +5,9 @@ import { InternalProvider } from "./internal_provider"
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <InternalProvider>
-     <div className="flex max-w-7xl m-auto pt-20 pb-10">
+     <div className="flex max-w-7xl pt-20 pb-10 gap-5  mx-auto px-4 sm:px-6 lg:px-8">
       <AdminSidebar />
-      <main className="flex-1 p-6  min-h-screen">
+      <main className="flex-1 min-h-screen">
         {children}
       </main>
       </div>
