@@ -4,48 +4,45 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { ServiceCard } from "./ServiceCard"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { Workflow__ } from "@/app/admin/service/list/page"
+import { home_service_api } from "@/api"
 
 
 
 export default function Services() {
- const services = [
-  {
-    image: "/service.jpg",
-    title: "CRM Automation",
-    desc: "Sync leads, customers, and sales pipelines automatically.",
-    link: "/services/crm-automation",
-  },
-  {
-    image: "/service.jpg",
-    title: "E-commerce Workflows",
-    desc: "Automate order sync, stock updates, and payments.",
-    link: "/services/ecommerce-workflows",
-  },
-  {
-    image: "/service.jpg",
-    title: "Marketing Campaigns",
-    desc: "Trigger campaigns, schedule mails, and track conversions.",
-    link: "/services/marketing-campaigns",
-  },
-   {
-    image: "/service.jpg",
-    title: "CRM Automation",
-    desc: "Sync leads, customers, and sales pipelines automatically.",
-    link: "/services/crm-automation",
-  },
-  {
-    image: "/service.jpg",
-    title: "E-commerce Workflows",
-    desc: "Automate order sync, stock updates, and payments.",
-    link: "/services/ecommerce-workflows",
-  },
-  {
-    image: "/service.jpg",
-    title: "Marketing Campaigns",
-    desc: "Trigger campaigns, schedule mails, and track conversions.",
-    link: "/services/marketing-campaigns",
-  },
-]
+  const [workflows, setWorkflows] = useState<Workflow__[]>([]);
+
+
+   useEffect(() => {
+
+    async function fetchWorkflows() {
+      try {
+        const { data } = await axios.post(
+          home_service_api,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+         
+            },
+          }
+        );
+
+        console.log(data)
+        setWorkflows(data.workflows);
+      } catch (err) {
+        console.error("Failed to fetch workflows:", err);
+      }
+    }
+    fetchWorkflows();
+  }, []);
+
+
+
+
+ 
 
   return (
     <section className=" max-w-7xl pt-28 px-6  text-center m-auto">
@@ -77,14 +74,14 @@ export default function Services() {
             visible: { transition: { staggerChildren: 0.2 } },
           }}
         >
-          {services.map((service, i) => (
+          {workflows.map((service, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <ServiceCard {...service} />
+             <ServiceCard workflows={service} />
             </motion.div>
           ))}
         </motion.div>

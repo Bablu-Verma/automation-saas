@@ -6,72 +6,45 @@ import NewsletterSection from "@/components/Newsletter"
 import Features from "@/components/Features"
 import AppIntegrationSlider from "@/components/IntegratesWith"
 import { ServiceCard, ServiceCardProps } from "@/components/ServiceCard"
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { Workflow__ } from "../admin/service/list/page"
+import { service_list_api } from "@/api"
 
-// Example services data (replace with API/db data)
-const services: ServiceCardProps[] = [
-  {
-    title: "CRM Automation",
-    desc: "Automate your customer workflows and save time.",
-    image: "/service.jpg",
-    link: "/services/crm-automation",
-  },
-  {
-    title: "E-Commerce Workflows",
-    desc: "Sync orders, inventory, and invoices effortlessly.",
-    image: "/service.jpg",
-    link: "/services/ecommerce",
-  },
-  {
-    title: "Marketing Campaigns",
-    desc: "Automate emails, ads, and customer engagement.",
-    image: "/service.jpg",
-    link: "/services/marketing",
-  },
-  {
-    title: "Analytics Dashboard",
-    desc: "Track performance and generate smart reports.",
-    image: "/service.jpg",
-    link: "/services/analytics",
-  },
-  {
-    title: "CRM Automation",
-    desc: "Automate your customer workflows and save time.",
-    image: "/service.jpg",
-    link: "/services/crm-automation",
-  },
-  {
-    title: "E-Commerce Workflows",
-    desc: "Sync orders, inventory, and invoices effortlessly.",
-    image: "/service.jpg",
-    link: "/services/ecommerce",
-  },
-  {
-    title: "Marketing Campaigns",
-    desc: "Automate emails, ads, and customer engagement.",
-    image: "/service.jpg",
-    link: "/services/marketing",
-  },
-  {
-    title: "Analytics Dashboard",
-    desc: "Track performance and generate smart reports.",
-    image: "/service.jpg",
-    link: "/services/analytics",
-  },
-  {
-    title: "Integration Tools",
-    desc: "Connect multiple apps seamlessly without code.",
-    image: "/service.jpg",
-    link: "/services/integrations",
-  },
-  {
-    title: "Workflow Optimization",
-    desc: "Design smooth processes that minimize errors and maximize productivity.",
-    image: "/service.jpg",
-    link: "/services/workflow-optimization",
-  },
-]
 
 export default function ServicesPage() {
+
+    const [workflows, setWorkflows] = useState<Workflow__[]>([]);
+
+
+   useEffect(() => {
+
+    async function fetchWorkflows() {
+      try {
+        const { data } = await axios.post(
+          service_list_api,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+         
+            },
+          }
+        );
+
+        console.log(data)
+        setWorkflows(data.workflows);
+      } catch (err) {
+        console.error("Failed to fetch workflows:", err);
+      }
+    }
+    fetchWorkflows();
+  }, []);
+
+
+
+
+
   return (
     <section className="pt-28 px-6 max-w-7xl mx-auto">
       {/* Hero Section */}
@@ -92,14 +65,14 @@ export default function ServicesPage() {
 
       {/* Services Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        {services.map((service, i) => (
+        {workflows.map((service, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: i * 0.1 }}
           >
-            <ServiceCard {...service} />
+            <ServiceCard  workflows={service} />
           </motion.div>
         ))}
       </div>

@@ -15,7 +15,7 @@ export const getMasterWorkflowDetail = async (req: AuthenticatedRequest, res: Re
 
 
 
-    const { id } = req.params;
+    const { id } = req.body;
 
     if (!id) {
       return res.status(400).json({

@@ -5,6 +5,9 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import UploadImageGetLink from "../../_components/UploadImage";
+import { create_master_workflow_api } from "@/api";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux-store/redux_store";
 
 const TiptapEditor = dynamic(() => import("../../_components/TextEditor"), { ssr: false });
 
@@ -12,19 +15,22 @@ export default function AddMasterWorkflow() {
     const initialFormData = {
         name: "",
         workflowJsonTemplate: "",
-        serviceIconUrl: "",
+        serviceImage: "",
         category: "",
         pricePerMonth: 0,
         currency: "INR",
         trialDays: 7,
         requiredInputs: [{ key: "", label: "", type: "string", placeholder: "", required: true }],
-        requiredCredentials: [{ service: "", label: "", type: "oauth2" }],
+        requiredCredentials: [{ service: "", label: "", type: "OAuth2" }],
         isPublished: "PAUSE",
     };
 
     const [formData, setFormData] = useState(initialFormData);
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const token = useSelector((state: RootState) => state.user.token);
+
 
     // handle input change
     const handleChange = (
@@ -74,11 +80,18 @@ export default function AddMasterWorkflow() {
                 }
             }
 
-            const res = await axios.post("/api/master-workflows/add", {
+            const res = await axios.post(create_master_workflow_api, {
                 ...formData,
                 workflowJsonTemplate: parsedTemplate,
                 description,
-            });
+            },
+        {
+             headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        );
 
             toast.success(res.data.message);
 
@@ -129,9 +142,9 @@ export default function AddMasterWorkflow() {
 
                     <input
                         type="text"
-                        name="serviceIconUrl"
+                        name="serviceImage"
                         placeholder="Service Icon URL"
-                        value={formData.serviceIconUrl}
+                        value={formData.serviceImage}
                         onChange={handleChange}
                         className="w-full border rounded-lg p-2"
                     />
@@ -199,7 +212,7 @@ export default function AddMasterWorkflow() {
                                     value={input.key}
                                     onChange={(e) => handleArrayChange(idx, "key", e.target.value, "requiredInputs")}
                                     className="border p-2 rounded-lg flex-1"
-                                    required
+                                    
                                 />
                                 <input
                                     type="text"
@@ -207,7 +220,7 @@ export default function AddMasterWorkflow() {
                                     value={input.label}
                                     onChange={(e) => handleArrayChange(idx, "label", e.target.value, "requiredInputs")}
                                     className="border p-2 rounded-lg flex-1"
-                                    required
+                                    
                                 />
                                 <input
                                     type="text"
@@ -255,7 +268,7 @@ export default function AddMasterWorkflow() {
                                     value={cred.service}
                                     onChange={(e) => handleArrayChange(idx, "service", e.target.value, "requiredCredentials")}
                                     className="border p-2 rounded-lg flex-1"
-                                    required
+                                    
                                 />
                                 <input
                                     type="text"
@@ -263,7 +276,7 @@ export default function AddMasterWorkflow() {
                                     value={cred.label}
                                     onChange={(e) => handleArrayChange(idx, "label", e.target.value, "requiredCredentials")}
                                     className="border p-2 rounded-lg flex-1"
-                                    required
+                                    
                                 />
                                 <select
                                     value={cred.type}
@@ -272,6 +285,7 @@ export default function AddMasterWorkflow() {
                                 >
                                     <option value="oauth2">OAuth2</option>
                                     <option value="apikey">API Key</option>
+                                    <option value="token">Token</option>
                                 </select>
                                 <button
                                     type="button"

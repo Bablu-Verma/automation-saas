@@ -1,24 +1,21 @@
 import { Response } from "express";
-import { AuthenticatedRequest } from "../../../../middlewares/loginCheck";
-import MasterWorkflow from "../../../../models/MasterWorkflow";
+import { AuthenticatedRequest } from "../../../middlewares/loginCheck";
+import MasterWorkflow from "../../../models/MasterWorkflow";
 
-
-export const listServiceflows = async (req: AuthenticatedRequest, res: Response) => {
+export const listService = async (req: AuthenticatedRequest, res: Response) => {
   try {
-   
 
     // Pagination params
     const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 20;
+    const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
 
     let filter: Record<string, any> = {};
-
-    filter = { isPublished: "ACTIVE" };
-
+    
+    filter.isPublished = 'ACTIVE'
+    
     const workflows = await MasterWorkflow.find(filter)
-      .sort({ name: 1 })
-      .select('-workflowJsonTemplate -description')
+      .sort({ name: 1 }).select('-workflowJsonTemplate -description')
       .skip(skip)
       .limit(limit);
 

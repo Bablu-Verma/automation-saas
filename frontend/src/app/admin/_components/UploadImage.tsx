@@ -16,9 +16,6 @@ const UploadImageGetLink = () => {
   const [imgLink, setImgLink] = useState("");
   const [loadings, setLoading] = useState(false);
 
-
-
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -53,8 +50,9 @@ const UploadImageGetLink = () => {
 
       toast.success("Image uploaded successfully");
 
-      setImgLink(data.url);
+      setImgLink(data.filePath);
     } catch (error) {
+      console.log(error)
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.message || "An error occurred");
       } else {
@@ -124,25 +122,15 @@ const UploadImageGetLink = () => {
       {imgLink && (
         <div className="mt-4">
           <div className="flex items-center justify-start gap-5">
-            <span>Link:</span>
             <button
               onClick={() => {
-                navigator.clipboard.writeText(imgLink);
+                navigator.clipboard.writeText(process.env.NEXT_PUBLIC_BACKEND_BASE_URL+imgLink);
                 toast.success("Link copied to clipboard!");
               }}
-              className="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded"
+              className="text-base rounded-full bg-gray-200 hover:bg-primary px-8 py-1 "
             >
-              Copy
+              Click to Copy your Image Link
             </button>
-            <Link
-              href={imgLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-dark underline break-all  line-clamp-1 "
-            >
-              {imgLink}
-            </Link>
-
           </div>
         </div>
       )}

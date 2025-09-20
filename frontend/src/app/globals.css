@@ -5,6 +5,7 @@
   --light: #ffffff;
   --secondary: #131D4F;
   --primary: #E6521F;
+  --main-color:#E6521F
 }
 
 @theme inline {

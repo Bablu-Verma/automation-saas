@@ -14,8 +14,23 @@ export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Respons
       });
     }
 
-    const { id } = req.params; 
-    const { name, description, workflowJsonTemplate, serviceIconUrl, isPublished } = req.body;
+    const {
+      id,
+      name,
+      description,
+      pricePerMonth,
+      currency,
+      workflowJsonTemplate,
+      trialDays,
+      serviceImage,
+      isPublished,
+      requiredInputs,
+      requiredCredentials,
+      category,
+    } = req.body;
+
+
+    console.log(req.body)
 
     if (!id) {
       return res.status(400).json({
@@ -24,7 +39,7 @@ export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Respons
       });
     }
 
-    // ✅ Validate isPublished against allowed values
+    // ✅ Validate isPublished
     if (isPublished && !["ACTIVE", "PAUSE"].includes(isPublished)) {
       return res.status(400).json({
         success: false,
@@ -32,13 +47,19 @@ export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Respons
       });
     }
 
-    // ✅ Build update fields
+    // ✅ Build update fields dynamically
     const updateFields: Record<string, any> = {};
     if (name !== undefined) updateFields.name = name;
     if (description !== undefined) updateFields.description = description;
     if (workflowJsonTemplate !== undefined) updateFields.workflowJsonTemplate = workflowJsonTemplate;
-    if (serviceIconUrl !== undefined) updateFields.serviceIconUrl = serviceIconUrl;
+    if (serviceImage !== undefined) updateFields.serviceImage = serviceImage;
     if (isPublished !== undefined) updateFields.isPublished = isPublished;
+    if (pricePerMonth !== undefined) updateFields.pricePerMonth = pricePerMonth;
+    if (currency !== undefined) updateFields.currency = currency;
+    if (trialDays !== undefined) updateFields.trialDays = trialDays;
+    if (requiredInputs !== undefined) updateFields.requiredInputs = requiredInputs;
+    if (requiredCredentials !== undefined) updateFields.requiredCredentials = requiredCredentials;
+    if (category !== undefined) updateFields.category = category;
 
     if (Object.keys(updateFields).length === 0) {
       return res.status(400).json({
@@ -47,9 +68,12 @@ export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Respons
       });
     }
 
-    // ✅ Check duplicate name (only if name is being updated)
+    // ✅ Duplicate name check (ignore current ID)
     if (name) {
-      const existing = await MasterWorkflow.findOne({ name, _id: { $ne: id } });
+      const existing = await MasterWorkflow.findOne({
+        name,
+        _id: { $ne: id },
+      });
       if (existing) {
         return res.status(409).json({
           success: false,

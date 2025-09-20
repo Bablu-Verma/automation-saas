@@ -21,7 +21,7 @@ export const listMasterWorkflows = async (req: AuthenticatedRequest, res: Respon
     }
 
     const workflows = await MasterWorkflow.find(filter)
-      .sort({ name: 1 })
+      .sort({ name: 1 }).select('-workflowJsonTemplate -description')
       .skip(skip)
       .limit(limit);
 

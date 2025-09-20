@@ -3,11 +3,17 @@ import { AuthenticatedRequest } from "../../../../middlewares/loginCheck";
 import MasterWorkflow from "../../../../models/MasterWorkflow";
 
 
-export const getMasterWorkflowDetail = async (req: AuthenticatedRequest, res: Response) => {
+export const getServiceDetail = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const requestUser = req.user;
 
-    const { id } = req.params;
+
+  
+
+    const { id } = req.body;
+
+
+    console.log("id==",id)
 
     if (!id) {
       return res.status(400).json({
@@ -16,8 +22,8 @@ export const getMasterWorkflowDetail = async (req: AuthenticatedRequest, res: Re
       });
     }
 
-    // 🔍 Fetch workflow
-    const workflow = await MasterWorkflow.findOne({id,isPublished: "ACTIVE"} );
+ 
+    const workflow = await MasterWorkflow.findOne({_id:id, isPublished: "ACTIVE"} );
 
     if (!workflow) {
       return res.status(404).json({
