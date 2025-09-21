@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import UploadImageGetLink from "../../_components/UploadImage";
-import { create_master_workflow_api, details_master_workflow_api, edit_master_workflow_api } from "@/api";
+import {  admin_details_master_workflow_api, admin_edit_master_workflow_api } from "@/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import { useSearchParams } from "next/navigation";
@@ -40,7 +40,7 @@ export default function EditMasterWorkflow() {
 
         async function fetchWorkflow() {
             try {
-                const { data } = await axios.post(details_master_workflow_api, {
+                const { data } = await axios.post(admin_details_master_workflow_api, {
                     id: workflowId
                 }, {
                     headers: { Authorization: `Bearer ${token}` },
@@ -120,7 +120,7 @@ export default function EditMasterWorkflow() {
                 }
             }
 
-            const res = await axios.post(edit_master_workflow_api, {
+            const res = await axios.post(admin_edit_master_workflow_api, {
                 id:workflowId,
                 ...formData,
                 workflowJsonTemplate: parsedTemplate,

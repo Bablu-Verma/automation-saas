@@ -3,7 +3,7 @@ import { AuthenticatedRequest } from "../../../../middlewares/loginCheck";
 import MasterWorkflow from "../../../../models/MasterWorkflow";
 
 
-export const listServiceflows = async (req: AuthenticatedRequest, res: Response) => {
+export const listService = async (req: AuthenticatedRequest, res: Response) => {
   try {
    
 

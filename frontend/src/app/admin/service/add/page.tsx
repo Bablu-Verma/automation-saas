@@ -5,7 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import UploadImageGetLink from "../../_components/UploadImage";
-import { create_master_workflow_api } from "@/api";
+import { admin_create_master_workflow_api } from "@/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 
@@ -80,7 +80,7 @@ export default function AddMasterWorkflow() {
                 }
             }
 
-            const res = await axios.post(create_master_workflow_api, {
+            const res = await axios.post(admin_create_master_workflow_api, {
                 ...formData,
                 workflowJsonTemplate: parsedTemplate,
                 description,

@@ -124,7 +124,7 @@ export default function HomePage() {
           className="mt-8"
         >
           <Link
-            href="/auth/signup"
+            href="/services"
             className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition duration-300 hover:from-secondary hover:to-primary"
           >
             🚀 Start Free Trial

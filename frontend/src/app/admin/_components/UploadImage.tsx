@@ -1,6 +1,6 @@
 "use client";
 
-import { upload_image_api } from "@/api";
+import { upload_image_admin_api } from "@/api";
 import { RootState } from "@/redux-store/redux_store";
 
 import axios from "axios";
@@ -41,7 +41,7 @@ const UploadImageGetLink = () => {
 
 
       setLoading(true);
-      const { data } = await axios.post(upload_image_api, formPayload, {
+      const { data } = await axios.post(upload_image_admin_api, formPayload, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

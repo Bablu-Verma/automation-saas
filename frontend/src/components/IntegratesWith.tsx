@@ -59,7 +59,7 @@ export default function AppIntegrationSlider({ apps = defaultApps }: AppIntegrat
       >
         {apps.map((app, i) => (
           <SwiperSlide key={i}>
-            <div className="flex justify-center items-center p-4 py-10 bg-white/10 rounded-xl shadow-lg hover:text-primary transition-transform duration-300 ">
+            <div className="flex justify-center text-white items-center p-4 py-10 bg-white/10 rounded-xl shadow-lg hover:text-primary transition-transform duration-300 ">
               {app.icon}
             </div>
           </SwiperSlide>

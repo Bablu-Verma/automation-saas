@@ -2,7 +2,7 @@ import { Response } from "express";
 import { AuthenticatedRequest } from "../../../middlewares/loginCheck";
 import MasterWorkflow from "../../../models/MasterWorkflow";
 
-export const SearchService = async (req: AuthenticatedRequest, res: Response) => {
+export const searchService = async (req: AuthenticatedRequest, res: Response) => {
   try {
     // Body params (POST)
     const {

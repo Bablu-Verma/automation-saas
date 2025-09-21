@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import Image from "next/image";
 import { FiCheckCircle, FiClock, FiXCircle } from "react-icons/fi";
-import { details_master_workflow_api } from "@/api";
+import { admin_details_master_workflow_api } from "@/api";
 import Link from "next/link";
 
 export type WorkflowDetail = {
@@ -38,7 +38,7 @@ export default function WorkflowDetailPage() {
 
     async function fetchWorkflow() {
       try {
-        const { data } = await axios.post(details_master_workflow_api, {
+        const { data } = await axios.post(admin_details_master_workflow_api, {
           id: workflowId
         }, {
           headers: { Authorization: `Bearer ${token}` },

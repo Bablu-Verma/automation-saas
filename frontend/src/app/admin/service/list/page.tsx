@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiCreditCard, FiCheckCircle, FiClock } from "react-icons/fi";
 import axios from "axios";
-import { list_master_workflow_api } from "@/api";
+import { admin_list_master_workflow_api } from "@/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import Image from "next/image";
@@ -33,7 +33,7 @@ export default function MasterWorkflows() {
     async function fetchWorkflows() {
       try {
         const { data } = await axios.post(
-          list_master_workflow_api,
+          admin_list_master_workflow_api,
           {},
           {
             headers: {

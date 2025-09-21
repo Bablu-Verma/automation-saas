@@ -7,13 +7,7 @@ export const getServiceDetail = async (req: AuthenticatedRequest, res: Response)
   try {
     const requestUser = req.user;
 
-
-  
-
     const { id } = req.body;
-
-
-    console.log("id==",id)
 
     if (!id) {
       return res.status(400).json({

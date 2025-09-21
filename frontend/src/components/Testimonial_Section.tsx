@@ -22,25 +22,25 @@ export default function Testimonials() {
         Hear From Our Happy Clients
       </h2>
 
- <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="mt-6 text-lg text-white/70 max-w-2xl text-center mx-auto"
-        >
-          Discover how businesses are saving time, boosting productivity, and scaling effortlessly with AutoFlow.
-        </motion.p>
+      <motion.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+        className="mt-6 text-lg text-white/70 max-w-2xl text-center mx-auto"
+      >
+        Discover how businesses are saving time, boosting productivity, and scaling effortlessly with AutoFlow.
+      </motion.p>
 
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 3500 }}
         loop
-        slidesPerView={1} // default for mobile
+        slidesPerView={1}
         spaceBetween={10}
-      
+
         breakpoints={{
-          640: { slidesPerView: 1, spaceBetween: 10 }, // small tablets
-          768: { slidesPerView: 2, spaceBetween: 15 }, // desktop
+          640: { slidesPerView: 1, spaceBetween: 10 },
+          768: { slidesPerView: 2, spaceBetween: 15 },
           1024: { slidesPerView: 2, spaceBetween: 20 },
         }}
         className="mt-12 max-w-5xl mx-auto"
