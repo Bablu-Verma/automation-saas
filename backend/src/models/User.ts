@@ -40,12 +40,7 @@ const userSchema = new mongoose.Schema<UserDocument>({
         type: Number,
         select: false
     },
-    trialUsedServices: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "MasterWorkflow",
-        },
-    ],
+   
 
 }, { timestamps: true });
 

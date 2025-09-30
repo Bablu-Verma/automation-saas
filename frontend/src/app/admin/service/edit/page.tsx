@@ -5,34 +5,38 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import UploadImageGetLink from "../../_components/UploadImage";
-import {  admin_details_master_workflow_api, admin_edit_master_workflow_api } from "@/api";
+import { admin_details_master_workflow_api, admin_edit_master_workflow_api } from "@/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import { useSearchParams } from "next/navigation";
+import { RequiredCredentialForm } from "../../_components/RequiredCradential";
+import { RequiredInputsForm } from "../../_components/RequiredInputsForm";
+import { useFormArrayHelpers } from "../useFormArrayHelpers";
+import { initialFormData } from "../initialFormData";
+import KeywordInput from "../KeywordInput";
+
 
 const TiptapEditor = dynamic(() => import("../../_components/TextEditor"), { ssr: false });
 
 export default function EditMasterWorkflow() {
-    const initialFormData = {
-        name: "",
-        workflowJsonTemplate: "",
-        serviceImage: "",
-        category: "",
-        pricePerMonth: 0,
-        currency: "INR",
-        trialDays: 7,
-        requiredInputs: [{ key: "", label: "", type: "string", placeholder: "", required: true }],
-        requiredCredentials: [{ service: "", label: "", type: "OAuth2" }],
-        isPublished: "PAUSE",
-    };
+
+    const {
+        formData,
+        setFormData,
+        handleChange,
+        handleArrayChange,
+        addField,
+        removeField,
+
+        description,
+        setDescription,
+        handleReset
+    } = useFormArrayHelpers(initialFormData);
+
     const searchParams = useSearchParams();
     const workflowId = searchParams.get("id");
-    const [formData, setFormData] = useState(initialFormData);
-    const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(false);
-
     const token = useSelector((state: RootState) => state.user.token);
-
 
 
     useEffect(() => {
@@ -46,18 +50,18 @@ export default function EditMasterWorkflow() {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
-                console.log(data)
+                // console.log(data)
 
-                 // Prefill form with fetched data
-            const workflow = data.workflow || {};
-            setFormData({
-                ...initialFormData,
-                ...workflow,
-                workflowJsonTemplate: workflow.workflowJsonTemplate
-                    ? JSON.stringify(workflow.workflowJsonTemplate, null, 2)
-                    : "",
-            });
-            setDescription(workflow.description || "");
+                // Prefill form with fetched data
+                const workflow = data.workflow || {};
+                setFormData({
+                    ...initialFormData,
+                    ...workflow,
+                    workflowJsonTemplate: workflow.workflowJsonTemplate
+                        ? JSON.stringify(workflow.workflowJsonTemplate, null, 2)
+                        : "",
+                });
+                setDescription(workflow.description || "");
 
             } catch (err) {
                 console.error("Failed to fetch workflow detail:", err);
@@ -70,37 +74,7 @@ export default function EditMasterWorkflow() {
     }, [workflowId, token]);
 
 
-
-
-    // handle input change
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-    ) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
-
-    // handle dynamic fields
-    const handleArrayChange = (
-        index: number,
-        field: string,
-        value: string,
-        arrayName: "requiredInputs" | "requiredCredentials"
-    ) => {
-        const updatedArray = [...formData[arrayName]];
-        updatedArray[index] = { ...updatedArray[index], [field]: value };
-        setFormData((prev) => ({ ...prev, [arrayName]: updatedArray }));
-    };
-
-    const addField = (arrayName: "requiredInputs" | "requiredCredentials", newItem: any) => {
-        setFormData((prev) => ({ ...prev, [arrayName]: [...prev[arrayName], newItem] }));
-    };
-
-    const removeField = (arrayName: "requiredInputs" | "requiredCredentials", index: number) => {
-        const updatedArray = [...formData[arrayName]];
-        updatedArray.splice(index, 1);
-        setFormData((prev) => ({ ...prev, [arrayName]: updatedArray }));
-    };
+    
 
     // handle submit
     const handleSubmit = async (e: React.FormEvent) => {
@@ -121,11 +95,11 @@ export default function EditMasterWorkflow() {
             }
 
             const res = await axios.post(admin_edit_master_workflow_api, {
-                id:workflowId,
+                id: workflowId,
                 ...formData,
                 workflowJsonTemplate: parsedTemplate,
                 description,
-                
+
             },
                 {
                     headers: {
@@ -145,11 +119,6 @@ export default function EditMasterWorkflow() {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleReset = () => {
-        setFormData(initialFormData);
-        setDescription("");
     };
 
     return (
@@ -182,7 +151,9 @@ export default function EditMasterWorkflow() {
                         required
                     />
 
-                    <input
+                   
+                    <div className="grid grid-cols-2 gap-5">
+                        <input
                         type="text"
                         name="serviceImage"
                         placeholder="Service Icon URL"
@@ -191,16 +162,6 @@ export default function EditMasterWorkflow() {
                         className="w-full border rounded-lg p-2"
                     />
 
-                    <div className="grid grid-cols-2 gap-5">
-                        <input
-                            type="text"
-                            name="category"
-                            placeholder="Category"
-                            value={formData.category}
-                            onChange={handleChange}
-                            className="w-full border rounded-lg p-2"
-                            required
-                        />
 
                         <select
                             name="isPublished"
@@ -243,111 +204,28 @@ export default function EditMasterWorkflow() {
                         />
                     </div>
 
-                    {/* Dynamic Inputs */}
-                    <div>
-                        <h3 className="font-semibold mb-2">Required Inputs</h3>
-                        {formData.requiredInputs.map((input, idx) => (
-                            <div key={idx} className="flex gap-2 mb-2">
-                                <input
-                                    type="text"
-                                    placeholder="Key"
-                                    value={input.key}
-                                    onChange={(e) => handleArrayChange(idx, "key", e.target.value, "requiredInputs")}
-                                    className="border p-2 rounded-lg flex-1"
 
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Label"
-                                    value={input.label}
-                                    onChange={(e) => handleArrayChange(idx, "label", e.target.value, "requiredInputs")}
-                                    className="border p-2 rounded-lg flex-1"
+                    <KeywordInput
+                            keywords={formData.keyword}
+                            setKeywords={(newKeywords) => setFormData({ ...formData, keyword: newKeywords })}
+                        />
 
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Placeholder"
-                                    value={input.placeholder}
-                                    onChange={(e) => handleArrayChange(idx, "placeholder", e.target.value, "requiredInputs")}
-                                    className="border p-2 rounded-lg flex-1"
-                                />
-                                <select
-                                    value={input.type}
-                                    onChange={(e) => handleArrayChange(idx, "type", e.target.value, "requiredInputs")}
-                                    className="border p-2 rounded-lg"
-                                >
-                                    <option value="string">String</option>
-                                    <option value="number">Number</option>
-                                    <option value="boolean">Boolean</option>
-                                </select>
-                                <button
-                                    type="button"
-                                    onClick={() => removeField("requiredInputs", idx)}
-                                    className="bg-red-500 text-white px-3 rounded-lg"
-                                >
-                                    ✕
-                                </button>
-                            </div>
-                        ))}
-                        <button
-                            type="button"
-                            onClick={() =>
-                                addField("requiredInputs", { key: "", label: "", type: "string", placeholder: "", required: true })
-                            }
-                            className="text-blue-600 text-sm"
-                        >
-                            ➕ Add Input
-                        </button>
-                    </div>
+                    <RequiredInputsForm
+                        arrayName="requiredInputs"
+                        fields={formData.requiredInputs || []}
+                        handleArrayChange={handleArrayChange}
+                        addField={addField}
+                        removeField={removeField}
+                        newItemTemplate={{ key: "", label: "", inject: [{ node: "", field: "" }] }}
+                    />
 
-                    <div>
-                        <h3 className="font-semibold mb-2">Required Credentials</h3>
-                        {formData.requiredCredentials.map((cred, idx) => (
-                            <div key={idx} className="flex gap-2 mb-2">
-                                <input
-                                    type="text"
-                                    placeholder="Service"
-                                    value={cred.service}
-                                    onChange={(e) => handleArrayChange(idx, "service", e.target.value, "requiredCredentials")}
-                                    className="border p-2 rounded-lg flex-1"
-
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Label"
-                                    value={cred.label}
-                                    onChange={(e) => handleArrayChange(idx, "label", e.target.value, "requiredCredentials")}
-                                    className="border p-2 rounded-lg flex-1"
-
-                                />
-                                <select
-                                    value={cred.type}
-                                    onChange={(e) => handleArrayChange(idx, "type", e.target.value, "requiredCredentials")}
-                                    className="border p-2 rounded-lg"
-                                >
-                                    <option value="oauth2">OAuth2</option>
-                                    <option value="apikey">API Key</option>
-                                    <option value="token">Token</option>
-                                </select>
-                                <button
-                                    type="button"
-                                    onClick={() => removeField("requiredCredentials", idx)}
-                                    className="bg-red-500 text-white px-3 rounded-lg"
-                                >
-                                    ✕
-                                </button>
-                            </div>
-                        ))}
-                        <button
-                            type="button"
-                            onClick={() =>
-                                addField("requiredCredentials", { service: "", label: "", type: "oauth2" })
-                            }
-                            className="text-blue-600 text-sm"
-                        >
-                            ➕ Add Credential
-                        </button>
-                    </div>
+                    <RequiredCredentialForm
+                        formData={formData}
+                        handleArrayChange={handleArrayChange}
+                        addField={addField}
+                        setFormData={setFormData}
+                        removeField={removeField}
+                    />
 
                     {/* Rich Text Editor */}
                     <div>

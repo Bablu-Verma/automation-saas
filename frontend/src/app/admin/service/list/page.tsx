@@ -14,7 +14,6 @@ export type Workflow__ = {
   _id: string;
   name: string;
   description: string;
-  category: string;
   pricePerMonth: number;
   currency: string;
   isPublished: "ACTIVE" | "PAUSE";
@@ -131,7 +130,7 @@ export default function MasterWorkflows() {
               </span>
             </div>
 
-            <p className="text-gray-400 text-sm mb-2">Category: {wf.category}</p>
+          
             <p className="text-gray-300 font-semibold mb-4">
               Price: ₹{wf.pricePerMonth}/{wf.currency} | Trial: {wf.trialDays} days
             </p>

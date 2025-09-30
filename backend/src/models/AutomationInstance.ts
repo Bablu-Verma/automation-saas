@@ -1,30 +1,39 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const AutomationInstanceSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
-  masterWorkflow: { type: Schema.Types.ObjectId, ref: "MasterWorkflow", required: true },
-  subscription: { type: Schema.Types.ObjectId, ref: "Subscription", required: true },
+const AutomationInstanceSchema = new Schema(
+  {
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
+    masterWorkflow: { type: Schema.Types.ObjectId, ref: "MasterWorkflow", required: true },
+    instanceValue: { type: Schema.Types.ObjectId, ref: "InstanceValue", required: true },
 
-  n8nWorkflowId: { type: String, required: true, index: true },
-  instanceName: { type: String, required: true },
-  
-  isActive: {  type: String,
-    enum: ["ACTIVE", "PAUSE"],
-    default: "PAUSE",
-   },
+    subscription: { type: Schema.Types.ObjectId, ref: "Subscription" },
 
-  // User credentials for this instance
-  userCredentials: [
-    {
-      serviceName: String,
-      n8nCredentialId: String,
+    n8nWorkflowId: { type: String, required: true, index: true },
+    instanceName: { type: String, required: true },
+
+    isActive: {
+      type: String,
+      enum: ["RUNNING", "PAUSE"],
+      default: "PAUSE",
     },
-  ],
 
-  // Stats
-  executionCount: { type: Number, default: 0 },
-  lastExecutedAt: { type: Date },
-}, { timestamps: true });
+    systemStatus: {
+      type: String,
+      enum: ["TRIAL", "ACTIVE", 'PAID_PENDING', 'EXPIRED', 'CONTACT_SUPPORT'], 
+      default: "TRIAL",
+      index: true,
+    },
+    periods:{
+      startTime:Date,
+      endTime:Date,
+    },
+   
+    // Stats
+    executionCount: { type: Number, default: 0 },
+    lastExecutedAt: { type: Date },
+  },
+  { timestamps: true }
+);
 
 export default mongoose.model("AutomationInstance", AutomationInstanceSchema);

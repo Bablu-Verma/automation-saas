@@ -4,12 +4,14 @@ const { Schema } = mongoose;
 const MasterWorkflowSchema = new Schema({
   name: { type: String, required: true, unique: true, trim: true },
   description: { type: String, trim: true },
-
+  slug:{
+       type: String, required: true, unique: true, index: true
+    },
   workflowJsonTemplate: { type: Object, required: true },
   serviceImage: { type: String },
 
   version: { type: Number, default: 1 },
-  category: { type: String, required: true },
+  keyword: [{ type: String, trim: true }], 
 
   isPublished: {
     type: String,
@@ -17,30 +19,44 @@ const MasterWorkflowSchema = new Schema({
     default: "PAUSE",
   },
 
-  // Monetization
   pricePerMonth: { type: Number, default: 0 },
   currency: { type: String, default: "INR" },
+  
   trialDays: { type: Number, default: 7 },
 
-  // What inputs user must provide
   requiredInputs: [
     {
-      key: { type: String, required: true },
-      label: { type: String, required: true },
-      type: { type: String, default: "string" },
-      placeholder: { type: String },
-      required: { type: Boolean, default: true },
+      key: { type: String},
+      label: { type: String },
+      inject: [{ node: String, field: String }]
     },
   ],
 
-  // What credentials user must connect
-  requiredCredentials: [
-    {
-      service: { type: String, required: true },
-      label: { type: String, required: true },
-      type: { type: String, default: "oauth2" },
-    },
-  ],
+ requiredCredentials: [
+  {
+    service: { type: String },          // e.g. "Google Sheets"
+    label: { type: String },            // e.g. "Google OAuth2"
+    inputType: { type: String },        // "oauth2" | "apikey" | "httpBasic"
+    credentialType: { type: String },   // e.g. "googleSheetsOAuth2Api"
+    scopes: { type: [String] },         // For OAuth2 (optional)
+    fields: [                           // 👈 New: define actual fields
+      {
+        name: { type: String },         // field key (e.g. "clientId")
+        label: { type: String },        // UI label (e.g. "Client ID")
+        inputType: { type: String },    // "text" | "password" | "token"
+        required: { type: Boolean }
+      }
+    ],
+    inject: [
+      {
+        node: { type: String },         // node name to inject into
+        field: { type: String }         // node field name
+      }
+    ]
+  }
+]
+
 }, { timestamps: true });
 
 export default mongoose.model("MasterWorkflow", MasterWorkflowSchema);
+

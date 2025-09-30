@@ -87,10 +87,7 @@ export default function ServiceDetails() {
           <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
             {workflow.name}
           </h1>
-          <p className="flex items-center text-lg text-white/80 gap-2">
-            <FiCheckCircle className="text-green-400" size={20} />
-            Category: <span className="font-semibold">{workflow.category}</span>
-          </p>
+        
 
           {/* Price & Trial */}
           <p className="text-2xl md:text-3xl font-bold text-white">
@@ -107,57 +104,76 @@ export default function ServiceDetails() {
         </div>
       </motion.div>
 
+        <p className="flex items-center text-lg text-white/80 gap-2">
+            <FiCheckCircle className="text-green-400" size={20} />
+            Keywords: <div className="flex gap-x-3 flex-wrap gap-y-1">{
+              workflow.keyword.map((item, i )=>(
+                <span key={i} className="font-normal capitalize px-4 py-.5 rounded-full bg-amber-600 ">{item}</span>
+              ))
+              }</div>
+          </p>
+
       {/* Description */}
       {workflow.description && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className=" mx-4 mb-16 md:mx-8 dangerouslyHTML"
-          dangerouslySetInnerHTML={{ __html: workflow.description }}
-        />
+        <div className="mt-10">
+          <h2 className="text-2xl font-semibold text-white mb-4">Description</h2>
+      <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className=" mx-4 mb-16 md:mx-8 dangerouslyHTML"
+                dangerouslySetInnerHTML={{ __html: workflow.description }}
+              />
+        </div>
+       
       )}
 
-      {/* Required Inputs & Credentials */}
-      <div className="grid lg:grid-cols-2 gap-10 mb-16">
-        {/* Required Inputs */}
-        {workflow.requiredInputs?.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-md"
-          >
-            <h2 className="text-2xl font-semibold text-white mb-4">Required Inputs</h2>
-            <ul className="list-disc list-inside text-white/80">
-              {workflow.requiredInputs.map((input, idx) => (
-                <li key={idx}>
-                  <span className="font-semibold">{input.label}</span> ({input.type}) {input.required ? '*' : ''}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
+     {/* Required Inputs & Credentials */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 lg:gap-6 mb-16">
+  {/* Required Inputs */}
+  {workflow.requiredInputs?.filter((input) => input.key)?.length > 0 && (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-md"
+    >
+      <h2 className="text-2xl font-semibold text-white mb-4">Required Inputs</h2>
+      <ul className="list-disc list-inside text-white/80">
+        {workflow.requiredInputs
+          .filter((input) => input.key && input.label)
+          .map((input, idx) => (
+            <li key={idx}>
+              <span className="font-semibold">{input.label}</span>
+            </li>
+          ))}
+      </ul>
+    </motion.div>
+  )}
 
-        {/* Required Credentials */}
-        {workflow.requiredCredentials?.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-md"
-          >
-            <h2 className="text-2xl font-semibold text-white mb-4">Required Credentials</h2>
-            <ul className="list-disc list-inside text-white/80">
-              {workflow.requiredCredentials.map((cred, idx) => (
-                <li key={idx}>
-                  <span className="font-semibold">{cred.label}</span> ({cred.service})
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </div>
+
+  {/* Required Credentials */}
+  {workflow.requiredCredentials?.filter((cred) => cred.service && cred.label)?.length > 0 && (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-md"
+    >
+      <h2 className="text-2xl font-semibold text-white mb-4">Required Credentials</h2>
+      <ul className="list-disc list-inside text-white/80">
+        {workflow.requiredCredentials
+          .filter((cred) => cred.service && cred.label)
+          .map((cred, idx) => (
+            <li key={idx}>
+              <span className="font-semibold">{cred.label}</span> {cred.service}
+            </li>
+          ))}
+      </ul>
+    </motion.div>
+  )}
+</div>
+
 
       {/* CTA Section */}
       <motion.div

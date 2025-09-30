@@ -8,34 +8,35 @@ import route from './router/route';
 
 connectDB();
 
-const app = express();
+export const app_ = express();
 
-app.use("/images", express.static("images"));
+app_.use("/images", express.static("images"));
 
 
 
-app.use(cors({
+app_.use(cors({
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
 
 
-app.use(express.json());
+app_.use(express.json());
 
 
 
-app.get('/', (req, res) => {
+app_.get('/', (req, res) => {
     res.send('Hello server');
 });
 
 // Routes
-app.use('/api', route)
+app_.use('/api', route)
 
+// import './lib/OAuth2';
 
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app_.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

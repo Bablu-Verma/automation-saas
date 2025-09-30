@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { AuthenticatedRequest } from "../../../middlewares/loginCheck";
 import MasterWorkflow from "../../../models/MasterWorkflow";
+import slug from "slug";
 
 export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -25,12 +26,11 @@ export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Respons
       serviceImage,
       isPublished,
       requiredInputs,
+      keyword,
       requiredCredentials,
-      category,
     } = req.body;
 
 
-    console.log(req.body)
 
     if (!id) {
       return res.status(400).json({
@@ -47,9 +47,39 @@ export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Respons
       });
     }
 
-    // ✅ Build update fields dynamically
+
+   let find_workflow = await MasterWorkflow.findById(id)
+
+   if(!find_workflow){
+     return res.status(400).json({
+        success: false,
+        message: "Work Flow not found",
+      });
+   }
+
+   // ✅ Build update fields dynamically
     const updateFields: Record<string, any> = {};
-    if (name !== undefined) updateFields.name = name;
+
+   if (name && find_workflow.name !== name) {
+      const newSlug = slug(name);
+
+      const existingSlug = await MasterWorkflow.findOne({
+        slug: newSlug,
+        _id: { $ne: id }, 
+      });
+
+      if (existingSlug) {
+        return res.status(409).json({
+          success: false,
+          message: "Slug already exists for another workflow. Please choose a different name.",
+        });
+      }
+
+      updateFields.slug = newSlug;
+      updateFields.name = name;
+    }
+
+    
     if (description !== undefined) updateFields.description = description;
     if (workflowJsonTemplate !== undefined) updateFields.workflowJsonTemplate = workflowJsonTemplate;
     if (serviceImage !== undefined) updateFields.serviceImage = serviceImage;
@@ -59,7 +89,8 @@ export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Respons
     if (trialDays !== undefined) updateFields.trialDays = trialDays;
     if (requiredInputs !== undefined) updateFields.requiredInputs = requiredInputs;
     if (requiredCredentials !== undefined) updateFields.requiredCredentials = requiredCredentials;
-    if (category !== undefined) updateFields.category = category;
+    if (keyword !== undefined) updateFields.category = keyword;
+  
 
     if (Object.keys(updateFields).length === 0) {
       return res.status(400).json({

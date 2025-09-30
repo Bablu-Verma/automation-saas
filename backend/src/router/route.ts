@@ -24,8 +24,12 @@ import { upload_ } from '../config/multer_';
 import { uploadImageByAdmin } from '../controllers/image_upload/imageupload';
 import { createContact } from '../controllers/frontend/public/ContactUs';
 import { deleteContactus, getContacts, updateContactStatus } from '../controllers/admin/ContactUsAdmin';
-import { subscribeNewsletter, unsubscribeNewsletter } from '../controllers/frontend/public/newsletterController';
+import { subscribeNewsletter, unsubscribeNewsletter } from '../controllers/frontend/public/NewsletterController';
 import { getAllSubscribers } from '../controllers/admin/NewsletterAdminController';
+import { automationList } from '../controllers/frontend/dashboard/automation/automationList';
+import { automationDetail } from '../controllers/frontend/dashboard/automation/automationDetails';
+import { updateAutomationStatus } from '../controllers/frontend/dashboard/automation/automationUpdateStatus';
+import { createN8nCredential } from '../controllers/frontend/dashboard/automation/InstanceValue';
 
 
 const route = express.Router();
@@ -73,6 +77,12 @@ route.post(base + '/home/search', searchService);
 
 // automation
 route.post(base + '/instance/automation-create',loginCheck, createAutomationInstance);
+route.post(base + '/instance/automation-list',loginCheck, automationList);
+route.post(base + '/instance/automation-details',loginCheck, automationDetail);
+route.post(base + '/instance/automation-update-status',loginCheck, updateAutomationStatus);
+
+
+route.post(base + '/instance/create-credential',loginCheck, createN8nCredential);
 
 // contactus 
 route.post( base + "/contact/create", createContact);             

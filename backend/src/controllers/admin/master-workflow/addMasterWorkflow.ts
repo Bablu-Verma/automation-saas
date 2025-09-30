@@ -1,6 +1,8 @@
 import { Response } from "express";
 import { AuthenticatedRequest } from "../../../middlewares/loginCheck";
 import MasterWorkflow from "../../../models/MasterWorkflow";
+import slug from "slug";
+
 
 export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -23,9 +25,9 @@ export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response
       trialDays,
       serviceImage,
       isPublished, 
+      keyword,
       requiredInputs,
       requiredCredentials,
-      category,
     } = req.body;
 
     // ✅ Manual validation
@@ -36,6 +38,9 @@ export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response
       });
     }
 
+    // 🔹 Generate slug from name
+    let create_slug = slug(name);
+
     // ✅ Check for duplicate name
     const existingWorkflow = await MasterWorkflow.findOne({ name });
     if (existingWorkflow) {
@@ -45,19 +50,29 @@ export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response
       });
     }
 
+    // ✅ Check for duplicate slug
+    const existingSlug = await MasterWorkflow.findOne({ slug: create_slug });
+    if (existingSlug) {
+      return res.status(409).json({
+        success: false,
+        message: "Slug already exists for another workflow. Please choose a different name.",
+      });
+    }
+
     // ✅ Create new workflow
     const newWorkflow = new MasterWorkflow({
       name,
+      slug: create_slug,
       description,
       workflowJsonTemplate,
       serviceImage,
-       pricePerMonth,
-        currency,
-        trialDays,
+      keyword,
+      pricePerMonth,
+      currency,
+      trialDays,
       isPublished: isPublished ?? "PAUSE", // default string
       requiredInputs: requiredInputs ?? [],
       requiredCredentials: requiredCredentials ?? [],
-      category: category ?? "general",
     });
 
     const savedWorkflow = await newWorkflow.save();
@@ -75,4 +90,3 @@ export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response
     });
   }
 };
-

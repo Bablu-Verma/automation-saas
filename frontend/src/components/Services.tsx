@@ -8,12 +8,13 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { Workflow__ } from "@/app/admin/service/list/page"
 import { home_service_api } from "@/api"
-
+import { setServices } from "@/redux-store/slice/serviceToFooterSlice"
+import { useDispatch } from "react-redux";
 
 
 export default function Services() {
   const [workflows, setWorkflows] = useState<Workflow__[]>([]);
-
+  const dispatch  = useDispatch()
 
    useEffect(() => {
 
@@ -30,8 +31,9 @@ export default function Services() {
           }
         );
 
-        console.log(data)
+        // console.log(data)
         setWorkflows(data.workflows);
+        dispatch(setServices(data.workflows));
       } catch (err) {
         console.error("Failed to fetch workflows:", err);
       }

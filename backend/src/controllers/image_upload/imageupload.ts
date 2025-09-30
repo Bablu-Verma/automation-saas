@@ -3,6 +3,7 @@ import sharp from "sharp";
 import path from "path";
 import fs from "fs";
 import { AuthenticatedRequest } from "../../middlewares/loginCheck";
+import { promises as fsp } from "fs";
 
 export const uploadImageByAdmin = async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -32,13 +33,19 @@ export const uploadImageByAdmin = async (req: AuthenticatedRequest, res: Respons
 
     // ✅ Sharp optimization
     await sharp(inputPath)
-      .resize({ width: 1600 }) 
-      .jpeg({ quality: 80 })   
+      .resize({ width: 1600 })
+      .jpeg({ quality: 80 })
       .toFile(outputPath);
 
     // ✅ Delete original file after optimization
     if (fs.existsSync(inputPath)) {
-      fs.unlinkSync(inputPath);
+      try {
+        await fsp.unlink(inputPath);
+      } catch (err: any) {
+        if (err.code !== "ENOENT") {
+          console.error("Error deleting file:", err);
+        }
+      }
     }
 
     // ✅ Public path for client

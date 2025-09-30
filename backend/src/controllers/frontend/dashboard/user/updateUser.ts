@@ -3,6 +3,7 @@ import { AuthenticatedRequest } from '../../../../middlewares/loginCheck';
 import User from '../../../../models/User';
 import { Response } from 'express';
 import { phoneRegex } from '../../../../utils/constant';
+import { jsonwebtoken_create } from '../../../../lib/jsonwebtoken_';
 
 
 
@@ -37,15 +38,27 @@ const updateUserProfile = async (req: AuthenticatedRequest, res: Response) => {
             { new: true, runValidators: true } 
         ).select('-password -otp -__v');
 
+
+
        
         if (!updatedUser) {
             return res.status(404).json({ success: false, msg: 'User not found.' });
         }
 
+         const token = jsonwebtoken_create(
+                        {
+                            _id: updatedUser._id.toString(),
+                            email: updatedUser.email,
+                            role: updatedUser.role,
+                        },
+                        "5d"
+                    );
+
         return res.status(200).json({
             success: true,
             msg: 'Profile updated successfully.',
-            data: updatedUser
+            token,
+            user: updatedUser
         });
 
     } catch (err: any) {

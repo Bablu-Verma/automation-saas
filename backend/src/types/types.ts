@@ -33,6 +33,13 @@ export interface JwtPayload {
 //   status: string;
 // }
 
+export interface ITrialService {
+  masterWorkflow: Types.ObjectId; // Ref to MasterWorkflow
+  instance: Types.ObjectId;       // Ref to AutomationInstance
+  trialStart: Date;
+  trialEnd: Date;
+}
+
 interface Profile {
   company?: string;
   phoneNumber?: string;
@@ -55,6 +62,6 @@ export interface UserDocument extends Document {
   createdAt: Date;
   updatedAt: Date;
 
-  trialUsedServices: Types.ObjectId[];
+  // trialUsedServices: ITrialService[];
 }
 

@@ -140,7 +140,9 @@
 
 .dangerouslyHTML img {
   width: 100%;
+  max-width: 700px;
   height: auto;
+  margin: auto;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   margin: 12px 0;
   border-radius: 6px;

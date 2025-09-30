@@ -19,6 +19,24 @@ export const service_list_api = api_url + 'v1/service/list'
 export const service_detail_api = api_url + 'v1/service/details'
 
 
+export const contact_create_api = api_url + 'v1/contact/create'
+
+
+export const newsletter_create_api = api_url + 'v1/newsletter/subscribe'
+
+
+export const instance_create_api = api_url + 'v1/instance/automation-create'
+export const instance_list_api = api_url + 'v1/instance/automation-list'
+export const instance_details_api = api_url + 'v1/instance/automation-details'
+export const instance_update_status_api = api_url + 'v1/instance/automation-update-status'
+
+export const create_instance_value_api = api_url + 'v1/instance/create-credential'
+
+
+export const user_profile_api = api_url + 'v1/user/get-profile'
+export const user_profile_update_api = api_url + 'v1/user/update-profile'
+
+
 
 export const admin_create_master_workflow_api = api_url + 'v1/admin/master-workflow/create'
 export const admin_list_master_workflow_api = api_url + 'v1/admin/master-workflow/list'

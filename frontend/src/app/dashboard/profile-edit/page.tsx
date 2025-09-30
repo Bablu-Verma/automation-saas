@@ -1,26 +1,86 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { FiUser, FiPhone, FiMapPin, FiBriefcase, FiSave } from "react-icons/fi"
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { FiUser, FiPhone, FiMapPin, FiBriefcase, FiSave } from "react-icons/fi";
+import axios from "axios";
+import { user_profile_update_api } from "@/api";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/redux-store/redux_store";
+import { IUser } from "@/types";
+import toast from "react-hot-toast";
+import { login } from "@/redux-store/slice/userSlice";
+import { setClientCookie } from "@/helpers/client";
+
 
 export default function EditProfile() {
+  const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.user.token);
+  const user = useSelector((state: RootState) => state.user.user) as IUser | null;
+
   const [form, setForm] = useState({
-    name: "Aman Sharma",
-    company: "TechFlow",
-    phoneNumber: "+91 98765 43210",
-    address: "Bangalore, India",
-  })
+    name: "",
+    company: "",
+    phoneNumber: "",
+    address: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+ 
+
+
+  // 🔹 Prefill form with Redux user data
+  useEffect(() => {
+    if (user) {
+      setForm({
+        name: user?.name || "",
+        company: user.profile?.company || "",
+        phoneNumber: user.profile?.phoneNumber || "",
+        address: user.profile?.address || "",
+      });
+    }
+  }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Updated Profile:", form)
-    // 👉 Yahan tum API call karke DB update kar sakte ho
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token) {
+      toast.error("Unauthorized: No token found");
+      return;
+    }
+
+    setLoading(true);
+    
+
+    try {
+      const { data } = await axios.post(
+        user_profile_update_api,
+        { ...form },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ Send token
+          },
+        }
+      );
+
+     console.log(data)
+            dispatch(login({ user: data.user, token: data.token }))
+            setClientCookie("token", data.token, 60 * 24 * 5)
+            setClientCookie("user", JSON.stringify(data.user), 60 * 24 * 5)
+      toast.success("Profile updated successfully");
+      
+    } catch (err: any) {
+      console.error("Profile update failed:", err);
+      toast.error("Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="max-w-3xl mx-auto text-white">
@@ -95,12 +155,17 @@ export default function EditProfile() {
           {/* Save Button */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-primary to-secondary py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:shadow-[0_0_20px_#E6521F] transition"
+            disabled={loading}
+            className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition ${
+              loading
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-gradient-to-r from-primary to-secondary hover:shadow-[0_0_20px_#E6521F]"
+            }`}
           >
-            <FiSave /> Save Changes
+            <FiSave /> {loading ? "Saving..." : "Save Changes"}
           </button>
         </form>
       </motion.div>
     </div>
-  )
+  );
 }

@@ -1,11 +1,19 @@
 "use client"
 
+import { RootState } from "@/redux-store/redux_store";
+import { IUser } from "@/types";
 import { motion } from "framer-motion"
 import {FiMail, FiZap, FiCreditCard } from "react-icons/fi"
+import { useSelector } from "react-redux";
 
 export default function DashboardPage() {
-  // Example user (API se aayega baad me)
-  const user = {
+ 
+   const user = useSelector(
+    (state: RootState) => state.user.user
+  ) as IUser | null;
+
+
+  const data = {
     name: "Aman Sharma",
     email: "aman@example.com",
     automations: [
@@ -41,12 +49,12 @@ export default function DashboardPage() {
         >
           <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
             <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-3xl font-bold shadow-lg">
-              {user.name[0]}
+              {user?.name[0]}
             </div>
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-3xl font-extrabold">{user.name}</h1>
+              <h1 className="text-3xl font-extrabold">{user?.name}</h1>
               <p className="text-gray-300 flex items-center justify-center md:justify-start gap-2">
-                <FiMail /> {user.email}
+                <FiMail /> {user?.email}
               </p>
              
             </div>
@@ -66,7 +74,7 @@ export default function DashboardPage() {
             <FiZap /> Automations
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
-            {user.automations.map((auto, i) => (
+            {data.automations.map((auto, i) => (
               <div key={i} className="bg-dark/40 rounded-xl p-5 border border-white/10 hover:border-secondary transition">
                 <h3 className="font-semibold text-lg">{auto.name}</h3>
                 <p className="text-gray-400 text-sm mt-1">Runs: {auto.executionCount}</p>
@@ -91,7 +99,7 @@ export default function DashboardPage() {
             <FiCreditCard /> Billing History
           </h2>
           <div className="space-y-4">
-            {user.billingHistory.map((bill, i) => (
+            {data.billingHistory.map((bill, i) => (
               <div key={i} className="flex justify-between items-center bg-dark/40 p-4 rounded-lg border border-white/10">
                 <div>
                   <p className="font-semibold">Invoice #{bill.invoiceId}</p>

@@ -13,6 +13,9 @@ export default function Footer() {
     (state: RootState) => state.user.user
   ) as IUser | null;
 
+  const service = useSelector(
+    (state: RootState) => state.servicetofooter.services
+  )
   const loggedIn = Boolean(user)
 
   return (
@@ -44,7 +47,7 @@ export default function Footer() {
             <li><Link href="/about" className="hover:text-primary">About Us</Link></li>
             <li><Link href="/services" className="hover:text-primary">Services</Link></li>
             {
-              !loggedIn && <li><Link href="/login" className="hover:text-primary">Ligin</Link></li>
+              !loggedIn && <li><Link href="/login" className="hover:text-primary">Login</Link></li>
             }
           </ul>
         </div>
@@ -52,11 +55,14 @@ export default function Footer() {
         {/* Services */}
         <div>
           <h2 className="text-lg font-semibold text-white mb-4">Services</h2>
-          <ul className="space-y-2">
-            <li><Link href="/services/crm" className="hover:text-primary">CRM Automation</Link></li>
-            <li><Link href="/services/marketing" className="hover:text-primary">Marketing Workflows</Link></li>
-            <li><Link href="/services/ecommerce" className="hover:text-primary">E-commerce Sync</Link></li>
-            <li><Link href="/services/analytics" className="hover:text-primary">Data & Analytics</Link></li>
+          <ul className="space-y-2 capitalize ">
+            {
+              service.slice(0, 5).map((item, i) => {
+                return (
+                  <li key={i}><Link href={`/services/view?id=${item._id}`} className="hover:text-primary line-clamp-1">{item.name}</Link></li>
+                )
+              })
+            }
           </ul>
         </div>
 

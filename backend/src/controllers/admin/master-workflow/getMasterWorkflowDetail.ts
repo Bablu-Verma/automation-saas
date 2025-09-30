@@ -13,8 +13,6 @@ export const getMasterWorkflowDetail = async (req: AuthenticatedRequest, res: Re
       });
     }
 
-
-
     const { id } = req.body;
 
     if (!id) {

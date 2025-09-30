@@ -58,7 +58,8 @@ import {
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
-import { upload_image_api } from "@/api";
+import { upload_image_admin_api } from "@/api";
+import toast from "react-hot-toast";
 
 
 const TiptapEditor: React.FC<{
@@ -180,20 +181,22 @@ const TiptapEditor: React.FC<{
 
 
       try {
-        const { data } = await axios.post(upload_image_api, formData, {
+        const { data } = await axios.post(upload_image_admin_api, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         });
-        if (data.url) {
-          editor.chain().focus().setImage({ src: data.url }).run();
+        console.log("data=",data)
+        if (data.filePath) {
+          editor.chain().focus().setImage({ src: process.env.NEXT_PUBLIC_BACKEND_BASE_URL +data.filePath }).run();
         } else {
-          alert("Failed to upload image");
+          toast.error("Failed to upload image");
+
         }
       } catch (error) {
         console.error("Upload error:", error);
-        alert("Error uploading image");
+        toast.error("Error uploading image");
       }
     };
 

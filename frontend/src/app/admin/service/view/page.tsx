@@ -15,14 +15,15 @@ export type WorkflowDetail = {
   _id: string;
   name: string;
   description: string;
-  category: string;
+  keyword:[];
   pricePerMonth: number;
   currency: string;
   isPublished: "ACTIVE" | "PAUSE";
   serviceImage?: string;
   trialDays: number;
-  requiredInputs: { key: string; label: string; type: string; placeholder?: string }[];
-  requiredCredentials: { service: string; label: string; type: string }[];
+  requiredInputs: { key: string; label: string;  }[];
+  requiredKey: { key: string; label: string; }[];
+  requiredCredentials: { service: string; label: string; type: string ; scope:string[] }[];
 };
 
 export default function WorkflowDetailPage() {
@@ -67,7 +68,7 @@ export default function WorkflowDetailPage() {
     }
   };
 
-  
+
 
   if (loading)
     return (
@@ -108,40 +109,75 @@ export default function WorkflowDetailPage() {
           </span>
         </div>
 
-      
-        <p className="text-gray-400 text-sm mb-2">Category: {workflow.category}</p>
+
+      <div className="flex gap-x-4 gap-y-1">
+         {
+        workflow.keyword.map((item, i)=>(
+          <p key={i} className="">{item}</p>
+        ))
+       }
+      </div>
         <p className="text-gray-300 font-semibold mb-4">
           Price: ₹{workflow.pricePerMonth}/{workflow.currency} | Trial: {workflow.trialDays} days
         </p>
 
-        <div className="mb-4">
-          <h3 className="font-bold mb-2">Required Inputs</h3>
-          <ul className="list-disc ml-5 text-gray-300">
-            {workflow.requiredInputs.map((input) => (
-              <li key={input.key}>
-                {input.label} ({input.type}) {input.placeholder && `- e.g. ${input.placeholder}`}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {workflow.requiredInputs?.filter((input) => input.key)?.length > 0 && (
+          <div className="mb-4">
+            <h3 className="font-bold mb-2">Required Inputs</h3>
+            <ul className="list-disc ml-5 text-gray-300">
+              {workflow.requiredInputs
+                .filter((input) => input.key && input.label)
+                .map((input) => (
+                  <li key={input.key}>
+                    {input.label}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
 
-        <div>
-          <h3 className="font-bold mb-2">Required Credentials</h3>
-          <ul className="list-disc ml-5 text-gray-300">
-            {workflow.requiredCredentials.map((cred, i) => (
-              <li key={i}>
-                {cred.label} ({cred.type})
-              </li>
-            ))}
-          </ul>
-        </div>
+        {workflow.requiredKey?.filter((input) => input.key)?.length > 0 && (
+          <div className="mb-4">
+            <h3 className="font-bold mb-2">Required Key</h3>
+            <ul className="list-disc ml-5 text-gray-300">
+              {workflow.requiredKey
+                .filter((input) => input.key && input.label)
+                .map((input) => (
+                  <li key={input.key}>
+                    {input.label}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
 
-         {workflow.description && (
-  <div
-    className="text-gray-300 mb-2 dangerouslyHTML"
-    dangerouslySetInnerHTML={{ __html: workflow.description }}
-  />
-)}
+        {workflow.requiredCredentials?.filter((cred) => cred.label)?.length > 0 && (
+          <div className="mb-4">
+            <h3 className="font-bold mb-2">Required Credentials</h3>
+            <ul className="list-disc ml-5 text-gray-300">
+              {workflow.requiredCredentials
+                .filter((cred) => cred.label && cred.type)
+                .map((cred, i) => (
+                  <li key={i}>
+                    {cred.label} ({cred.type})
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
+
+
+
+
+
+
+        <h3 className="font-bold mb-2">Description</h3>
+        {workflow.description && (
+          <div
+            className="text-gray-300 mb-2 dangerouslyHTML"
+            dangerouslySetInnerHTML={{ __html: workflow.description }}
+          />
+        )}
 
         <div className="mt-6 flex gap-3">
           <Link
