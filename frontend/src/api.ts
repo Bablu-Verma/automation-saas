@@ -30,7 +30,7 @@ export const instance_list_api = api_url + 'v1/instance/automation-list'
 export const instance_details_api = api_url + 'v1/instance/automation-details'
 export const instance_update_status_api = api_url + 'v1/instance/automation-update-status'
 
-export const create_instance_value_api = api_url + 'v1/instance/create-credential'
+// export const create_instance_value_api = api_url + 'v1/instance/create-credential'
 
 
 export const user_profile_api = api_url + 'v1/user/get-profile'

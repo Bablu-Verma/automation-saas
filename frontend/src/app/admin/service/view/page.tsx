@@ -15,15 +15,16 @@ export type WorkflowDetail = {
   _id: string;
   name: string;
   description: string;
-  keyword:[];
+  keyword: [];
   pricePerMonth: number;
   currency: string;
   isPublished: "ACTIVE" | "PAUSE";
   serviceImage?: string;
   trialDays: number;
-  requiredInputs: { key: string; label: string;  }[];
-  requiredKey: { key: string; label: string; }[];
-  requiredCredentials: { service: string; label: string; type: string ; scope:string[] }[];
+  requiredInputs: { key: string; label: string; }[];
+  requiredCredentials: {
+    service: string; label: string; inputType: string; scope: string[];  credentialType: string
+  }[];
 };
 
 export default function WorkflowDetailPage() {
@@ -110,13 +111,13 @@ export default function WorkflowDetailPage() {
         </div>
 
 
-      <div className="flex gap-x-4 gap-y-1">
-         {
-        workflow.keyword.map((item, i)=>(
-          <p key={i} className="">{item}</p>
-        ))
-       }
-      </div>
+        <div className="flex gap-x-4 gap-y-1">
+          {
+            workflow.keyword.map((item, i) => (
+              <p key={i} className="">{item}</p>
+            ))
+          }
+        </div>
         <p className="text-gray-300 font-semibold mb-4">
           Price: ₹{workflow.pricePerMonth}/{workflow.currency} | Trial: {workflow.trialDays} days
         </p>
@@ -136,30 +137,17 @@ export default function WorkflowDetailPage() {
           </div>
         )}
 
-        {workflow.requiredKey?.filter((input) => input.key)?.length > 0 && (
-          <div className="mb-4">
-            <h3 className="font-bold mb-2">Required Key</h3>
-            <ul className="list-disc ml-5 text-gray-300">
-              {workflow.requiredKey
-                .filter((input) => input.key && input.label)
-                .map((input) => (
-                  <li key={input.key}>
-                    {input.label}
-                  </li>
-                ))}
-            </ul>
-          </div>
-        )}
+      
 
         {workflow.requiredCredentials?.filter((cred) => cred.label)?.length > 0 && (
           <div className="mb-4">
             <h3 className="font-bold mb-2">Required Credentials</h3>
             <ul className="list-disc ml-5 text-gray-300">
               {workflow.requiredCredentials
-                .filter((cred) => cred.label && cred.type)
+                .filter((cred) => cred.label && cred.inputType)
                 .map((cred, i) => (
                   <li key={i}>
-                    {cred.label} ({cred.type})
+                    {cred.label} ({cred.inputType})
                   </li>
                 ))}
             </ul>

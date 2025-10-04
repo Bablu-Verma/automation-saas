@@ -1,6 +1,6 @@
 "use client";
 
-import { service_detail_api } from "@/api";
+import { instance_create_api, service_detail_api } from "@/api";
 import { WorkflowDetail } from "@/app/admin/service/view/page";
 import Loading_ from "@/components/Loading";
 import { RootState } from "@/redux-store/redux_store";
@@ -10,6 +10,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+
+const allowedOrigins = [process.env.NEXT_PUBLIC_BACKEND_BASE_URL];
 
 export default function StartFormPage() {
   const searchParams = useSearchParams();
@@ -23,7 +25,7 @@ export default function StartFormPage() {
 
   const [instanceName, setInstanceName] = useState("");
   const [inputData, setInputData] = useState<Record<string, string>>({});
-  const [credentialsData, setCredentialsData] = useState<Record<string, string>>({});
+  const [credentialsData, setCredentialsData] = useState<Record<string, Record<string, string>>>({});
 
   // Fetch workflow details
   useEffect(() => {
@@ -42,17 +44,19 @@ export default function StartFormPage() {
           )
         );
 
-        // Initialize credentialsData
-        const creds: Record<string, string> = {};
+        // Initialize credentialsData as nested object
+        const creds: Record<string, Record<string, string>> = {};
         (wf.requiredCredentials || []).forEach((cred) => {
+          creds[cred.service] = {};
           (cred.fields || []).forEach((field) => {
-            creds[`${cred.service}_${field.name}`] = "";
+            creds[cred.service][field.name] = "";
           });
         });
         setCredentialsData(creds);
 
       } catch (err) {
         console.error("Failed to fetch workflow:", err);
+        toast.error("Failed to load workflow details.");
       } finally {
         setLoading(false);
       }
@@ -67,45 +71,115 @@ export default function StartFormPage() {
   };
 
   const handleCredentialChange = (service: string, fieldName: string, value: string) => {
-    setCredentialsData((prev) => ({
+    setCredentialsData(prev => ({
       ...prev,
-      [`${service}_${fieldName}`]: value,
+      [service]: {
+        ...(prev[service] || {}),
+        [fieldName]: value
+      }
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormLoading(true);
+  const handleOAuth2Connect = async (cred) => {
     try {
-      const payload = {
-        workflowId,
-        instanceName,
-        inputs: inputData,
-        credentials: credentialsData,
-      };
-      console.log("Submitting payload:", payload);
-      toast.success("Workflow submitted successfully!");
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to start workflow.");
-    } finally {
-      setFormLoading(false);
-    }
-  };
+      // 1️⃣ Dynamic scopes from the credential object
+      const scopesParam = encodeURIComponent((cred.scopes || []).join(" "));
 
-  const handleOAuth2Connect = async (service: string) => {
-    try {
-      const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/${service}`;
-      window.open(authUrl, "_blank");
-      toast.success(`Please complete the OAuth flow in the opened window for ${service}`);
+      // 2️⃣ Fetch OAuth URL from backend, pass scopes
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/oauth/google?scopes=${scopesParam}`
+      );
+
+      const { url } = response.data;
+
+      console.log(url)
+
+      const width = 500;
+      const height = 600;
+      const left = window.screen.width / 2 - width / 2;
+      const top = window.screen.height / 2 - height / 2;
+
+      // 3️⃣ Open OAuth popup
+      window.open(
+        url,
+        `${cred.service} OAuth`,
+        `width=${width},height=${height},top=${top},left=${left}`
+      );
+
+      // 4️⃣ Listen for message from popup
+      const handleMessage = (event: MessageEvent) => {
+        if (!allowedOrigins.includes(event.origin)) return;
+
+        const data = event.data;
+        if (data.success) {
+          setCredentialsData(prev => ({
+            ...prev,
+            [cred.service]: {
+              ...(prev[cred.service] || {}),
+              accessToken: data.accessToken || "",
+              refreshToken: data.refreshToken || "",
+              clientId: data.clientId || "",
+              clientSecret: data.clientSecret || ""
+            }
+          }));
+          toast.success(`${cred.service} connected successfully!`);
+        } else {
+          toast.error(`${cred.service} OAuth failed.`);
+        }
+
+        window.removeEventListener("message", handleMessage);
+      };
+
+      window.addEventListener("message", handleMessage, false);
     } catch (err) {
       console.error("OAuth2 connection failed:", err);
       toast.error("Failed to connect with OAuth2 service.");
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!workflowId || !instanceName) {
+      toast.error("Please fill all required fields.");
+      return;
+    }
+
+    setFormLoading(true);
+    try {
+      const payload = {
+        workflowId,
+        instanceName,
+        inputs: Object.entries(inputData).map(([key, value]) => ({ key, value })),
+        credentials: credentialsData 
+      };
+
+      // console.log("Submitting payload:", payload);
+
+      const res = await axios.post(
+        instance_create_api,
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (res.data.success) {
+        toast.success("Automation instance Create successfully!");
+        // router.push("/user/dashboard");
+      } else {
+        toast.error("Failed to start automation.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error starting automation.");
+    } finally {
+      setFormLoading(false);
+    }
+  };
 
   if (loading) return <Loading_ />;
+
+
+  // console.log(credentialsData)
 
   return (
     <section className="relative">
@@ -164,38 +238,29 @@ export default function StartFormPage() {
               {cred.label} ({cred.service})
             </span>
 
-            {(cred.fields || []).map((field) => (
-              <input
-                key={field.name}
-                type={field.inputType === "token" ? "text" : field.inputType}
-                placeholder={field.label}
-                value={credentialsData[`${cred.service}_${field.name}`] || ""}
-                onChange={(e) =>
-                  handleCredentialChange(cred.service, field.name, e.target.value)
-                }
-                className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-            ))}
+            {(cred.fields || []).map((field, fIdx) => {
+              return (
+                <input
+                  key={fIdx}
+                  type={field.inputType === "token" ? "text" : field.inputType}
+                  placeholder={field.label}
+                  value={credentialsData[cred.service]?.[field.name] || ""}
+                  onChange={(e) =>
+                    handleCredentialChange(cred.service, field.name, e.target.value)
+                  }
+                  className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              );
+            })}
 
-            {/* OAuth2 Connect button if required */}
+            {/* OAuth2 Connect Button */}
             {cred.inputType?.toLowerCase().includes("oauth2") && (
               <button
                 type="button"
-                className="px-5 py-2 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-lg transition"
-                onClick={() => handleOAuth2Connect(cred.service)}
+                className="px-5 py-2 rounded-full bg-white text-secondary font-semibold hover:shadow-lg transition"
+                onClick={() => handleOAuth2Connect(cred)}
               >
-                Google Connect {cred.label}
-              </button>
-            )}
-
-            {/* facebookOAuth2Api Connect button if required */}
-            {cred.inputType?.toLowerCase().includes("facebookOAuth2Api") && (
-              <button
-                type="button"
-                className="px-5 py-2 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-lg transition"
-                onClick={() => handleOAuth2Connect(cred.service)}
-              >
-                Facebook Connect {cred.label}
+                Connect {cred.label}
               </button>
             )}
           </div>
@@ -204,6 +269,7 @@ export default function StartFormPage() {
         <div className="flex justify-center items-center">
           <button
             type="submit"
+            disabled={formLoading}
             className="px-20 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition hover:from-secondary hover:to-primary"
           >
             {formLoading ? "Processing..." : "Continue"}

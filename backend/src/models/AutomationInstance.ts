@@ -5,7 +5,6 @@ const AutomationInstanceSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
     masterWorkflow: { type: Schema.Types.ObjectId, ref: "MasterWorkflow", required: true },
-    instanceValue: { type: Schema.Types.ObjectId, ref: "InstanceValue", required: true },
 
     subscription: { type: Schema.Types.ObjectId, ref: "Subscription" },
 
@@ -20,16 +19,39 @@ const AutomationInstanceSchema = new Schema(
 
     systemStatus: {
       type: String,
-      enum: ["TRIAL", "ACTIVE", 'PAID_PENDING', 'EXPIRED', 'CONTACT_SUPPORT'], 
+      enum: ["TRIAL", "ACTIVE", 'PAID_PENDING', 'EXPIRED', 'CONTACT_SUPPORT'],
       default: "TRIAL",
       index: true,
     },
-    periods:{
-      startTime:Date,
-      endTime:Date,
+
+    periods: {
+      startTime: Date,
+      endTime: Date,
     },
-   
-    // Stats
+
+    n8nInputs: [
+      {
+        key: { type: String },
+        value: { type: String },
+        inject: [{ node: String, field: String }]
+      },
+    ],
+
+    n8nCredentials: [
+      {
+        service: { type: String },
+        label: { type: String },
+        n8nCredentialId: { type: String },
+        n8nCredentialName: { type: String },
+        inject: [
+          {
+            node: { type: String },
+            field: { type: String }
+          }
+        ]
+      }
+    ],
+    
     executionCount: { type: Number, default: 0 },
     lastExecutedAt: { type: Date },
   },

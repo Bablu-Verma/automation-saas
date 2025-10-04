@@ -1,105 +1,7 @@
-import { useFormArrayHelpers } from "../service/useFormArrayHelpers";
 
-
-const googleScopes = [
-  { label: "Google Drive (readonly)", value: "https://www.googleapis.com/auth/drive.readonly" },
-  { label: "Google Drive (full)", value: "https://www.googleapis.com/auth/drive" },
-  { label: "Gmail Readonly", value: "https://www.googleapis.com/auth/gmail.readonly" },
-  { label: "Gmail Send", value: "https://www.googleapis.com/auth/gmail.send" },
-  { label: "Gmail Modify", value: "https://www.googleapis.com/auth/gmail.modify" },
-  { label: "Google Sheets", value: "https://www.googleapis.com/auth/spreadsheets" },
-  { label: "Google Calendar", value: "https://www.googleapis.com/auth/calendar" },
-  { label: "Google Calendar (readonly)", value: "https://www.googleapis.com/auth/calendar.readonly" },
-  { label: "Google Docs", value: "https://www.googleapis.com/auth/documents" },
-  { label: "Google Docs (readonly)", value: "https://www.googleapis.com/auth/documents.readonly" },
-  { label: "Google Contacts", value: "https://www.googleapis.com/auth/contacts" },
-  { label: "User Profile", value: "https://www.googleapis.com/auth/userinfo.profile" },
-  { label: "User Email", value: "https://www.googleapis.com/auth/userinfo.email" },
-  { label: "Google Photos (readonly)", value: "https://www.googleapis.com/auth/photoslibrary.readonly" },
-  { label: "Google Drive Metadata (readonly)", value: "https://www.googleapis.com/auth/drive.metadata.readonly" },
-];
-
-const facebookScopes = [
-  { label: "Public Profile", value: "public_profile" },
-  { label: "Email", value: "email" },
-  { label: "User Friends", value: "user_friends" },
-  { label: "Pages Show List", value: "pages_show_list" },
-  { label: "Pages Manage Posts", value: "pages_manage_posts" },
-  { label: "Pages Read Engagement", value: "pages_read_engagement" },
-  { label: "Pages Read User Content", value: "pages_read_user_content" },
-  { label: "Pages Manage Ads", value: "pages_manage_ads" },
-  { label: "Instagram Basic", value: "instagram_basic" },
-  { label: "Instagram Manage Insights", value: "instagram_manage_insights" },
-  { label: "Business Management", value: "business_management" },
-  { label: "Ads Management", value: "ads_management" },
-  { label: "Ads Read", value: "ads_read" },
-];
-
-
-const credentialFieldsMap: Record<string, { label: string; inputType: string; name: string }[]> = {
-  // HTTP
-  httpBasicAuth: [
-    { label: "Username", inputType: "text", name: "user" },
-    { label: "Password", inputType: "password", name: "password" },
-  ],
-  httpHeaderAuth: [
-    { label: "Header Name", inputType: "text", name: "name" },
-    { label: "Header Value", inputType: "text", name: "value" },
-  ],
-  httpQueryAuth: [
-    { label: "Query Parameter Name", inputType: "text", name: "name" },
-    { label: "Query Parameter Value", inputType: "text", name: "value" },
-  ],
-  apiKey: [
-    { label: "API Key", inputType: "text", name: "apiKey" },
-  ],
-
-  // OAuth2
-  oAuth2Api: [
-    { label: "Client ID", inputType: "text", name: "clientId" },
-    { label: "Client Secret", inputType: "password", name: "clientSecret" },
-    { label: "Access Token", inputType: "token", name: "accessToken" },
-    { label: "Refresh Token", inputType: "token", name: "refreshToken" },
-  ],
-
-  facebookOAuth2Api: [
-    { label: "App ID", inputType: "text", name: "appId" },
-    { label: "App Secret", inputType: "password", name: "appSecret" },
-    { label: "Access Token", inputType: "token", name: "accessToken" },
-  ],
-  slackApi: [
-    { label: "Token", inputType: "token", name: "token" },
-  ],
-  githubApi: [
-    { label: "Access Token", inputType: "token", name: "accessToken" },
-  ],
-  telegramApi: [
-    { label: "Bot Token", inputType: "token", name: "accessToken" },
-  ],
-
-  // Databases
-  mysql: [
-    { label: "Host", inputType: "text", name: "host" },
-    { label: "Port", inputType: "number", name: "port" },
-    { label: "Database", inputType: "text", name: "database" },
-    { label: "Username", inputType: "text", name: "user" },
-    { label: "Password", inputType: "password", name: "password" },
-  ],
-  postgres: [
-    { label: "Host", inputType: "text", name: "host" },
-    { label: "Port", inputType: "number", name: "port" },
-    { label: "Database", inputType: "text", name: "database" },
-    { label: "Username", inputType: "text", name: "user" },
-    { label: "Password", inputType: "password", name: "password" },
-  ],
-
-  // Cloud / Services
-  aws: [
-    { label: "Access Key ID", inputType: "text", name: "accessKeyId" },
-    { label: "Secret Access Key", inputType: "password", name: "secretAccessKey" },
-    { label: "Region", inputType: "text", name: "region" },
-  ],
-};
+import { IoClose } from "react-icons/io5";
+import { credentialFieldsMap, } from "./credential_fields_and_scopes";
+import { useState } from "react";
 
 
 export function RequiredCredentialForm({
@@ -109,46 +11,61 @@ export function RequiredCredentialForm({
   addField,
   setFormData
 }: any) {
-  const toggleScope = (credIdx: number, scope: string) => {
-    const scopes = formData.requiredCredentials[credIdx].scopes || [];
-    const updatedScopes = scopes.includes(scope)
-      ? scopes.filter((s: string) => s !== scope)
-      : [...scopes, scope];
-    handleArrayChange(credIdx, "scopes", updatedScopes, "requiredCredentials");
+
+
+
+  const [inputValues, setInputValues] = useState<{ [key: number]: string }>({});
+
+  const addScope = (credIdx: number) => {
+    const trimmed = (inputValues[credIdx] || "").trim();
+    if (!trimmed) return;
+
+    const currentScopes = formData.requiredCredentials[credIdx].scopes || [];
+    if (!currentScopes.includes(trimmed)) {
+      handleArrayChange(credIdx, "scopes", [...currentScopes, trimmed], "requiredCredentials");
+    }
+
+    setInputValues(prev => ({ ...prev, [credIdx]: "" }));
   };
+
+  const removeScope = (credIdx: number, scope: string) => {
+    const currentScopes = formData.requiredCredentials[credIdx].scopes || [];
+    handleArrayChange(credIdx, "scopes", currentScopes.filter((s: string) => s !== scope), "requiredCredentials");
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, credIdx: number) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addScope(credIdx);
+    }
+  };
+
 
 
   const handleInputTypeChange = (idx: number, value: string) => {
 
     const defaultFields = credentialFieldsMap[value] || [];
 
-  const updatedCred = {
-    ...formData.requiredCredentials[idx],
-    inputType: value,
-    // credentialType: value,
-    fields: defaultFields,
-  };
+    const updatedCred = {
+      ...formData.requiredCredentials[idx],
+      inputType: value,
+      fields: defaultFields,
+    };
 
-  const updatedArray = [...formData.requiredCredentials];
-  updatedArray[idx] = updatedCred;
+    const updatedArray = [...formData.requiredCredentials];
+    updatedArray[idx] = updatedCred;
 
-  setFormData((prev:any) => ({
-    ...prev,
-    requiredCredentials: updatedArray,
-  }));
+    setFormData((prev: any) => ({
+      ...prev,
+      requiredCredentials: updatedArray,
+    }));
 
   };
 
   return (
     <div>
-      <h3 className="font-semibold mb-2">Required Credentials</h3>
+      <h3 className="font-semibold mb-2">Required Credentials </h3>
       {formData.requiredCredentials.map((cred: any, idx: number) => {
-        const availableScopes =
-          cred.inputType === 'oAuth2Api'
-            ? googleScopes
-            : cred.inputType === "facebookOAuth2Api"
-              ? facebookScopes
-              : [];
 
         return (
           <div key={idx} className="flex flex-col gap-2 mb-4 border p-3 rounded-lg">
@@ -191,7 +108,7 @@ export function RequiredCredentialForm({
                 type="text"
                 placeholder="Credential Type (n8n internal)"
                 value={cred.credentialType}
-               onChange={(e) =>
+                onChange={(e) =>
                   handleArrayChange(idx, "credentialType", e.target.value, "requiredCredentials")
                 }
                 className="border p-2 rounded-lg flex-1"
@@ -281,24 +198,48 @@ export function RequiredCredentialForm({
               </button>
             </div>
 
-            {/* Dynamic Scopes */}
-            {availableScopes.length > 0 && (
-              <div className="mt-2">
-                <p className="text-sm font-medium">Select Scopes:</p>
-                <div className="flex gap-x-8 gap-y-3 flex-wrap mt-1">
-                  {availableScopes.map((scope) => (
-                    <label key={scope.value} className="flex items-center gap-2 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={cred.scopes?.includes(scope.value) || false}
-                        onChange={() => toggleScope(idx, scope.value)}
-                      />
-                      {scope.label}
-                    </label>
-                  ))}
+
+            <div className="mt-2">
+              <p className="text-sm font-medium">Select Scopes: <a className="text-primary underline" href="/admin/service/scopes" target="_blank">go to scopes</a></p>
+              <div className=" mt-1">
+                <div className="space-y-2">
+
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Type a scope and press Enter"
+                      value={inputValues[idx] || ""}
+                      onChange={(e) => setInputValues(prev => ({ ...prev, [idx]: e.target.value }))}
+                      onKeyDown={(e) => handleInputKeyDown(e, idx)}
+                      className="border px-2 py-1 rounded-lg w-full max-w-[500px] "
+                    />
+                    <button
+                      type="button"
+                      onClick={() => addScope(idx)}
+                      className="bg-primary text-white px-4 rounded-lg hover:shadow-md"
+                    >
+                      Add
+                    </button>
+                  </div>
+
+                  {/* Show keywords as chips */}
+                  <div className="flex flex-wrap gap-2">
+                    {(cred.scopes || []).map((scope: string, i: number) => (
+                      <span key={i} className="bg-gray-200 text-sm px-3 py-1 rounded-full flex items-center gap-2">
+                        {scope}
+                        <button
+                          type="button"
+                          onClick={() => removeScope(idx, scope)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          <IoClose size={14} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         );
       })}

@@ -5,156 +5,136 @@ import MasterWorkflow from "../../../../models/MasterWorkflow";
 import AutomationInstance from "../../../../models/AutomationInstance";
 import User from "../../../../models/User";
 import { getIndiaTimeFormatted } from "../../../../utils/dateformate";
+import { buildCredentialData, getCredentialSchema, injectWorkflowCredentials, injectWorkflowInputs } from "../../../../lib/_n8n_helper";
 
-// Helper: inject value at nested field
-// function injectValue(node: any, fieldPath: string, value: any) {
-//   const parts = fieldPath.split(".");
-//   let obj = node;
-//   for (let i = 0; i < parts.length - 1; i++) {
-//     obj = obj[parts[i]];
-//     if (!obj) return; // field not found
-//   }
-//   obj[parts[parts.length - 1]] = value;
-// }
+
+function getCredName(creds: unknown, fallback: string) {
+  if (creds && typeof creds === 'object' && 'name' in creds) {
+    return (creds as Record<string, any>).name || fallback;
+  }
+  return fallback;
+}
 
 export const createAutomationInstance = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const {
-      serviceId: masterWorkflowId,
-      instanceName,
-      userInputs,
-      userKeys,
-      userCredentials,
-    } = req.body;
-
+    const { workflowId, instanceName, inputs, credentials } = req.body;
     const userId = req.user?.id;
+
     if (!userId) return res.status(401).json({ message: "Unauthorized", success: false });
-    if (!masterWorkflowId) return res.status(400).json({ message: "Invalid serviceId.", success: false });
-    if (!instanceName) return res.status(400).json({ message: "Add your automation name.", success: false });
+    if (!workflowId) return res.status(400).json({ message: "Invalid workflowId.", success: false });
+    if (!instanceName) return res.status(400).json({ message: "Instance name is required.", success: false });
 
     // Fetch master workflow
-    const masterWorkflow = await MasterWorkflow.findById(masterWorkflowId);
-    if (!masterWorkflow) return res.status(404).json({ message: "Master workflow template not found.", success: false });
+    const masterWorkflow = await MasterWorkflow.findById(workflowId);
+    if (!masterWorkflow) return res.status(404).json({ message: "Master workflow not found.", success: false });
 
     // Fetch user
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found", success: false });
+    if (!user) return res.status(404).json({ message: "User not found.", success: false });
 
-    const existingInstance = await AutomationInstance.findOne({ user: userId, masterWorkflow: masterWorkflowId })
+    const existingInstance = await AutomationInstance.findOne({ user: userId, masterWorkflow: workflowId });
 
-    // ------------------ Validation ------------------
-    for (const inputDef of masterWorkflow.requiredInputs || []) {
-      if (!inputDef.key) continue;
-      const provided = (userInputs || []).find((i: any) => i.key === inputDef.key);
-      if (!provided?.value) {
-        return res.status(400).json({ message: `Missing required input: ${inputDef.label}`, success: false });
-      }
-    }
-
-
-
-    for (const credDef of masterWorkflow.requiredCredentials || []) {
-      if (!credDef.service) continue;
-      const provided = (userCredentials || []).find((c: any) => c.serviceName === credDef.service);
-      if (!provided?.n8nCredentialId) {
-        return res.status(400).json({ message: `Missing required credential: ${credDef.label}`, success: false });
-      }
-    }
-
-    // ------------------ Step 1: Clone Workflow ------------------
+    // ------------------ Step 1: Clone workflow JSON ------------------
     let workflowJson = JSON.parse(JSON.stringify(masterWorkflow.workflowJsonTemplate));
 
-    // ------------------ Step 2: Replace Inputs ------------------
-    // let workflowString = JSON.stringify(workflowJson);
-    // for (const input of userInputs || []) {
-    //   const placeholder = `__${input.key.toUpperCase()}__`;
-    //   workflowString = workflowString.replace(new RegExp(placeholder, "g"), input.value);
-    // }
-    // workflowJson = JSON.parse(workflowString);
 
-    // ------------------ Step 3: Handle Keys ------------------
-    // for (const keyDef of masterWorkflow.requiredKey || []) {
-    //   if (!keyDef.key || !keyDef.inject) continue;
+    // ------------------ Step 2: Replace input placeholders ------------------
+    let workflowWithInputs = injectWorkflowInputs(workflowJson, masterWorkflow.requiredInputs, inputs);
 
-    //   const userKey = (userKeys || []).find((k: any) => k.key === keyDef.key);
-    //   if (!userKey) continue;
+    const credMap: Record<string, any> = {};
 
-    //   // Agar n8nCredentialId nahi diya to create
-    //   if (!userKey.n8nCredentialId) {
-    //     const credPayload = {
-    //       name: `${keyDef.key}_${user.email}_${Date.now()}`,
-    //       type: keyDef.inject.field.split(".").pop() || keyDef.key, // type guess
-    //       data: { token: userKey.value },
-    //     };
+    // Step 3: Create or reuse credentials
+    for (const [service, creds] of Object.entries(credentials || {})) {
 
-    //     const credRes = await axios.post(
-    //       `${process.env.N8N_API_URL}/api/v1/credentials`,
-    //       credPayload,
-    //       { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } }
-    //     );
+      const credentialsReadyToUse: Record<string, any> = {};
 
-    //     userKey.n8nCredentialId = credRes.data.id;
-    //   }
+      for (const [key, value] of Object.entries(creds as Record<string, any>)) {
+         
+        if (typeof value === 'string' && value.startsWith('process.env.')) {
+          
+          const envVarName = value.replace('process.env.', '');
+          const envValue = process.env[envVarName];
+          if (envValue == null) {
+           console.warn(`Warning: Environment variable ${envVarName} is not set for credential field ${key}`);
+          }
+          credentialsReadyToUse[key] = envValue ?? null;
+        } else {
+           
+          credentialsReadyToUse[key] = value ?? null;
+        }
+      }
 
-    //   // Inject into node
-    //   for (const node of workflowJson.nodes || []) {
-    //     if (node.name === keyDef.inject.node) {
-    //       injectValue(node, keyDef.inject.field, {
-    //         id: userKey.n8nCredentialId,
-    //         name: userKey.name || keyDef.key,
-    //       });
-    //     }
-    //   }
-    // }
+      // Check if creds already have n8nCredentialId
+      let n8nCredentialId = (creds as any).n8nCredentialId;
+      const credType = masterWorkflow.requiredCredentials?.find(c => c.service === service)?.credentialType || service;
 
-    // // ------------------ Step 4: Inject Credentials ------------------
-    // for (const credDef of masterWorkflow.requiredCredentials || []) {
-    //   if (!credDef.service || !credDef.inject) continue;
+      if (!n8nCredentialId) {
 
-    //   const userCred = (userCredentials || []).find((c: any) => c.serviceName === credDef.service);
-    //   if (!userCred) continue;
+        // console.log('credType',credType)
+        const schemaData = await getCredentialSchema(credType);
 
-    //   for (const node of workflowJson.nodes || []) {
-    //     if (node.name === credDef.inject.node) {
-    //       injectValue(node, credDef.inject.field, {
-    //         id: userCred.n8nCredentialId,
-    //         name: userCred.name || credDef.service,
-    //       });
-    //     }
-    //   }
-    // }
+        // console.log('credentialsReadyToUse',credentialsReadyToUse)
+        // console.log('schemaData',schemaData)
+        const _data_ = buildCredentialData(schemaData, credentialsReadyToUse);
 
-    // ------------------ Step 5: Clean Workflow ------------------
-    const { meta, versionId, id, tags, pinData, active, ...allowedWorkflow } = workflowJson;
+        // console.log('_data___', _data_)
+
+        const credPayload = {
+          name: `_${instanceName}_${user.email}_${Date.now()}_`,
+          type: credType,
+          data: _data_
+        };
+
+
+        // console.log("credPayload", credPayload)
+
+        const credRes = await axios.post(
+          `${process.env.N8N_API_URL}/api/v1/credentials`,
+          credPayload,
+          { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } }
+        );
+
+        n8nCredentialId = credRes.data.id;
+        credMap[service] = credRes.data;
+      } else {
+        credMap[service] = { id: n8nCredentialId, name: getCredName(creds, service) || service };
+      }
+    }
+
+    // Step 4: Inject credentials into workflow
+    workflowWithInputs = injectWorkflowCredentials(workflowWithInputs, masterWorkflow.requiredCredentials, credMap);
+
+
+    // ------------------ Step 4: Post workflow to n8n ------------------
+    const { meta, versionId, id, tags, pinData, active, ...allowedWorkflow } = workflowWithInputs;
+
     const newWorkflowJson = {
       ...allowedWorkflow,
       name: `${instanceName} ${user.email} ${getIndiaTimeFormatted()}`,
     };
 
-    // ------------------ Step 6: POST to n8n ------------------
     const n8nResponse = await axios.post(
       `${process.env.N8N_API_URL}/api/v1/workflows`,
       newWorkflowJson,
       { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } }
     );
+
     const newN8nWorkflowId = n8nResponse.data.id;
 
-    // ------------------ Step 7: Save Instance ------------------
+    // ------------------ Step 5: Save automation instance ------------------
     const automationInstance = new AutomationInstance({
       user: userId,
-      masterWorkflow: masterWorkflowId,
+      masterWorkflow: workflowId,
       n8nWorkflowId: newN8nWorkflowId,
       instanceName,
       isActive: "PAUSE",
-      userInputs,
-      userKeys,
-      userCredentials,
+      inputs,
+      userCredentials: [],
       executionCount: 0,
     });
 
     if (!existingInstance) {
-      // First instance → Trial
-      automationInstance.systemStatus = 'TRIAL';
+      automationInstance.systemStatus = "TRIAL";
       const trialDays = masterWorkflow.trialDays || 7;
       automationInstance.periods = {
         startTime: new Date(),
@@ -166,8 +146,8 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
     await automationInstance.save();
 
-    return res.status(201).json({
-      message: "Instance created successfully!",
+    return res.status(200).json({
+      message: "Automation instance created successfully!",
       automation: automationInstance,
       success: true,
     });
@@ -178,8 +158,5 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
     return res.status(500).json({ message: "Server error while creating automation.", success: false });
   }
 };
-
-
-
 
 

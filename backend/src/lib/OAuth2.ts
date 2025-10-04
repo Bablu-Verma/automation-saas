@@ -1,66 +1,107 @@
-import { Request, Response } from 'express';
-import passport, { Profile } from 'passport';
-import { Strategy as GoogleStrategy, VerifyCallback } from 'passport-google-oauth20';
-import { app_ } from '../index';
+// backend/googleAuth.ts
+import express from "express";
+import { google } from "googleapis";
 
-interface GoogleUser {
-  accessToken: string;
-  refreshToken: string;
-  profile: Profile;
-}
+const OAuthRouter = express.Router();
 
-// 🔹 Configure Google OAuth strategy
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID ?? '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
-      callbackURL: process.env.GOOGLE_CALLBACK_URL ?? '',
-    },
-    (
-      accessToken: string,
-      refreshToken: string,
-      profile: Profile,
-      done: VerifyCallback
-    ) => {
-      const user: GoogleUser = { accessToken, refreshToken, profile };
-      return done(null, user);
-    }
-  )
+const oauth2Client = new google.auth.OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_CALLBACK_URL
 );
 
-// 🔹 Initialize Passport
-app_.use(passport.initialize());
+const FRONTEND_ORIGIN = process.env.CLIENT_URL
 
-// 🔹 Start Google consent
-app_.get(
-  '/auth/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email', 'https://www.googleapis.com/auth/drive.readonly'],
-    accessType: 'offline',
-    prompt: 'consent',
-    session: false,
-  })
-);
+// Step 1: Redirect user to Google consent screen
+OAuthRouter.get("/oauth/google", (req, res) => {
+  try {
+    // 1️⃣ Frontend से scopes fetch करो
+    const { scopes } = req.query;
 
-// 🔹 Callback after consent
-app_.get(
-  '/auth/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: '/auth/failure',
-    session: false,
-  }),
-  (req: Request, res: Response) => {
-    const user = req.user as GoogleUser;
-    res.json({
-      accessToken: user.accessToken,
-      refreshToken: user.refreshToken,
-      profile: user.profile,
+    // 2️⃣ Scopes ko array me convert karo
+    const scopeArray: string[] = scopes
+      ? (scopes as string).split(" ").map((s) => s.trim()).filter(Boolean)
+      : [
+          "https://www.googleapis.com/auth/userinfo.email",
+          "https://www.googleapis.com/auth/drive.readonly",
+        ];
+
+    // 3️⃣ Generate Google OAuth URL
+    const url = oauth2Client.generateAuthUrl({
+      access_type: "offline",
+      prompt: "consent",
+      scope: scopeArray,
+    });
+    // console.log(url)
+    return res.status(200).json({
+      success: true,
+      message: "Google OAuth URL generated successfully.",
+      url,
+    });
+  } catch (error) {
+    console.error("Error generating Google OAuth URL:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to generate Google OAuth URL.",
     });
   }
-);
-
-// 🔹 Failure route
-app_.get('/auth/failure', (_req: Request, res: Response) => {
-  res.status(401).send('Consent failed');
 });
+
+
+OAuthRouter.get("/oauth/google/callback", async (req, res) => {
+  try {
+    const { code } = req.query;
+
+    if (!code) {
+      return res.send(`
+        <html>
+          <body>
+            <h2>Authorization code is missing</h2>
+            <button onclick="window.close()">Close Window</button>
+          </body>
+        </html>
+      `);
+    }
+
+    const { tokens } = await oauth2Client.getToken(code as string);
+
+    return res.send(`
+      <html>
+        <body>
+          <h2>Google OAuth completed successfully!</h2>
+          <p>You can close this window now.</p>
+           <script>
+            const FRONTEND__ORIGIN = "${FRONTEND_ORIGIN}";
+            
+            window.opener.postMessage(
+              {
+                success: true,
+                accessToken: "${tokens.access_token}",
+                refreshToken: "${tokens.refresh_token || ''}",
+                clientSecret: "process.env.GOOGLE_CLIENT_SECRET",
+                clientId: "process.env.GOOGLE_CLIENT_ID",
+              },
+             FRONTEND__ORIGIN
+            );
+            window.close();
+          </script>
+        
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error("Error during Google OAuth callback:", error);
+    return res.send(`
+      <html>
+        <body>
+          <h2>Failed to complete Google OAuth.</h2>
+          <p>Please try again.</p>
+          <button onclick="window.close()">Close Window</button>
+        </body>
+      </html>
+    `);
+  }
+});
+
+
+export default OAuthRouter;

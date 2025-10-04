@@ -5,13 +5,13 @@ import express from 'express'
 import connectDB from './config/db';
 import cors from 'cors';
 import route from './router/route';
+import OAuthRouter from './lib/OAuth2';
 
 connectDB();
 
 export const app_ = express();
 
 app_.use("/images", express.static("images"));
-
 
 
 app_.use(cors({
@@ -31,6 +31,7 @@ app_.get('/', (req, res) => {
 
 // Routes
 app_.use('/api', route)
+app_.use(OAuthRouter)
 
 // import './lib/OAuth2';
 
