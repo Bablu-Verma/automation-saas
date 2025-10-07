@@ -25,11 +25,19 @@ import { uploadImageByAdmin } from '../controllers/image_upload/imageupload';
 import { createContact } from '../controllers/frontend/public/ContactUs';
 import { deleteContactus, getContacts, updateContactStatus } from '../controllers/admin/ContactUsAdmin';
 import { subscribeNewsletter, unsubscribeNewsletter } from '../controllers/frontend/public/NewsletterController';
-import { getAllSubscribers } from '../controllers/admin/NewsletterAdminController';
+import { deleteSubscriber, getAllSubscribers } from '../controllers/admin/NewsletterAdminController';
 import { automationList } from '../controllers/frontend/dashboard/automation/automationList';
 import { automationDetail } from '../controllers/frontend/dashboard/automation/automationDetails';
 import { updateAutomationStatus } from '../controllers/frontend/dashboard/automation/automationUpdateStatus';
-import { createN8nCredential } from '../controllers/frontend/dashboard/automation/InstanceValue';
+import { PaymentDetailsRequest } from '../controllers/frontend/dashboard/payment/payment-details-request';
+import { createPayment } from '../controllers/frontend/dashboard/payment/payment-request';
+import { getUserPayments } from '../controllers/frontend/dashboard/payment/payment-get';
+import { getUserListForAdmin } from '../controllers/admin/users/getUserListForAdmin';
+import { getUserDetailsForAdmin } from '../controllers/admin/users/getUsersDetailsForAdmin';
+import { updateUserByAdmin } from '../controllers/admin/users/updateUserByAdmin';
+import { adminUserAutomations } from '../controllers/admin/automation/adminautomationList';
+
+
 
 
 const route = express.Router();
@@ -57,6 +65,12 @@ route.post(base + '/user/update-profile',loginCheck, updateUserProfile);
 route.post(base + '/user/delete-request',loginCheck, AccountDeleteRequest);
 
 
+
+route.post(base + '/admin/user/list',loginCheck, getUserListForAdmin );
+route.post(base + '/admin/user/details',loginCheck, getUserDetailsForAdmin );
+route.post(base + '/admin/user/update',loginCheck, updateUserByAdmin );
+
+
 // Service
 route.post(base + '/service/list', listService);
 route.post(base + '/service/details', getServiceDetail);
@@ -68,6 +82,10 @@ route.post(base + '/admin/master-workflow/list',loginCheck, listMasterWorkflows)
 route.post(base + '/admin/master-workflow/edit',loginCheck, editMasterWorkflow);
 route.post(base + '/admin/master-workflow/delete',loginCheck, deleteMasterWorkflow);
 route.post(base + '/admin/master-workflow/details',loginCheck, getMasterWorkflowDetail);
+
+
+route.post(base + '/admin/automation/list',loginCheck, adminUserAutomations);
+route.post(base + '/admin/automation/details',loginCheck, adminUserAutomations);
 
 
 // home 
@@ -82,19 +100,29 @@ route.post(base + '/instance/automation-details',loginCheck, automationDetail);
 route.post(base + '/instance/automation-update-status',loginCheck, updateAutomationStatus);
 
 
-route.post(base + '/instance/create-credential',loginCheck, createN8nCredential);
+
+route.post(base + '/payment/payment-details-request',loginCheck, PaymentDetailsRequest);
+
+
+route.post(base + '/payment/create-payment',loginCheck, createPayment);
+route.post(base + '/payment/get-payment',loginCheck, getUserPayments);
+
+
+
 
 // contactus 
 route.post( base + "/contact/create", createContact);             
-route.post( base + "/admin/contact/get", getContacts);    
-route.post(base +  "/admin/contact/status", updateContactStatus); 
-route.post(base + "/admin/contact/delete", deleteContactus); 
+route.post( base + "/admin/contact/get",loginCheck, getContacts);    
+route.post(base +  "/admin/contact/status",loginCheck, updateContactStatus); 
+route.post(base + "/admin/contact/delete",loginCheck, deleteContactus); 
 
 
 // newsletter 
 route.post(base +"/newsletter/subscribe", subscribeNewsletter);     
 route.post(base +"/newsletter/unsubscribe", unsubscribeNewsletter); 
-route.post(base +"/admin/newsletter/list", getAllSubscribers);   
+route.post(base +"/admin/newsletter/list",loginCheck, getAllSubscribers);   
+route.post(base +"/admin/newsletter/delete",loginCheck, deleteSubscriber);   
+
 
 
 

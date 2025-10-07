@@ -6,22 +6,17 @@ import { AuthenticatedRequest } from "../../middlewares/loginCheck";
 
 export const getContacts = async (req: AuthenticatedRequest, res: Response) => {
 
-
-  
-
   try {
 
-
      const requestUser = req.user;
+
+    
    if (!requestUser || requestUser.role !== "admin") {
       return res.status(403).json({
         success: false,
         message: "Access denied. Only administrators can view user details.",
       });
     }
-
-
-
     const { page = 1, limit = 10, search = "", status } = req.body;
     const skip = (page - 1) * limit;
 
@@ -67,19 +62,25 @@ export const getContacts = async (req: AuthenticatedRequest, res: Response) => {
 };
 
 
-// Update contact status (PATCH /contacts/:id/status)
+// Update contact status (POST /contacts/status/:id)
 export const updateContactStatus = async (req: AuthenticatedRequest, res: Response) => {
   try {
-
-     const requestUser = req.user;
-   if (!requestUser || requestUser.role !== "admin") {
+    const requestUser = req.user;
+    if (!requestUser || requestUser.role !== "admin") {
       return res.status(403).json({
         success: false,
-        message: "Access denied. Only administrators can view user details.",
+        message: "Access denied. Only administrators can update contact status.",
       });
     }
-    const { id } = req.params;
-    const { status } = req.body;
+
+    const { status , id} = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Contact ID is required.",
+      });
+    }
 
     if (!["UN_READ", "READ"].includes(status)) {
       return res.status(400).json({
@@ -115,21 +116,27 @@ export const updateContactStatus = async (req: AuthenticatedRequest, res: Respon
   }
 };
 
-// Delete a contact (DELETE /contacts/:id)
+
+
+// Alternative: Delete a contact using POST with ID in body (POST /contacts/delete)
 export const deleteContactus = async (req: AuthenticatedRequest, res: Response) => {
   try {
-
-
-     const requestUser = req.user;
-   if (!requestUser || requestUser.role !== "admin") {
+    const requestUser = req.user;
+    if (!requestUser || requestUser.role !== "admin") {
       return res.status(403).json({
         success: false,
-        message: "Access denied. Only administrators can view user details.",
+        message: "Access denied. Only administrators can delete contacts.",
       });
     }
 
+    const { id } = req.body;
 
-    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Contact ID is required.",
+      });
+    }
 
     const contact = await ContactUs.findByIdAndDelete(id);
 

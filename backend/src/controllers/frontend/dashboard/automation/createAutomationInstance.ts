@@ -129,7 +129,6 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
       instanceName,
       isActive: "PAUSE",
       inputs,
-      userCredentials: [],
       executionCount: 0,
     });
 
@@ -141,7 +140,7 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
         endTime: new Date(Date.now() + trialDays * 24 * 60 * 60 * 1000),
       };
     } else {
-      automationInstance.systemStatus = "PAID_PENDING";
+      automationInstance.systemStatus = "NEED_PAYMENT";
     }
 
     await automationInstance.save();

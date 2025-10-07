@@ -4,16 +4,68 @@ import { RootState } from "@/redux-store/redux_store"
 import { IUser } from "@/types"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { FaHome, FaUser, FaFileAlt, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa"
+import { 
+  FaHome, 
+  FaUser, 
+  FaFileAlt, 
+  FaCreditCard, 
+  FaNewspaper, 
+  FaEnvelope,
+  FaCogs,
+  FaRobot,
+  FaBars,
+  FaTimes,
+  FaSignOutAlt
+} from 'react-icons/fa';
 import { useSelector } from "react-redux"
 import { useState } from "react"
 
+
+
 const links = [
-  { href: "/admin", label: "Home", icon: <FaHome size={18} /> },
-  { href: "/admin/user", label: "Users", icon: <FaUser size={18} /> },
-  { href: "/admin/service", label: "Service", icon: <FaFileAlt size={18} /> },
-  { href: "/admin/instance", label: "Instance", icon: <FaFileAlt size={18} /> },
-]
+  { 
+    href: "/admin", 
+    label: "Dashboard", 
+    icon: <FaHome size={18} />,
+    description: "Admin Overview"
+  },
+  { 
+    href: "/admin/user", 
+    label: "Users", 
+    icon: <FaUser size={18} />,
+    description: "Manage Users"
+  },
+  { 
+    href: "/admin/service", 
+    label: "Services", 
+    icon: <FaCogs size={18} />,
+    description: "Manage Services"
+  },
+  { 
+    href: "/admin/automation", 
+    label: "Automations", 
+    icon: <FaRobot size={18} />,
+    description: "User Automations"
+  },
+  { 
+    href: "/admin/billing", 
+    label: "Billing", 
+    icon: <FaCreditCard size={18} />,
+    description: "Payments & Invoices"
+  },
+  { 
+    href: "/admin/newsletter", 
+    label: "Newsletter", 
+    icon: <FaNewspaper size={18} />,
+    description: "Email Campaigns"
+  },
+  { 
+    href: "/admin/contact-us", 
+    label: "Contact Messages", 
+    icon: <FaEnvelope size={18} />,
+    description: "User Inquiries"
+  },
+];
 
 export default function AdminSidebar() {
   const pathname = usePathname()

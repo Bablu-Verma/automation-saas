@@ -243,7 +243,7 @@ export default function BillingRequests() {
         </div>
       ) : (
         <>
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <div className=" mb-8">
             {payments.map((payment, i) => {
               const period = calculatePeriod(payment.createdAt, payment.subscriptionMonths)
               

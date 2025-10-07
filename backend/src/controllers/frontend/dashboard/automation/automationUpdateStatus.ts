@@ -1,24 +1,24 @@
 import { Response } from "express";
 import { AuthenticatedRequest } from "../../../../middlewares/loginCheck";
 import AutomationInstance from "../../../../models/AutomationInstance";
-import User from "../../../../models/User";
 import axios from "axios";
-import { UserDocument } from "../../../../types/types";
-
-const N8N_BASE_URL = process.env.N8N_API_URL || "https://automation.babluverma.site";
-const N8N_API_KEY = process.env.N8N_API_KEY || "";
 
 
-async function toggleN8nWorkflow(workflowId?: string, active: boolean = false) {
+
+
+async function toggleN8nWorkflow(workflowId?: string, activate: boolean = false) {
   if (!workflowId) return;
 
+  // Choose the correct endpoint based on the desired action
+  const endpoint = activate ? 'activate' : 'deactivate';
+
   try {
-    await axios.patch(
-      `${N8N_BASE_URL}/rest/workflows/${workflowId}`,
-      { active },
-      { headers: { "X-N8N-API-KEY": N8N_API_KEY } }
+    await axios.post( // Use POST method for activation/deactivation
+      `${process.env.N8N_API_URL}/api/v1/workflows/${workflowId}/${endpoint}`,
+      {},
+      { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } }
     );
-    console.log(`Workflow ${workflowId} updated to ${active ? "ACTIVE" : "PAUSED"}`);
+    console.log(`Workflow ${workflowId} ${activate ? "ACTIVATED" : "DEACTIVATED"}`);
   } catch (err: any) {
     console.error(
       `Failed to update n8n workflow ${workflowId}:`,
@@ -27,12 +27,14 @@ async function toggleN8nWorkflow(workflowId?: string, active: boolean = false) {
   }
 }
 
+
 enum SystemStatus {
   TRIAL = "TRIAL",
   ACTIVE = "ACTIVE",
   EXPIRED = "EXPIRED",
   CONTACT_SUPPORT = "CONTACT_SUPPORT",
-  PAID_PENDING = "PAID_PENDING",
+  NEED_PAYMENT = "NEED_PAYMENT",
+  EXPIRE_SOON='EXPIRE_SOON'
 }
 
 export const updateAutomationStatus = async (
@@ -40,31 +42,20 @@ export const updateAutomationStatus = async (
   res: Response
 ) => {
   try {
-    const userId = req.user?.id;
+    // const userId = req.user?.id;
     const { id, isActive } = req.body;
-
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized", success: false });
-    }
 
     if (!id || !["RUNNING", "PAUSE"].includes(isActive)) {
       return res.status(400).json({ message: "Invalid request data", success: false });
     }
 
     // 🔹 Find automation instance
-    const automation = await AutomationInstance.findById(id).populate("masterWorkflow");
+    const automation = await AutomationInstance.findById(id)
     if (!automation) {
       return res.status(404).json({ message: "Automation instance not found", success: false });
     }
 
-    // 🔹 Find user
-    const user = (await User.findById(userId).populate(
-      "trialUsedServices.masterWorkflow"
-    )) as UserDocument | null;
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found", success: false });
-    }
 
     if (isActive === "PAUSE") {
       automation.isActive = "PAUSE";
@@ -96,14 +87,14 @@ export const updateAutomationStatus = async (
         success: false,
       });
     }
-    if (automation.systemStatus === SystemStatus.PAID_PENDING) {
+    if (automation.systemStatus === SystemStatus.NEED_PAYMENT) {
       return res.status(400).json({
         message: `You are already used Trail need to subscribe`,
         success: false,
       });
     }
 
-    if (automation.systemStatus == SystemStatus.ACTIVE || automation.systemStatus == SystemStatus.TRIAL) {
+    if (automation.systemStatus == SystemStatus.ACTIVE || automation.systemStatus == SystemStatus.TRIAL || automation.systemStatus == SystemStatus.EXPIRE_SOON) {
       automation.isActive = "RUNNING";
       await automation.save();
 

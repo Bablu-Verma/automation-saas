@@ -22,7 +22,14 @@ export const service_detail_api = api_url + 'v1/service/details'
 export const contact_create_api = api_url + 'v1/contact/create'
 
 
+export const admin_contact_list_api = api_url + 'v1/admin/contact/get'
+export const admin_contact_update_api = api_url + 'v1/admin/contact/status'
+export const admin_contact_delete_api = api_url + 'v1/admin/contact/delete'
+
+
 export const newsletter_create_api = api_url + 'v1/newsletter/subscribe'
+export const admin_newsletter_list_api = api_url + 'v1/admin/newsletter/list'
+export const admin_newsletter_delete_api = api_url + 'v1/admin/newsletter/delete'
 
 
 export const instance_create_api = api_url + 'v1/instance/automation-create'
@@ -30,11 +37,29 @@ export const instance_list_api = api_url + 'v1/instance/automation-list'
 export const instance_details_api = api_url + 'v1/instance/automation-details'
 export const instance_update_status_api = api_url + 'v1/instance/automation-update-status'
 
+
+
+
+
+
+export const payment_details_request_api = api_url + 'v1/payment/payment-details-request'
+export const payment_create_request_api = api_url + 'v1/payment/create-payment'
+export const payment_get_api = api_url + 'v1/payment/get-payment'
+
 // export const create_instance_value_api = api_url + 'v1/instance/create-credential'
 
 
 export const user_profile_api = api_url + 'v1/user/get-profile'
 export const user_profile_update_api = api_url + 'v1/user/update-profile'
+
+
+
+export const admin_user_list_api = api_url + 'v1/admin/user/list'
+export const admin_user_details_api = api_url + 'v1/admin/user/details'
+export const admin_user_update_api = api_url + 'v1/admin/user/update'
+
+
+export const admin_automation_list_api = api_url + 'v1/admin/automation/list'
 
 
 

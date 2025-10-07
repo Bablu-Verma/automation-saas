@@ -45,3 +45,46 @@ export const getAllSubscribers = async (req: AuthenticatedRequest, res: Response
     });
   }
 };
+
+// Delete subscriber controller
+export const deleteSubscriber = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const requestUser = req.user;
+    if (!requestUser || requestUser.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Only administrators can delete subscribers.",
+      });
+    }
+
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Subscriber ID is required.",
+      });
+    }
+
+    const subscriber = await Newsletter.findByIdAndDelete(id);
+
+    if (!subscriber) {
+      return res.status(404).json({
+        success: false,
+        message: "Subscriber not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Subscriber deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error deleting subscriber:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while deleting subscriber.",
+    });
+  }
+};
+

@@ -12,9 +12,8 @@ import { useState } from "react"
 const links = [
   { href: "/dashboard", label: "Home", icon: <FaHome size={18} /> },
   { href: "/dashboard/profile", label: "Profile", icon: <FaUser size={18} /> },
-  { href: "/dashboard/requests", label: "My Requests", icon: <FaFileAlt size={18} /> },
+  { href: "/dashboard/automation", label: "My Automation", icon: <FaFileAlt size={18} /> },
   { href: "/dashboard/billing", label: "Billing", icon: <FaEnvelope size={18} /> },
-  { href: "/dashboard/settings", label: "Settings", icon: <FaCog size={18} /> },
   { href: "/dashboard/help", label: "Help & Support", icon: <FaLifeRing size={18} /> },
 ]
 

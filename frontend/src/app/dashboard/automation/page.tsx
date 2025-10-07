@@ -8,11 +8,12 @@ import { instance_list_api } from "@/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import Link from "next/link";
+import Pagination from "@/components/Pagination";
 
 export type AutomationInstance__ = {
   _id: string;
   instanceName: string;
-  isActive: "ACTIVE" | "PAUSE";
+  isActive: "RUNNING" | "PAUSE";
   executionCount: number;
   systemStatus: string;
   masterWorkflow: string;
@@ -68,7 +69,7 @@ export default function AutomationInstances() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "ACTIVE":
+      case "RUNNING":
         return <FiCheckCircle className="text-green-400" size={20} />;
       case "PAUSE":
         return <FiClock className="text-yellow-400" size={20} />;
@@ -79,7 +80,7 @@ export default function AutomationInstances() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "ACTIVE":
+      case "RUNNING":
         return "text-green-400 bg-green-400/10";
       case "PAUSE":
         return "text-yellow-400 bg-yellow-400/10";
@@ -146,7 +147,7 @@ export default function AutomationInstances() {
             <div className="flex items-center gap-2 text-gray-300 mb-2">
               {getStatusIcon(inst.isActive)}
               <span className="text-sm">
-                {inst.isActive === "ACTIVE"
+                {inst.isActive === "RUNNING"
                   ? "Instance is live"
                   : "Instance is paused"}
               </span>
@@ -171,7 +172,7 @@ export default function AutomationInstances() {
                 View
               </Link>
               <Link
-                href={`/dashboard/request-view?id=${inst._id}`}
+                href={`/dashboard/automation-view?id=${inst._id}`}
                 className="px-4 py-2 rounded-full border border-white/30 text-white font-semibold hover:bg-white hover:text-primary transition"
               >
                 Logs
@@ -181,36 +182,13 @@ export default function AutomationInstances() {
         ))}
       </div>
 
-      {/* Pagination Controls */}
-      <div className="flex justify-center items-center gap-3 mt-10">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage((p) => p - 1)}
-          className={`px-4 py-2 rounded-lg font-semibold ${
-            page === 1
-              ? "bg-gray-600 cursor-not-allowed"
-              : "bg-primary hover:bg-secondary"
-          }`}
-        >
-          Prev
-        </button>
-
-        <span className="text-gray-300 font-medium">
-          Page {page} of {totalPages}
-        </span>
-
-        <button
-          disabled={page === totalPages}
-          onClick={() => setPage((p) => p + 1)}
-          className={`px-4 py-2 rounded-lg font-semibold ${
-            page === totalPages
-              ? "bg-gray-600 cursor-not-allowed"
-              : "bg-primary hover:bg-secondary"
-          }`}
-        >
-          Next
-        </button>
-      </div>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+        showPageNumbers={true}
+        compact={false}
+      />
     </div>
   );
 }
