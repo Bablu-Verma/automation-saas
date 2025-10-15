@@ -50,10 +50,7 @@ export default function NewsletterSection() {
 
   return (
     <section className="py-28 px-6 max-w-7xl mx-auto text-white rounded-3xl relative">
-      {/* Background shapes */}
-      <div className="absolute -top-20 -left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute -bottom-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl -z-10"></div>
-
+    
       <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
         {/* Text */}
         <div className="text-center lg:text-left">

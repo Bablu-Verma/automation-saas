@@ -95,9 +95,9 @@ export default function HomePage() {
       <FAQSection />
 
       <section className="relative  text-white pt-28 px-6 text-center ">
-        {/* Subtle background shapes */}
-        <div className="absolute -top-20 -left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl -z-10"></div>
-        <div className="absolute -bottom-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl -z-10"></div>
+       <div className="absolute -top-32 -left-32 w-72 h-72 bg-gradient-to-tr from-primary/40 to-secondary/30 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute -bottom-32 -right-32 w-72 h-72 bg-gradient-to-tr from-secondary/40 to-primary/30 rounded-full blur-3xl -z-10"></div>
+
 
         <motion.h2
           initial={{ opacity: 0, y: 40 }}

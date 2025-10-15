@@ -24,9 +24,7 @@
 body {
   @apply min-h-screen text-[var(--color-foreground)];
   background: linear-gradient(135deg, #131D4F 0%, #06202B 35%, #E6521F 100%);
-
-
-  background-attachment: fixed; /* makes gradient fixed on scroll */
+  background-attachment: fixed; 
   background-size: cover;
   color: var(--secondary);
   font-family: Arial, Helvetica, sans-serif;

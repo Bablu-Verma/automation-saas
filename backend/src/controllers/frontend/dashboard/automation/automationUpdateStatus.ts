@@ -2,30 +2,12 @@ import { Response } from "express";
 import { AuthenticatedRequest } from "../../../../middlewares/loginCheck";
 import AutomationInstance from "../../../../models/AutomationInstance";
 import axios from "axios";
+import { toggleN8nWorkflow } from "../../../../lib/_n8n_helper";
 
 
 
 
-async function toggleN8nWorkflow(workflowId?: string, activate: boolean = false) {
-  if (!workflowId) return;
 
-  // Choose the correct endpoint based on the desired action
-  const endpoint = activate ? 'activate' : 'deactivate';
-
-  try {
-    await axios.post( // Use POST method for activation/deactivation
-      `${process.env.N8N_API_URL}/api/v1/workflows/${workflowId}/${endpoint}`,
-      {},
-      { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } }
-    );
-    console.log(`Workflow ${workflowId} ${activate ? "ACTIVATED" : "DEACTIVATED"}`);
-  } catch (err: any) {
-    console.error(
-      `Failed to update n8n workflow ${workflowId}:`,
-      err.response?.data || err.message
-    );
-  }
-}
 
 
 enum SystemStatus {
@@ -34,7 +16,7 @@ enum SystemStatus {
   EXPIRED = "EXPIRED",
   CONTACT_SUPPORT = "CONTACT_SUPPORT",
   NEED_PAYMENT = "NEED_PAYMENT",
-  EXPIRE_SOON='EXPIRE_SOON'
+  EXPIRE_SOON = 'EXPIRE_SOON'
 }
 
 export const updateAutomationStatus = async (
@@ -42,7 +24,7 @@ export const updateAutomationStatus = async (
   res: Response
 ) => {
   try {
-    // const userId = req.user?.id;
+    const userId = req.user?.id;
     const { id, isActive } = req.body;
 
     if (!id || !["RUNNING", "PAUSE"].includes(isActive)) {
@@ -50,29 +32,32 @@ export const updateAutomationStatus = async (
     }
 
     // 🔹 Find automation instance
-    const automation = await AutomationInstance.findById(id)
+    const automation = await AutomationInstance.findOne({ _id: id, user: userId })
     if (!automation) {
       return res.status(404).json({ message: "Automation instance not found", success: false });
     }
 
 
 
-    if (isActive === "PAUSE") {
-      automation.isActive = "PAUSE";
+   if (isActive === "PAUSE") {
+  const success = await toggleN8nWorkflow(automation.n8nWorkflowId, false);
 
-      // ✅ n8n workflow bhi pause
-      if (automation.n8nWorkflowId) {
-        await toggleN8nWorkflow(automation.n8nWorkflowId, false);
-      }
+  if (success) {
+    automation.isActive = "PAUSE";
+    await automation.save();
 
-      await automation.save();
-
-      return res.status(200).json({
-        message: "Automation paused successfully",
-        success: true,
-        automation,
-      });
-    }
+    return res.status(200).json({
+      message: "Automation paused successfully",
+      success: true,
+      automation,
+    });
+  } else {
+    return res.status(500).json({
+      message: "Failed to pause automation in the backend. Please try again.",
+      success: false,
+    });
+  }
+}
 
     if (automation.systemStatus === SystemStatus.CONTACT_SUPPORT) {
       return res.status(400).json({
@@ -95,16 +80,24 @@ export const updateAutomationStatus = async (
     }
 
     if (automation.systemStatus == SystemStatus.ACTIVE || automation.systemStatus == SystemStatus.TRIAL || automation.systemStatus == SystemStatus.EXPIRE_SOON) {
-      automation.isActive = "RUNNING";
-      await automation.save();
 
-      await toggleN8nWorkflow(automation.n8nWorkflowId, true);
+      const success = await toggleN8nWorkflow(automation.n8nWorkflowId, true);
 
-      return res.status(200).json({
-        message: "Automation RUNNING successfully",
-        success: true,
-        automation,
-      });
+      if (success) {
+        automation.isActive = "RUNNING";
+        await automation.save();
+
+        return res.status(200).json({
+          message: "Automation is now RUNNING successfully",
+          success: true,
+          automation,
+        });
+      } else {
+        return res.status(500).json({
+          message: "Failed to activate automation in the backend. Please try again or contact support.",
+          success: false,
+        });
+      }
     }
 
 

@@ -5,24 +5,31 @@ import { AuthenticatedRequest } from "../../middlewares/loginCheck";
 
 
 export const getContacts = async (req: AuthenticatedRequest, res: Response) => {
-
   try {
+    const requestUser = req.user;
 
-     const requestUser = req.user;
-
-    
-   if (!requestUser || requestUser.role !== "admin") {
+    if (!requestUser || requestUser.role !== "admin") {
       return res.status(403).json({
         success: false,
         message: "Access denied. Only administrators can view user details.",
       });
     }
-    const { page = 1, limit = 10, search = "", status } = req.body;
+
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+      status,
+      fromDate,
+      toDate,
+    } = req.body;
+
     const skip = (page - 1) * limit;
 
     // Build filter
     let filter: Record<string, any> = {};
 
+    // Search filter
     if (search) {
       filter.$or = [
         { name: { $regex: search, $options: "i" } },
@@ -31,25 +38,57 @@ export const getContacts = async (req: AuthenticatedRequest, res: Response) => {
       ];
     }
 
+    // Status filter
     if (status) {
       filter.status = status;
     }
 
+    // Date range filter
+    if (fromDate || toDate) {
+      filter.createdAt = {};
+
+      if (fromDate) {
+        filter.createdAt.$gte = new Date(fromDate);
+      }
+
+      if (toDate) {
+        // Add one day to include the entire toDate
+        const endDate = new Date(toDate);
+        endDate.setDate(endDate.getDate() + 1);
+        filter.createdAt.$lte = endDate;
+      }
+    }
+
+
+
     // Query DB
     const contacts = await ContactUs.find(filter)
-      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
     const total = await ContactUs.countDocuments(filter);
 
+
+    let dateSummary = null;
+    if (fromDate || toDate) {
+      const dateFilter = { ...filter };
+      if (dateFilter.createdAt) {
+        dateSummary = {
+          from: fromDate ? new Date(fromDate).toISOString().split('T')[0] : null,
+          to: toDate ? new Date(toDate).toISOString().split('T')[0] : null
+        };
+      }
+    }
+
     return res.status(200).json({
       success: true,
       message: "Contacts fetched successfully.",
-      count: contacts.length,
-      total,
-      page,
-      totalPages: Math.ceil(total / limit),
+      pagination: {
+        total,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        totalPages: Math.ceil(total / limit),
+      },
       contacts,
     });
   } catch (error) {
@@ -73,7 +112,7 @@ export const updateContactStatus = async (req: AuthenticatedRequest, res: Respon
       });
     }
 
-    const { status , id} = req.body;
+    const { status, id } = req.body;
 
     if (!id) {
       return res.status(400).json({

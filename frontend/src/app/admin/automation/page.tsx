@@ -1,352 +1,334 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { FiSearch, FiFilter, FiPlay, FiPause, FiEdit, FiTrash2, FiInfo, FiActivity, FiZap, FiUser } from "react-icons/fi";
+import { useEffect, useState, useCallback } from "react";
+import { FiSearch, FiTrash2, FiInfo, FiCalendar } from "react-icons/fi"; // ✅ Added FiCalendar
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import Pagination from "@/components/Pagination";
-
 import Link from "next/link";
 import { admin_automation_list_api } from "@/api";
+import LoadingSpiner from "../_components/LoadingSpiner";
 
 export type Automation = {
   _id: string;
   instanceName: string;
- 
   executionCount: number;
   lastExecutedAt: string;
   createdAt: string;
   updatedAt: string;
-  user: {
-    name: string;
-    email: string;
-  };
+  systemStatus: string;
+  isActive: string;
+  masterWorkflow?: { name: string };
+  user?: { name: string; email: string };
+};
+
+// ✅ Define the shape of the filter state
+type FilterState = {
+  search: string;
+  user: string;
+  systemStatus: string;
+  isActive: string;
+  dateFrom: string;
+  dateTo: string;
 };
 
 export default function AdminAutomations() {
+  const token = useSelector((state: RootState) => state.user.token);
   const [automations, setAutomations] = useState<Automation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("");
-
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [stats, setStats] = useState({
-    totalAutomations: 0,
-    activeAutomations: 0,
-    totalExecutions: 0
-  });
+  const [stats, setStats] = useState<any>(null);
+
   const limit = 10;
 
-  const token = useSelector((state: RootState) => state.user.token);
+  // ✅ 1. Temporary state for filter inputs
+  const [filters, setFilters] = useState<FilterState>({
+    search: "",
+    user: "",
+    systemStatus: "",
+    isActive: "",
+    dateFrom: "",
+    dateTo: "",
+  });
 
-  const fetchAutomations = async (pageNum: number = page) => {
+  // ✅ 2. State for filters that are currently applied to the query
+  const [appliedFilters, setAppliedFilters] = useState<FilterState>(filters);
+
+  // ✅ Fetch Automations - Now depends on appliedFilters
+  const fetchAutomations = useCallback(async (pageNum: number) => {
     if (!token) return;
-    
+
     try {
       setLoading(true);
+
+      // Construct payload, filtering out empty strings for cleaner request body
+      const payload = {
+        page: pageNum,
+        limit: limit,
+        // Only include filters if they have a non-empty value
+        ...Object.fromEntries(Object.entries(appliedFilters).filter(([_, v]) => v)),
+      };
+
       const { data } = await axios.post(
-        admin_automation_list_api, 
-        {
-          page: pageNum,
-          limit,
-          search,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        admin_automation_list_api,
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (data.success) {
         setAutomations(data.automations);
-        setTotal(data.total);
         setTotalPages(data.totalPages);
         setPage(data.page);
-        setStats(data.stats || {
-          totalAutomations: data.total,
-          totalExecutions: data.automations.reduce((sum: number, a: Automation) => sum + a.executionCount, 0)
-        });
+        setStats(data.stats);
       }
     } catch (err) {
       console.error("Failed to fetch automations:", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, limit, appliedFilters]); // Depend on appliedFilters
 
+  // ✅ Trigger Fetch on Applied Filter Change or initial load
   useEffect(() => {
+    // This will run whenever appliedFilters changes, starting the search from page 1
     fetchAutomations(1);
-  }, [token, search, statusFilter]);
+  }, [fetchAutomations]);
 
+  // Handler to apply the temporary filters
+  const handleApplyFilters = () => {
+    setAppliedFilters(filters);
+    setPage(1); // Reset to page 1 for a new search
+  }
 
+  // Handler to reset all filters
+  const handleResetFilters = () => {
+    const defaultFilters = { search: "", user: "", systemStatus: "", isActive: "", dateFrom: "", dateTo: "" };
+    setFilters(defaultFilters);      // Reset input fields
+    setAppliedFilters(defaultFilters); // Apply reset filters
+    setPage(1);                     // Reset page
+  }
 
-  // Delete Automation
+  // Handler for pagination change
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    fetchAutomations(newPage);
+  }
+
+  // ✅ Delete Automation
   const deleteAutomation = async (id: string) => {
     if (!token) return;
-
-    if (!confirm("Are you sure you want to delete this automation? This action cannot be undone.")) return;
+    if (!confirm("Are you sure you want to delete this automation?")) return;
 
     try {
       const { data } = await axios.post(
-        '/api/admin/automations/delete', // Your delete API
+        "/api/admin/automations/delete",
         { id },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (data.success) {
-        setAutomations(prev => prev.filter(auto => auto._id !== id));
-        setTotal(prev => prev - 1);
+        // Re-fetch the current page list after deletion
+        fetchAutomations(page);
         alert("Automation deleted successfully!");
       }
     } catch (err: any) {
-      console.error("Failed to delete automation:", err);
       alert(err.response?.data?.message || "Failed to delete automation");
     }
   };
 
-
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  if (loading && automations.length === 0)
-    return (
-      <div className="h-[50vh] flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1 }}
-          className="w-12 h-12 border-4 border-t-secondary border-white rounded-full"
-        />
-      </div>
-    );
-
+  // ✅ UI
   return (
-    <div className="max-w-7xl mx-auto pb-28 text-white px-6">
+    <div className="max-w-7xl mx-auto pb-28 px-6">
+      {/* Header and Stats */}
       <div className="mb-8">
         <h1 className="text-3xl font-extrabold mb-2">Automation Management</h1>
-        <p className="text-gray-300">Manage and monitor all user automations</p>
+        {stats && (
+          <div className="grid grid-cols-4 gap-2 text-sm text-gray-700 mt-3">
+            <div className="p-4 bg-white rounded shadow text-center">
+              <p className="text-gray-500 text-sm">Total</p>
+              <p className="text-lg font-bold">{stats.totalAutomations}</p>
+            </div>
+            <div className="p-4 bg-white rounded shadow text-center">
+              <p className="text-gray-500 text-sm">Active</p>
+              <p className="text-lg font-bold">{stats.active}</p>
+            </div>
+            <div className="p-4 bg-white rounded shadow text-center">
+              <p className="text-gray-500 text-sm">Trial</p>
+              <p className="text-lg font-bold">{stats.trial}</p>
+            </div>
+            <div className="p-4 bg-white rounded shadow text-center">
+              <p className="text-gray-500 text-sm">Expired</p>
+              <p className="text-lg font-bold">{stats.expired}</p>
+            </div>
+            <div className="p-4 bg-white rounded shadow text-center">
+              <p className="text-gray-500 text-sm">Need Payment </p>
+              <p className="text-lg font-bold">{stats.needPayment}</p>
+            </div>
+            <div className="p-4 bg-white rounded shadow text-center">
+              <p className="text-gray-500 text-sm">Executions</p>
+              <p className="text-lg font-bold">{stats.totalExecutions}</p>
+            </div>
+
+
+
+          </div>
+        )}
       </div>
 
-      {/* Filters and Search */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-white/10 mb-6"
-      >
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Search */}
-          <div className="flex-1 relative">
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search by automation name or user..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-secondary transition"
-            />
-          </div>
+      {/* 🔍 Filters */}
+      <div className="text-secondary grid grid-cols-4 gap-4 mb-6">
 
-          {/* Status Filter */}
-          <div className="flex gap-2">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-secondary transition"
-            >
-              <option value="">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="paused">Paused</option>
-              <option value="error">Error</option>
-            </select>
-
-           
-          </div>
+        <div className="flex-1 relative col-span-2">
+          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search by automation name..."
+            value={filters.search} // Bind to filters
+            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+            className="w-full pl-10 pr-4 py-2 border border-secondary  focus:outline-none transition"
+          />
         </div>
-      </motion.div>
 
-      {/* Stats */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"
-      >
-        <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-400/10 rounded-lg">
-              <FiZap className="text-blue-400" size={20} />
-            </div>
-            <div>
-              <p className="text-sm text-gray-300">Total Automations</p>
-              <p className="text-2xl font-bold">{stats.totalAutomations}</p>
-            </div>
-          </div>
+        <div className="flex-1 relative col-span-2">
+          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search by User ID, Name, or Email..."
+            value={filters.user} // Bind to filters
+            onChange={(e) => setFilters({ ...filters, user: e.target.value })}
+            className="w-full pl-10 pr-4 py-2 bg-white/5 border border-secondary focus:outline-none transition"
+          />
         </div>
-        <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-400/10 rounded-lg">
-              <FiPlay className="text-green-400" size={20} />
-            </div>
-            <div>
-              <p className="text-sm text-gray-300">Active</p>
-              <p className="text-2xl font-bold">{stats.activeAutomations}</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-400/10 rounded-lg">
-              <FiActivity className="text-purple-400" size={20} />
-            </div>
-            <div>
-              <p className="text-sm text-gray-300">Total Executions</p>
-              <p className="text-2xl font-bold">{stats.totalExecutions}</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-orange-400/10 rounded-lg">
-              <FiUser className="text-orange-400" size={20} />
-            </div>
-            <div>
-              <p className="text-sm text-gray-300">Users with Automations</p>
-              <p className="text-2xl font-bold">
-                {new Set(automations.map(a => a.user?.email)).size}
-              </p>
-            </div>
-          </div>
-        </div>
-      </motion.div>
 
-      {/* Automations List */}
-      <div className="space-y-4">
-        {automations.map((automation, i) => (
-          <motion.div
-            key={automation._id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-white/10 hover:shadow-[0_0_20px_rgba(230,82,31,0.2)] transition"
-          >
-            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-              {/* Automation Info */}
-              <div className="flex-1">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-1">
-                      {automation.instanceName}
-                    </h3>
-                   
-                  </div>
-                 
-                </div>
-
-                {/* Automation Details */}
-                <div className="mb-4">
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <span className="font-medium">Workflow:</span>
-                    <span>{automation.masterWorkflow?.name || "N/A"}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <span className="font-medium">Executions:</span>
-                    <span>{automation.executionCount}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <span className="font-medium">Last Run:</span>
-                    <span>
-                      {automation.lastExecutedAt 
-                        ? formatDate(automation.lastExecutedAt)
-                        : "Never"
-                      }
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 text-sm text-gray-400">
-                  <span>Created: {formatDate(automation.createdAt)}</span>
-                  {automation.updatedAt !== automation.createdAt && (
-                    <span>Updated: {formatDate(automation.updatedAt)}</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex lg:flex-col gap-2">
-                {/* View Details Button */}
-                <Link
-                  href={`/admin/automation/view?id=${automation._id}`}
-                  className="px-4 py-2 rounded-xl bg-blue-400/10 text-blue-400 hover:bg-blue-400/20 font-semibold transition flex items-center gap-2"
-                >
-                  <FiInfo size={16} />
-                  View Details
-                </Link>
-                {/* Edit Button */}
-                <Link
-                  href={`/admin/automation/edit?id=${automation._id}`}
-                  className="px-4 py-2 rounded-xl bg-green-400/10 text-green-400 hover:bg-green-400/20 font-semibold transition flex items-center gap-2"
-                >
-                  <FiEdit size={16} />
-                  Edit
-                </Link>
-
-                {/* Delete Button */}
-                <button
-                  onClick={() => deleteAutomation(automation._id)}
-                  className="px-4 py-2 rounded-xl bg-red-400/10 text-red-400 hover:bg-red-400/20 font-semibold transition flex items-center gap-2"
-                >
-                  <FiTrash2 size={16} />
-                  Delete
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* No Results */}
-      {!loading && automations.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-12"
+        <select
+          value={filters.systemStatus} // Bind to filters
+          onChange={(e) => setFilters({ ...filters, systemStatus: e.target.value })}
+          className="px-4 py-2 border border-secondary bg-white/5  flex-1"
         >
-          <FiZap size={64} className="mx-auto text-gray-400 mb-4" />
-          <h3 className="text-xl font-bold text-gray-300 mb-2">No automations found</h3>
-         
-        </motion.div>
+          <option value="">All System Status</option>
+          <option value="TRIAL">Trial</option>
+          <option value="ACTIVE">Active</option>
+          <option value="NEED_PAYMENT">Need Payment</option>
+          <option value="EXPIRE_SOON">Expire Soon</option>
+          <option value="EXPIRED">Expired</option>
+          <option value="CONTACT_SUPPORT">Contact Support</option>
+        </select>
+
+
+        <select
+          value={filters.isActive} // Bind to filters
+          onChange={(e) => setFilters({ ...filters, isActive: e.target.value })}
+          className="px-4 py-2 border border-secondary bg-white/5  flex-1"
+        >
+          <option value="">All States</option>
+          <option value="RUNNING">Running</option>
+          <option value="PAUSE">Paused</option>
+        </select>
+
+
+        <div className="relative flex-1">
+          <input
+            type="date"
+            value={filters.dateFrom} // Bind to filters
+            onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
+            className="w-full px-4 py-2 border border-secondary  bg-white/5 text-sm focus:outline-none"
+          />
+        </div>
+        <div className="relative flex-1">
+          <input
+            type="date"
+            value={filters.dateTo} // Bind to filters
+            onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
+            className="w-full px-4 py-2 border border-secondary  bg-white/5 text-sm focus:outline-none"
+          />
+        </div>
+
+        <button
+          onClick={handleApplyFilters}
+          className="px-4 py-2 bg-blue-600 text-white  hover:bg-blue-700 font-medium transition"
+        >
+          Apply Filters
+        </button>
+        <button
+          onClick={handleResetFilters}
+          className="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 font-medium transition"
+        >
+          Reset Filters
+        </button>
+
+
+
+      </div>
+
+      {/* 📄 Automations List */}
+      {loading && automations.length === 0 ? (
+        <LoadingSpiner />
+      ) : automations.length > 0 ? (
+        <div className="space-y-4">
+          {automations.map((automation) => (
+            <div
+              key={automation._id}
+              className="p-4 border border-secondary transition hover:bg-white/5"
+            >
+              <div className="flex flex-col lg:flex-row justify-between gap-4">
+                {/* Automation Info */}
+                <div>
+                  <h3 className="text-xl capitalize font-bold mb-1">{automation.instanceName}</h3>
+                  <p className="text-gray-400">
+                    Workflow: {automation.masterWorkflow?.name || "N/A"}
+                  </p>
+                  <p className="text-gray-400 font-semibold mt-1">
+                    User: {automation.user?.name}
+                  </p>
+                  <p className="text-gray-500 text-sm">
+                    Email: {automation.user?.email}
+                  </p>
+                  <p className="text-gray-400 mt-2">Executions: {automation.executionCount}</p>
+                  <p className="text-gray-400">System Status: {automation.systemStatus}</p>
+                  <p className="text-gray-400">Active State: {automation.isActive}</p>
+                  <div className="text-sm text-gray-500 mt-2">
+                    Created: {new Date(automation.createdAt).toLocaleDateString()}{" "}
+                    {automation.updatedAt !== automation.createdAt && (
+                      <>| Updated: {new Date(automation.updatedAt).toLocaleDateString()}</>
+                    )}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col justify-center gap-2">
+                  <Link
+                    href={`/admin/automation/viewedit?id=${automation._id}`}
+                    className="px-4 py-2 rounded-xl bg-blue-400/10 text-blue-400 hover:bg-blue-400/20 font-semibold flex items-center justify-center gap-2"
+                  >
+                    <FiInfo /> View & Edit
+                  </Link>
+
+                  <button
+                    onClick={() => deleteAutomation(automation._id)}
+                    className="px-4 py-2 rounded-xl bg-red-400/10 text-red-400 hover:bg-red-400/20 font-semibold flex items-center justify-center gap-2"
+                  >
+                    <FiTrash2 /> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-12 text-gray-400">
+          <h3 className="text-xl font-bold">No automations found.</h3>
+          <p>Try adjusting your filters and applying them again.</p>
+        </div>
       )}
 
-      {/* Pagination */}
+   
       <Pagination
         currentPage={page}
         totalPages={totalPages}
-        onPageChange={(newPage) => {
-          setPage(newPage);
-          fetchAutomations(newPage);
-        }}
-        showPageNumbers={true}
-        compact={false}
+        onPageChange={handlePageChange} // Use the dedicated page handler
+        showPageNumbers
       />
     </div>
   );

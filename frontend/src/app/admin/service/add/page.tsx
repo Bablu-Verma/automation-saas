@@ -73,8 +73,9 @@ export default function AddMasterWorkflow() {
 
   return (
     <>
-      <UploadImageGetLink />
+      
       <div className="bg-white p-6 rounded-2xl shadow-lg">
+        <UploadImageGetLink />
         <h2 className="text-xl font-bold mb-4">➕ Add Master Workflow</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -14,10 +14,12 @@ import { IUser } from "@/types";
 export default function UserProfile() {
 
   
-
-  const token = useSelector((state: RootState) => state.user.token);
+   const token = useSelector((state: RootState) => state.user.token);
 
    const user = useSelector((state: RootState) => state.user.user) as IUser | null;
+
+
+   console.log('user',user)
  
  
 

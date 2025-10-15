@@ -30,6 +30,7 @@ export default function HomeHero() {
 
   return (
     <section className="relative min-h-[100vh] w-full flex flex-col justify-center items-center py-28 text-white overflow-hidden">
+       <div className="absolute top-20  w-96 h-64 bg-gradient-to-tr from-primary/40 to-secondary/30 rounded-full blur-3xl -z-10"></div>
 
       {/* Hero Content */}
       <div className="text-center max-w-3xl pb-10 px-6">

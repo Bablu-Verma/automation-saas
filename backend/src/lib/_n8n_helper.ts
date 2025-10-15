@@ -221,6 +221,29 @@ export function injectWorkflowCredentials(workflowJson: any, requiredCredentials
 }
 
 
+export async function toggleN8nWorkflow(workflowId?: string, activate: boolean = false) {
+  if (!workflowId) return;
+
+  // Choose the correct endpoint based on the desired action
+  const endpoint = activate ? 'activate' : 'deactivate';
+
+  try {
+    await axios.post( // Use POST method for activation/deactivation
+      `${process.env.N8N_API_URL}/api/v1/workflows/${workflowId}/${endpoint}`,
+      {},
+      { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } }
+    );
+    console.log(`Workflow ${workflowId} ${activate ? "ACTIVATED" : "DEACTIVATED"}`);
+    return true;
+  } catch (err: any) {
+    console.error(
+      `Failed to update n8n workflow ${workflowId}:`,
+      err.response?.data || err.message
+    );
+    return false;
+  }
+}
+
 
 
 

@@ -12,6 +12,7 @@ import { instance_details_api } from "@/api";
 import Link from "next/link";
 import StatusToggleButton from "./StatusToggleButton";
 import { TrialPeriodCircle } from "./TrialPeriodCircle";
+import LoadingSpiner from "@/app/admin/_components/LoadingSpiner";
 
 export type AutomationDetail = {
   _id: string;
@@ -114,9 +115,7 @@ export default function AutomationDetailPage() {
 
   if (loading)
     return (
-      <div className="h-[50vh] flex items-center justify-center text-white">
-        Loading automation details...
-      </div>
+     <LoadingSpiner />
     );
 
   if (!automation)
@@ -217,7 +216,7 @@ export default function AutomationDetailPage() {
                 <div className="flex items-center justify-between text-gray-400">
                   <span className="flex items-center gap-2">
                     <FiUser className="text-green-400" />
-                    Last Subscribe:
+                     Subscribe:
                   </span>
                   <span className="text-gray-300">
                     {automation.periods ? new Date(automation.periods.startTime).toLocaleString() : 'N/A'}

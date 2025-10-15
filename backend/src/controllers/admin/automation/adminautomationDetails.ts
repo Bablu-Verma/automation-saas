@@ -1,8 +1,9 @@
 import { Response } from "express";
-import { AuthenticatedRequest } from "../../../../middlewares/loginCheck";
-import AutomationInstance from "../../../../models/AutomationInstance";
+import { AuthenticatedRequest } from "../../../middlewares/loginCheck";
+import AutomationInstance from "../../../models/AutomationInstance";
 
-export const automationDetail = async (req: AuthenticatedRequest, res: Response) => {
+
+export const AdminautomationDetail = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?.id;
     const { id } = req.body; 
@@ -16,7 +17,7 @@ export const automationDetail = async (req: AuthenticatedRequest, res: Response)
     }
 
     
-    const instance = await AutomationInstance.findOne({ _id: id, user: userId })
+    const instance = await AutomationInstance.findOne({ _id: id })
       .select("-n8nCredential") 
       .populate("user", "name email") 
       .populate("masterWorkflow", "name category serviceImage"); 

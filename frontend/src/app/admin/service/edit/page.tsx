@@ -123,11 +123,9 @@ export default function EditMasterWorkflow() {
 
     return (
 
-        <>
+        <div className="p-6">
             <UploadImageGetLink />
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-
-                <h2 className="text-xl font-bold mb-4">➕ Edit Master Workflow</h2>
+             <h2 className="text-xl font-bold mb-4">➕ Edit Master Workflow</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Basic Inputs */}
@@ -251,8 +249,7 @@ export default function EditMasterWorkflow() {
                         </button>
                     </div>
                 </form>
-            </div>
-        </>
+        </div>
 
     );
 }

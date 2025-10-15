@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import Link from "next/link";
 import Pagination from "@/components/Pagination";
+import LoadingSpiner from "@/app/admin/_components/LoadingSpiner";
 
 export type AutomationInstance__ = {
   _id: string;
@@ -65,7 +66,7 @@ export default function AutomationInstances() {
     fetchAutomation();
   }, [token, page]);
 
-  console.log(instances)
+  // console.log(instances)
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -91,13 +92,7 @@ export default function AutomationInstances() {
 
   if (loading)
     return (
-      <div className="h-[50vh] flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1 }}
-          className="w-12 h-12 border-4 border-t-secondary border-white rounded-full"
-        />
-      </div>
+     <LoadingSpiner />
     );
 
   return (

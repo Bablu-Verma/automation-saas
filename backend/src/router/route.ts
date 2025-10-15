@@ -36,6 +36,13 @@ import { getUserListForAdmin } from '../controllers/admin/users/getUserListForAd
 import { getUserDetailsForAdmin } from '../controllers/admin/users/getUsersDetailsForAdmin';
 import { updateUserByAdmin } from '../controllers/admin/users/updateUserByAdmin';
 import { adminUserAutomations } from '../controllers/admin/automation/adminautomationList';
+import { AdminautomationDetail } from '../controllers/admin/automation/adminautomationDetails';
+import { getPaymentslistforAdmin } from '../controllers/admin/payment/payment-list';
+import { getPaymentDetailsForAdmin } from '../controllers/admin/payment/paymentdetails';
+import { AutomateupdateAutomationStatuses } from '../controllers/admin/automation/Automate_automationStatusUpdate';
+import { updateAutomationStatusById } from '../controllers/admin/automation/automationStatusUpdate';
+import { getPaymentDetails } from '../controllers/frontend/dashboard/payment/payment-details';
+import { updatePaymentForAdmin } from '../controllers/admin/payment/paymentedit';
 
 
 
@@ -85,13 +92,14 @@ route.post(base + '/admin/master-workflow/details',loginCheck, getMasterWorkflow
 
 
 route.post(base + '/admin/automation/list',loginCheck, adminUserAutomations);
-route.post(base + '/admin/automation/details',loginCheck, adminUserAutomations);
+route.post(base + '/admin/automation/details',loginCheck, AdminautomationDetail);
+route.post(base + '/admin/automation/automateupdate', AutomateupdateAutomationStatuses);
+route.post(base + '/admin/automation/update',loginCheck, updateAutomationStatusById);
 
 
 // home 
 route.post(base + '/home/service', listHomeService);
 route.post(base + '/home/search', searchService);
-
 
 // automation
 route.post(base + '/instance/automation-create',loginCheck, createAutomationInstance);
@@ -100,12 +108,19 @@ route.post(base + '/instance/automation-details',loginCheck, automationDetail);
 route.post(base + '/instance/automation-update-status',loginCheck, updateAutomationStatus);
 
 
-
 route.post(base + '/payment/payment-details-request',loginCheck, PaymentDetailsRequest);
-
-
 route.post(base + '/payment/create-payment',loginCheck, createPayment);
 route.post(base + '/payment/get-payment',loginCheck, getUserPayments);
+route.post(base + '/payment/get-payment-details',loginCheck, getPaymentDetails);
+
+
+route.post(base + '/admin/payment/list-payment',loginCheck, getPaymentslistforAdmin);
+route.post(base + '/admin/payment/payment-details',loginCheck, getPaymentDetailsForAdmin);
+route.post(base + '/admin/payment/payment-edit',loginCheck, updatePaymentForAdmin);
+
+
+
+
 
 
 

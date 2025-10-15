@@ -64,7 +64,7 @@ const UploadImageGetLink = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-lg mb-5">
+    <div className="bg-white p-6 border-gray-500 border rounded-xl shadow-lg mb-5">
       <div>
         <div className="flex justify-between items-start">
           <div className="">

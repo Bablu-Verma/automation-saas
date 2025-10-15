@@ -7,13 +7,13 @@ import Link from "next/link"
 export default function adminservicepage() {
   const supportOptions = [
     {
-      icon: <FiPlusCircle size={28} />, // Add icon for "Add"
+      icon: <FiPlusCircle size={28} />,
       title: "Add",
       desc: "Add new Work Flow",
       href: "/admin/service/add",
     },
     {
-      icon: <FiList size={28} />, // List icon for "List"
+      icon: <FiList size={28} />,
       title: "List",
       desc: "All Work flow",
       href: "/admin/service/list",
@@ -21,33 +21,27 @@ export default function adminservicepage() {
   ]
 
   return (
-    <div className="max-w-6xl mx-auto pt-16  text-white">
-      <motion.h1
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-4xl md:text-5xl font-extrabold text-center mb-12"
+    <div className="max-w-6xl mx-auto p-6  ">
+      <h1
+        className="text-xl md:text-3xl font-extrabold text-center mb-12"
       >
         Service
-      </motion.h1>
+      </h1>
 
       <div className="grid md:grid-cols-2 gap-8">
         {supportOptions.map((item, i) => (
-          <motion.div
+          <div
             key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: i * 0.1 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-md hover:shadow-2xl border border-white/10  transition"
+            className=" rounded-2xl p-8 shadow-md border border-secondary  transition"
           >
             <Link href={item.href} className="flex flex-col gap-4 h-full">
               <div className="flex items-center gap-4">
                 <span className="text-secondary">{item.icon}</span>
                 <h3 className="text-2xl font-bold">{item.title}</h3>
               </div>
-              <p className="text-gray-300">{item.desc}</p>
+              <p className="text-gray-700">{item.desc}</p>
             </Link>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>

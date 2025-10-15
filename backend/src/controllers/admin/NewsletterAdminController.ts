@@ -3,38 +3,85 @@ import Newsletter from "../../models/Newsletter";
 import { AuthenticatedRequest } from "../../middlewares/loginCheck";
 
 export const getAllSubscribers = async (req: AuthenticatedRequest, res: Response) => {
+  const requestUser = req.user;
+  if (!requestUser || requestUser.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      message: "Access denied. Only administrators can view user details.",
+    });
+  }
 
-    const requestUser = req.user;
-   if (!requestUser || requestUser.role !== "admin") {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied. Only administrators can view user details.",
-      });
-    }
   try {
-    const { page = 1, limit = 10, status, search = "" } = req.body;
+    const {
+      page = 1,
+      limit = 10,
+      status,
+      search = "",
+      fromDate,
+      toDate,
+    } = req.body;
+
     const skip = (page - 1) * limit;
 
+    // Build filter
     let filter: Record<string, any> = {};
-    if (status) filter.status = status;
-    if (search) {
-      filter.email = { $regex: search, $options: "i" };
+
+    // Status filter
+    if (status) {
+      filter.status = status;
     }
 
+    // Search filter - multiple fields
+    if (search) {
+      filter.$or = [
+        { email: { $regex: search, $options: "i" } },
+        { name: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // Date range filter
+    if (fromDate || toDate) {
+      filter.createdAt = {};
+
+      if (fromDate) {
+        filter.createdAt.$gte = new Date(fromDate);
+      }
+
+      if (toDate) {
+        // Add one day to include the entire toDate
+        const endDate = new Date(toDate);
+        endDate.setDate(endDate.getDate() + 1);
+        filter.createdAt.$lte = endDate;
+      }
+    }
+
+
+
+    // Query database
     const subscribers = await Newsletter.find(filter)
-      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
     const total = await Newsletter.countDocuments(filter);
 
+    // Get statistics if needed
+    const statistics = {
+      totalSubscribers: await Newsletter.countDocuments(),
+      activeSubscribers: await Newsletter.countDocuments({ status: "active" }),
+      inactiveSubscribers: await Newsletter.countDocuments({ status: "inactive" }),
+    };
+
     return res.status(200).json({
       success: true,
       message: "Subscribers fetched successfully.",
       count: subscribers.length,
-      total,
-      page,
-      totalPages: Math.ceil(total / limit),
+      pagination: {
+        total,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        totalPages: Math.ceil(total / limit),
+      },
+      statistics,
       subscribers,
     });
   } catch (error) {

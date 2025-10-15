@@ -71,12 +71,7 @@ const loginWithGoogle = async (req: Request, res: Response) => {
                     msg: "Login successful",
                     action: "LOGIN",
                     token,
-                    user: {
-                        _id: user._id,
-                        name: user.name,
-                        email: user.email,
-                        role: user.role,
-                    },
+                    user: user
                 })
             }
 
@@ -96,12 +91,7 @@ const loginWithGoogle = async (req: Request, res: Response) => {
                 msg: "Login successful",
                 action: "LOGIN",
                 token,
-                user: {
-                    _id: user._id,
-                    name: user.name,
-                    email: user.email,
-                    role: user.role,
-                },
+                user: user
             })
 
             }
@@ -134,12 +124,7 @@ const loginWithGoogle = async (req: Request, res: Response) => {
             msg: "Registration successful",
             action: "REGISTER",
             token,
-            user: {
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-            },
+            user: user
         })
     } catch (err: any) {
         console.error("Google login error:", err.message)

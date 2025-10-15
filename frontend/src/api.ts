@@ -45,6 +45,14 @@ export const instance_update_status_api = api_url + 'v1/instance/automation-upda
 export const payment_details_request_api = api_url + 'v1/payment/payment-details-request'
 export const payment_create_request_api = api_url + 'v1/payment/create-payment'
 export const payment_get_api = api_url + 'v1/payment/get-payment'
+export const payment_details_api = api_url + 'v1/payment/get-payment-details'
+
+
+
+
+export const admin_get_payment_list_api = api_url + 'v1/admin/payment/list-payment'
+export const admin_get_payment_dtails_api = api_url + 'v1/admin/payment/payment-details'
+export const admin_payment_edit_api = api_url + 'v1/admin/payment/payment-edit'
 
 // export const create_instance_value_api = api_url + 'v1/instance/create-credential'
 
@@ -60,6 +68,9 @@ export const admin_user_update_api = api_url + 'v1/admin/user/update'
 
 
 export const admin_automation_list_api = api_url + 'v1/admin/automation/list'
+export const admin_automation_details_api = api_url + 'v1/admin/automation/details'
+export const admin_automation_automateupdate_api = api_url + 'v1/admin/automation/automateupdate'
+export const admin_automation_update_api = api_url + 'v1/admin/automation/update'
 
 
 

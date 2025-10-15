@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { FiUsers, FiMail, FiSearch, FiCheckCircle, FiXCircle, FiTrash2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import { admin_newsletter_delete_api, admin_newsletter_list_api } from "@/api";
 import Pagination from "@/components/Pagination";
+import LoadingSpiner from "../_components/LoadingSpiner";
 
 export type Subscriber = {
   _id: string;
@@ -20,70 +20,60 @@ export type Subscriber = {
 export default function AdminSubscribers() {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"SUBSCRIBED" | "UNSUBSCRIBED" | "">("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-  const limit = 10;
+  const [stats, setStats] = useState({
+    totalSubscribers: 0,
+    activeSubscribers: 0,
+    inactiveSubscribers: 0
+  });
+
+  // Simple filter state
+  const [filters, setFilters] = useState({
+    search: "",
+    status: "" as "SUBSCRIBED" | "UNSUBSCRIBED" | "",
+    dateFrom: "",
+    dateTo: ""
+  });
+
+  const [appliedFilters, setAppliedFilters] = useState(filters);
 
   const token = useSelector((state: RootState) => state.user.token);
-  const user = useSelector((state: RootState) => state.user.user);
 
   const fetchSubscribers = async (pageNum: number = page) => {
-    if (!token || !user) {
-      setError("Please log in to access this page");
-      setLoading(false);
-      return;
-    }
-
-    if (user.role !== "admin") {
-      setError("Access denied. Admin privileges required.");
-      setLoading(false);
-      return;
-    }
+    if (!token) return;
 
     try {
       setLoading(true);
-      setError("");
-      
       const { data } = await axios.post(
-        admin_newsletter_list_api, // Update with your actual API endpoint
+        admin_newsletter_list_api,
         {
           page: pageNum,
-          limit,
-          search,
-          status: statusFilter || undefined,
+          limit: 10,
+          search: appliedFilters.search || undefined,
+          status: appliedFilters.status || undefined,
+          fromDate: appliedFilters.dateFrom || undefined,
+          toDate: appliedFilters.dateTo || undefined,
         },
         {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       if (data.success) {
         setSubscribers(data.subscribers);
-        setTotal(data.total);
-        setTotalPages(data.totalPages);
-        setPage(data.page);
-      } else {
-        setError(data.message || "Failed to fetch subscribers");
+        setTotal(data.pagination.total);
+        setTotalPages(data.pagination.totalPages);
+        setPage(data.pagination.page);
+        
+        // Set statistics from API response
+        if (data.statistics) {
+          setStats(data.statistics);
+        }
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Failed to fetch subscribers:", err);
-      
-      if (err.response?.status === 403) {
-        setError("Access denied. You don't have admin privileges.");
-      } else if (err.response?.status === 401) {
-        setError("Please log in to access this page");
-      } else if (err.response?.data?.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("Failed to fetch subscribers. Please try again.");
-      }
     } finally {
       setLoading(false);
     }
@@ -91,256 +81,184 @@ export default function AdminSubscribers() {
 
   useEffect(() => {
     fetchSubscribers(1);
-  }, [token, user, search, statusFilter]);
+  }, [token, appliedFilters]);
+
+  useEffect(() => {
+    fetchSubscribers(page);
+  }, [page]);
+
+  const handleApplyFilters = () => {
+    setAppliedFilters(filters);
+    setPage(1);
+  };
+
+  const handleResetFilters = () => {
+    const resetFilters = {
+      search: "",
+      status: "",
+      dateFrom: "",
+      dateTo: ""
+    };
+    setFilters(resetFilters);
+    setAppliedFilters(resetFilters);
+    setPage(1);
+  };
 
   const deleteSubscriber = async (id: string) => {
     if (!token) return;
-
     if (!confirm("Are you sure you want to delete this subscriber?")) return;
 
     try {
       const { data } = await axios.post(
         admin_newsletter_delete_api,
-        {id},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { id },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
       if (data.success) {
-        setSubscribers(prev => prev.filter(subscriber => subscriber._id !== id));
+        setSubscribers(prev => prev.filter(sub => sub._id !== id));
         setTotal(prev => prev - 1);
+        // Refresh the data
+        fetchSubscribers(page);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Failed to delete subscriber:", err);
-      alert(err.response?.data?.message || "Failed to delete subscriber");
+      alert("Failed to delete subscriber");
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "SUBSCRIBED":
-        return <FiCheckCircle className="text-green-400" size={18} />;
-      case "UNSUBSCRIBED":
-        return <FiXCircle className="text-red-400" size={18} />;
-      default:
-        return <FiMail size={18} />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "SUBSCRIBED":
-        return "text-green-400 bg-green-400/10 border-green-400/20";
-      case "UNSUBSCRIBED":
-        return "text-red-400 bg-red-400/10 border-red-400/20";
-      default:
-        return "text-gray-400 bg-gray-400/10 border-gray-400/20";
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+  const formatDate = (dateString: string) =>
+    new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
     });
-  };
 
-  if (loading && subscribers.length === 0)
-    return (
-      <div className="h-[50vh] flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1 }}
-          className="w-12 h-12 border-4 border-t-secondary border-white rounded-full"
-        />
-      </div>
-    );
-
+  if (loading && subscribers.length === 0) return <LoadingSpiner />;
 
   return (
-    <div className="max-w-7xl mx-auto pb-28 text-white px-6">
-      <div className="mb-8" >
-        <h1 className="text-3xl font-extrabold mb-2">Newsletter Subscribers</h1>
-        <p className="text-gray-300">Manage your newsletter email subscribers</p>
+    <div className="max-w-5xl mx-auto py-8 px-4 min-h-screen">
+      <h1 className="text-2xl font-bold mb-6">Newsletter Subscribers</h1>
+
+      {/* Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+        <div className="p-4 bg-white border rounded text-center">
+          <p className="text-gray-500 text-sm">Total Subscribers</p>
+          <p className="text-lg font-bold">{stats.totalSubscribers}</p>
+        </div>
+        <div className="p-4 bg-white border rounded text-center">
+          <p className="text-gray-500 text-sm">Subscribed</p>
+          <p className="text-lg font-bold">{stats.activeSubscribers}</p>
+        </div>
+        <div className="p-4 bg-white border rounded text-center">
+          <p className="text-gray-500 text-sm">Unsubscribed</p>
+          <p className="text-lg font-bold">{stats.inactiveSubscribers}</p>
+        </div>
       </div>
 
-      {/* Filters and Search */}
-      <motion.div
-        className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-white/10 mb-6"
-      >
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Search */}
-          <div className="flex-1 relative">
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search by email..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-secondary transition"
-            />
-          </div>
+      {/* Filters */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-6">
+        <div className="col-span-2">
+          <input
+            type="text"
+            placeholder="Search by email..."
+            value={filters.search}
+            onChange={e => setFilters({ ...filters, search: e.target.value })}
+            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+          />
+        </div>
 
-          {/* Status Filter */}
-          <div className="flex gap-2">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as "SUBSCRIBED" | "UNSUBSCRIBED" | "")}
-              className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-secondary transition"
-            >
-              <option value="">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
-        </div>
-      </motion.div>
+        <select
+          value={filters.status}
+          onChange={e => setFilters({ ...filters, status: e.target.value as "SUBSCRIBED" | "UNSUBSCRIBED" | "" })}
+          className="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        >
+          <option value="">All Status</option>
+          <option value="SUBSCRIBED">Subscribed</option>
+          <option value="UNSUBSCRIBED">Unsubscribed</option>
+        </select>
 
-      {/* Stats */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"
-      >
-        <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-400/10 rounded-lg">
-              <FiUsers className="text-blue-400" size={20} />
-            </div>
-            <div>
-              <p className="text-sm text-gray-300">Total Subscribers</p>
-              <p className="text-2xl font-bold">{total}</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-400/10 rounded-lg">
-              <FiCheckCircle className="text-green-400" size={20} />
-            </div>
-            <div>
-              <p className="text-sm text-gray-300">Active</p>
-              <p className="text-2xl font-bold">
-                {subscribers.filter(s => s.status === "SUBSCRIBED").length}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-red-400/10 rounded-lg">
-              <FiXCircle className="text-red-400" size={20} />
-            </div>
-            <div>
-              <p className="text-sm text-gray-300">Inactive</p>
-              <p className="text-2xl font-bold">
-                {subscribers.filter(s => s.status === "UNSUBSCRIBED").length}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-400/10 rounded-lg">
-              <FiMail className="text-purple-400" size={20} />
-            </div>
-            <div>
-              <p className="text-sm text-gray-300">This Page</p>
-              <p className="text-2xl font-bold">{subscribers.length}</p>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+        <input
+          type="date"
+          value={filters.dateFrom}
+          onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
+          className="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+          placeholder="From Date"
+        />
+        
+        <input
+          type="date"
+          value={filters.dateTo}
+          onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
+          className="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+          placeholder="To Date"
+        />
+
+        <button
+          onClick={handleApplyFilters}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+        >
+          Apply Filters
+        </button>
+        
+        <button
+          onClick={handleResetFilters}
+          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+        >
+          Reset Filters
+        </button>
+      </div>
 
       {/* Subscribers List */}
       <div className="space-y-4">
-        {subscribers.map((subscriber, i) => (
-          <motion.div
-            key={subscriber._id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-white/10 hover:shadow-[0_0_20px_rgba(230,82,31,0.2)] transition"
-          >
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-              {/* Subscriber Info */}
-              <div className="flex-1">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-1">
-                      {subscriber.email}
-                    </h3>
-                    <div className="flex items-center gap-4 text-sm text-gray-400">
-                      <span>Joined: {formatDate(subscriber.createdAt)}</span>
-                      {subscriber.updatedAt !== subscriber.createdAt && (
-                        <span>Updated: {formatDate(subscriber.updatedAt)}</span>
-                      )}
-                    </div>
+        {subscribers.length === 0 ? (
+          <div className="text-center py-12 bg-white border rounded">
+            <p className="text-gray-500 text-lg">No subscribers found</p>
+           
+          </div>
+        ) : (
+          subscribers.map(sub => (
+            <div key={sub._id} className="p-4 bg-white border rounded hover:shadow-sm transition-shadow">
+              <div className="flex justify-between items-center">
+                <div className="flex-1">
+                  <div className="font-semibold text-lg">{sub.email}</div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    <span>Joined: {formatDate(sub.createdAt)}</span>
+                    {sub.updatedAt !== sub.createdAt && (
+                      <span className="ml-4">Updated: {formatDate(sub.updatedAt)}</span>
+                    )}
                   </div>
-                  <span
-                    className={`px-3 py-1 text-sm rounded-full border ${getStatusColor(
-                      subscriber.status
-                    )}`}
-                  >
-                    <div className="flex items-center gap-2">
-                      {getStatusIcon(subscriber.status)}
-                      {subscriber.status === "SUBSCRIBED" ? "SUBSCRIBED" : "UNSUBSCRIBED"}
-                    </div>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <span className={`text-sm px-3 py-1 border rounded-full ${
+                    sub.status === "SUBSCRIBED" 
+                      ? "bg-green-50 text-green-700 border-green-200" 
+                      : "bg-red-50 text-red-700 border-red-200"
+                  }`}>
+                    {sub.status === "SUBSCRIBED" ? "Subscribed" : "Unsubscribed"}
                   </span>
+                  
+                  <button
+                    onClick={() => deleteSubscriber(sub._id)}
+                    className="p-2 border border-red-500 text-red-700 rounded hover:bg-red-50 transition-colors"
+                    title="Delete subscriber"
+                  >
+                    <FiTrash2 />
+                  </button>
                 </div>
-
-                <div className="flex items-center gap-4 text-sm">
-                  <span className="text-gray-300">ID: {subscriber._id}</span>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex lg:flex-col gap-2">
-                <button
-                  onClick={() => deleteSubscriber(subscriber._id)}
-                  className="px-4 py-2 rounded-xl bg-red-400/10 text-red-400 hover:bg-red-400/20 font-semibold transition flex items-center gap-2"
-                >
-                  <FiTrash2 size={16} />
-                  Delete
-                </button>
               </div>
             </div>
-          </motion.div>
-        ))}
+          ))
+        )}
       </div>
 
-      {/* No Results */}
-      {!loading && subscribers.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-12"
-        >
-          <FiUsers size={64} className="mx-auto text-gray-400 mb-4" />
-          <h3 className="text-xl font-bold text-gray-300 mb-2">No subscribers found</h3>
-          <p className="text-gray-400">
-            {search || statusFilter
-              ? "Try adjusting your search or filters"
-              : "No newsletter subscribers yet"}
-          </p>
-        </motion.div>
-      )}
-
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-        showPageNumbers={true}
-        compact={false}
-      />
+     <div className="mt-6">
+          <Pagination 
+            currentPage={page} 
+            totalPages={totalPages} 
+            onPageChange={setPage} 
+          />
+        </div>
     </div>
   );
 }

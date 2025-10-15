@@ -11,6 +11,7 @@ import Link from "next/link";
 import { payment_create_request_api, payment_details_request_api } from "@/api";
 import toast from "react-hot-toast";
 import { IUser } from "@/types";
+import LoadingSpiner from "@/app/admin/_components/LoadingSpiner";
 
 // Subscription plan types
 type SubscriptionPlan = {
@@ -76,7 +77,7 @@ export default function PaymentPage() {
     const baseAmount = monthlyPrice * selectedPlanData.duration;
     const discountAmount = selectedPlanData.savings || 0;
     const subtotal = baseAmount - discountAmount;
-    const taxPercentage = 18; // 18% GST
+    const taxPercentage = Number(process.env.NEXT_PUBLIC_TAX_PARCENTAGE) || 18; 
     const taxAmount = Math.round((subtotal * taxPercentage) / 100);
     const totalAmount = subtotal + taxAmount;
 
@@ -206,7 +207,7 @@ export default function PaymentPage() {
       };
 
       // Call payment API
-      const response = await axios.post(
+      const {data} = await axios.post(
         payment_create_request_api,
         {
           instanceId: instanceId,
@@ -224,10 +225,12 @@ export default function PaymentPage() {
         }
       );
 
-      if (response.data.success) {
+    
+
+      if (data.success) {
         toast.success("Payment request created successfully!");
         setTimeout(()=>{
-          router.push("/dashboard/billing");
+          router.push(`/dashboard/billing/view?id=${data.data.paymentId}`);
         },2000)
       }
     } catch (error: any) {
@@ -252,12 +255,7 @@ export default function PaymentPage() {
 
   if (!automation) {
     return (
-      <div className="h-[50vh] flex items-center justify-center text-white">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p>Loading payment details...</p>
-        </div>
-      </div>
+     <LoadingSpiner />
     );
   }
 

@@ -22,12 +22,10 @@ export const getPaymentslistforAdmin = async (req: AuthenticatedRequest, res: Re
       limit = 10,
       search = "",
       status = "",
-      paymentMethod = "",
       dateFrom = "",
       dateTo = "",
       amountMin = "",
       amountMax = "",
-      userId = ""
     } = req.body;
 
     const pageNum = parseInt(page as string);
@@ -49,7 +47,6 @@ export const getPaymentslistforAdmin = async (req: AuthenticatedRequest, res: Re
       const userIds = userSearchFilter.map(user => user._id);
 
       filter.$or = [
-        { paymentId: { $regex: search, $options: "i" } },
         { orderId: { $regex: search, $options: "i" } },
         { user: { $in: userIds } }
       ];
@@ -58,11 +55,6 @@ export const getPaymentslistforAdmin = async (req: AuthenticatedRequest, res: Re
     // ✅ Status filter
     if (status) {
       filter.status = status;
-    }
-
-    // ✅ Payment method filter
-    if (paymentMethod) {
-      filter.paymentMethod = paymentMethod;
     }
 
     // ✅ Date range filter
@@ -87,17 +79,7 @@ export const getPaymentslistforAdmin = async (req: AuthenticatedRequest, res: Re
       }
     }
 
-    // ✅ User filter
-    if (userId) {
-      if (!mongoose.Types.ObjectId.isValid(userId)) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid user ID.",
-        });
-      }
-      filter.user = userId;
-    }
-
+  
     // ✅ Fetch payments with filters
     const payments = await Payment.find(filter)
       .sort({ createdAt: -1 })
@@ -169,59 +151,3 @@ export const getPaymentslistforAdmin = async (req: AuthenticatedRequest, res: Re
   }
 };
 
-// ✅ Get payment details for admin
-export const getPaymentDetailsForAdmin = async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const requestUser = req.user;
-    const { id } = req.params;
-
-    // ✅ Access control: only admin
-    if (!requestUser || requestUser.role !== "admin") {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied. Only administrators can view payment details.",
-      });
-    }
-
-    // ✅ Validate payment ID
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Valid payment ID is required.",
-      });
-    }
-
-    // ✅ Fetch payment details
-    const payment = await Payment.findById(id)
-      .populate('user', 'name email profile phoneNumber')
-      .populate("instanceId", "instanceName status masterWorkflow")
-      .populate({
-        path: "instanceId",
-        populate: {
-          path: "masterWorkflow",
-          select: "name category description"
-        }
-      })
-      .lean();
-
-    if (!payment) {
-      return res.status(404).json({
-        success: false,
-        message: "Payment not found.",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: "Payment details fetched successfully.",
-      payment
-    });
-
-  } catch (error) {
-    console.error("Error fetching payment details:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Server error while fetching payment details.",
-    });
-  }
-};

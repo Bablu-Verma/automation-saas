@@ -1,4 +1,5 @@
 import { Response } from "express";
+import mongoose from "mongoose";
 import { AuthenticatedRequest } from "../../../middlewares/loginCheck";
 import User from "../../../models/User";
 
@@ -14,16 +15,17 @@ export const getUserListForAdmin = async (req: AuthenticatedRequest, res: Respon
       });
     }
 
-    // ✅ Get all parameters from request body
+
     const {
       page = 1,
       limit = 10,
       search = "",
       status = "",
-      role = ""
+      role = "",
+      dateFrom = "",
+      dateTo = ""
     } = req.body;
 
-    // ✅ Pagination parameters
     const pageNum = parseInt(page) || 1;
     const limitNum = parseInt(limit) || 10;
     const skip = (pageNum - 1) * limitNum;
@@ -31,13 +33,17 @@ export const getUserListForAdmin = async (req: AuthenticatedRequest, res: Respon
     // ✅ Build filter object
     const filter: any = {};
 
-    // Search filter (name, email, or company)
+    // Search filter: name, email, company, or user ID
     if (search) {
-      filter.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-        { "profile.company": { $regex: search, $options: "i" } }
-      ];
+      if (mongoose.Types.ObjectId.isValid(search)) {
+        filter._id = new mongoose.Types.ObjectId(search);
+      } else {
+        filter.$or = [
+          { name: { $regex: search, $options: "i" } },
+          { email: { $regex: search, $options: "i" } },
+          { "profile.company": { $regex: search, $options: "i" } }
+        ];
+      }
     }
 
     // Status filter
@@ -50,11 +56,22 @@ export const getUserListForAdmin = async (req: AuthenticatedRequest, res: Respon
       filter.role = role;
     }
 
-    // ✅ Fetch users with pagination and filters
+    // Date range filter: createdAt
+    if (dateFrom || dateTo) {
+      filter.createdAt = {};
+      if (dateFrom) {
+        filter.createdAt.$gte = new Date(dateFrom);
+      }
+      if (dateTo) {
+        filter.createdAt.$lte = new Date(dateTo);
+      }
+    }
+
+    // ✅ Fetch users and total count with filters
     const [users, totalUsers] = await Promise.all([
       User.find(filter)
         .select("-password -otp") // exclude sensitive fields
-        .sort({ createdAt: -1 }) // latest first
+        .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limitNum)
         .lean(),
@@ -62,7 +79,30 @@ export const getUserListForAdmin = async (req: AuthenticatedRequest, res: Respon
       User.countDocuments(filter)
     ]);
 
-    // ✅ Calculate pagination info
+    // ✅ Calculate statistics
+    const statsAggregation = await User.aggregate([
+      { $match: filter },
+      {
+        $group: {
+          _id: null,
+          totalUsers: { $sum: 1 },
+          activeUsers: { $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] } },
+          inactiveUsers: { $sum: { $cond: [{ $eq: ["$status", "inactive"] }, 1, 0] } },
+          adminUsers: { $sum: { $cond: [{ $eq: ["$role", "admin"] }, 1, 0] } },
+          regularUsers: { $sum: { $cond: [{ $eq: ["$role", "user"] }, 1, 0] } }
+        }
+      }
+    ]);
+
+    const statistics = statsAggregation.length > 0 ? statsAggregation[0] : {
+      totalUsers: 0,
+      activeUsers: 0,
+      inactiveUsers: 0,
+      adminUsers: 0,
+      regularUsers: 0
+    };
+
+    // ✅ Pagination info
     const totalPages = Math.ceil(totalUsers / limitNum);
     const hasNextPage = pageNum < totalPages;
     const hasPrevPage = pageNum > 1;
@@ -71,12 +111,15 @@ export const getUserListForAdmin = async (req: AuthenticatedRequest, res: Respon
       success: true,
       message: "User list fetched successfully.",
       users,
-      total: totalUsers,
-      page: pageNum,
-      totalPages,
-      hasNextPage,
-      hasPrevPage,
-      limit: limitNum
+      statistics,
+      pagination: {
+        page: pageNum,
+        totalPages,
+        hasNextPage,
+        hasPrevPage,
+        limit: limitNum,
+        totalUsers
+      }
     });
 
   } catch (error) {

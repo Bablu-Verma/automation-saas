@@ -2,6 +2,7 @@ import { Response } from "express";
 import { AuthenticatedRequest } from "../../../middlewares/loginCheck";
 import User from "../../../models/User";
 import AutomationInstance from "../../../models/AutomationInstance";
+import Payment from "../../../models/Payment";
 import mongoose from "mongoose";
 
 export const getUserDetailsForAdmin = async (req: AuthenticatedRequest, res: Response) => {
@@ -27,7 +28,7 @@ export const getUserDetailsForAdmin = async (req: AuthenticatedRequest, res: Res
 
     // ✅ Fetch user details
     const user = await User.findById(id)
-      .select("-password -otp") // exclude sensitive fields
+      .select("-password -otp")
       .lean();
 
     if (!user) {
@@ -37,48 +38,67 @@ export const getUserDetailsForAdmin = async (req: AuthenticatedRequest, res: Res
       });
     }
 
-    // ✅ Fetch user's automations count and stats
+    // ✅ Fetch automation stats
     const automationStats = await AutomationInstance.aggregate([
       { $match: { user: new mongoose.Types.ObjectId(id) } },
       {
         $group: {
           _id: null,
           totalAutomations: { $sum: 1 },
-          activeAutomations: {
-            $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] }
-          },
+          activeAutomations: { $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] } },
           totalExecutions: { $sum: "$executionCount" },
           lastActivity: { $max: "$lastExecutedAt" }
         }
       }
     ]);
 
-    // ✅ Fetch recent automations
     const recentAutomations = await AutomationInstance.find({ user: id })
-      .populate("masterWorkflow", "name category serviceIconUrl")
-      .select("instanceName executionCount lastExecutedAt createdAt status")
+      .populate("masterWorkflow", "name serviceIconUrl")
+      .select("instanceName executionCount lastExecutedAt createdAt isActive")
       .sort({ createdAt: -1 })
       .limit(5)
       .lean();
 
-    const stats = automationStats.length > 0 ? automationStats[0] : {
+    const automation = automationStats.length > 0 ? automationStats[0] : {
       totalAutomations: 0,
       activeAutomations: 0,
       totalExecutions: 0,
       lastActivity: null
     };
 
-    // ✅ Enhanced user data with stats
+    // ✅ Fetch user payments
+    const payments = await Payment.find({ user: id })
+      .sort({ createdAt: -1 })
+      .select("orderId paymentId amountDetails currency status createdAt planDetails instanceId subscriptionMonths")
+      .populate("instanceId", "instanceName status")
+      .lean();
+
+    // Optional: payment statistics
+    const paymentStats = payments.reduce((acc, p) => {
+      acc.totalAmount += p.amountDetails?.totalAmount || 0;
+      if (p.status === "success") acc.successfulPayments += 1;
+      else if (p.status === "failed") acc.failedPayments += 1;
+      else if (p.status === "pending") acc.pendingPayments += 1;
+      return acc;
+    }, { totalAmount: 0, successfulPayments: 0, failedPayments: 0, pendingPayments: 0 });
+
+    // ✅ Compile user details
     const userDetails = {
       ...user,
       stats: {
-        totalAutomations: stats.totalAutomations,
-        activeAutomations: stats.activeAutomations,
-        totalExecutions: stats.totalExecutions,
-        lastActivity: stats.lastActivity,
-        accountAge: Math.floor((Date.now() - new Date(user.createdAt).getTime()) / (1000 * 60 * 60 * 24))
+        totalAutomations: automation.totalAutomations,
+        activeAutomations: automation.activeAutomations,
+        totalExecutions: automation.totalExecutions,
+        lastActivity: automation.lastActivity,
+        accountAge: Math.floor((Date.now() - new Date(user.createdAt).getTime()) / (1000 * 60 * 60 * 24)),
+        totalPayments: payments.length,
+        totalAmount: paymentStats.totalAmount,
+        successfulPayments: paymentStats.successfulPayments,
+        failedPayments: paymentStats.failedPayments,
+        pendingPayments: paymentStats.pendingPayments
       },
-      recentAutomations
+      recentAutomations,
+      payments
     };
 
     return res.status(200).json({
@@ -95,4 +115,3 @@ export const getUserDetailsForAdmin = async (req: AuthenticatedRequest, res: Res
     });
   }
 };
-

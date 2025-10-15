@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { FiCreditCard, FiCheckCircle, FiClock } from "react-icons/fi";
 import axios from "axios";
 import { admin_list_master_workflow_api } from "@/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
-import Image from "next/image";
+import Pagination from "@/components/Pagination";
+import LoadingSpiner from "../../_components/LoadingSpiner";
 import Link from "next/link";
+import Image from "next/image";
 
 export type Workflow__ = {
   _id: string;
@@ -19,148 +19,168 @@ export type Workflow__ = {
   isPublished: "ACTIVE" | "PAUSE";
   serviceImage?: string;
   trialDays: number;
+  createdAt: string;
 };
 
 export default function MasterWorkflows() {
+  const token = useSelector((state: RootState) => state.user.token);
   const [workflows, setWorkflows] = useState<Workflow__[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [statistics, setStatistics] = useState({ totalWorkflows: 0, activeWorkflows: 0, inactiveWorkflows: 0 });
 
-  const token = useSelector((state: RootState) => state.user.token);
+  const [filters, setFilters] = useState({
+    search: "",
+    status: "" as "ACTIVE" | "PAUSE" | "",
+    dateFrom: "",
+    dateTo: "",
+  });
+
+  const [appliedFilters, setAppliedFilters] = useState(filters);
+
+
+
+  const fetchWorkflows = async (pageNum = page) => {
+    if (!token) return;
+
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        admin_list_master_workflow_api,
+        {
+          page: pageNum,
+          limit: 10,
+          ...Object.fromEntries(Object.entries(appliedFilters).filter(([_, v]) => v)),
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+ 
+      if (data.success) {
+        setWorkflows(data.workflows);
+        setTotalPages(data.pagination.totalPages);
+        setStatistics(data.statistics);
+      }
+    } catch (err) {
+      console.error("Failed to fetch workflows:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!token) return;
-    async function fetchWorkflows() {
-      try {
-        const { data } = await axios.post(
-          admin_list_master_workflow_api,
-          {},
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setWorkflows(data.workflows);
-      } catch (err) {
-        console.error("Failed to fetch workflows:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchWorkflows();
-  }, [token]);
+  }, [token, page, appliedFilters]);
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "ACTIVE":
-        return <FiCheckCircle className="text-green-400" size={22} />;
-      case "PAUSE":
-        return <FiClock className="text-yellow-400" size={22} />;
-      default:
-        return <FiCreditCard size={22} />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "ACTIVE":
-        return "text-green-400 bg-green-400/10";
-      case "PAUSE":
-        return "text-yellow-400 bg-yellow-400/10";
-      default:
-        return "text-gray-400 bg-gray-400/10";
-    }
-  };
-
-  if (loading)
-    return (
-      <div className="h-[50vh] flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1 }}
-          className="w-12 h-12 border-4 border-t-secondary border-white rounded-full"
-        />
-      </div>
-    );
+  if (loading) return <LoadingSpiner />;
 
   return (
-    <div className="max-w-7xl mx-auto pb-28 text-white px-6">
-      <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-3xl font-extrabold mb-8"
-      >
-        Master Workflows
-      </motion.h1>
+    <div className="max-w-6xl mx-auto pb-28 px-6">
+      <h1 className="text-3xl font-bold mb-6">Master Workflows</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {workflows.map((wf, i) => (
-          <motion.div
-            key={wf._id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.5, delay: i * 0.1, type: "spring", stiffness: 300 }}
-            className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl shadow-lg border border-white/10 hover:shadow-[0_0_20px_rgba(230,82,31,0.4)] transition"
-          >
-            {wf.serviceImage ? (
-              <Image
-                height={200}
-                width={300}
-                src={wf.serviceImage}
-                alt={wf.name}
-                className="w-full h-48 rounded-xl mb-4 object-cover"
-              />
-            ) : (
-              <div className="w-full h-48 bg-white/10 rounded-xl mb-4 flex items-center justify-center text-gray-400">
-                No Image
-              </div>
-            )}
-
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold">{wf.name}</h3>
-              <span
-                className={`px-3 py-1 text-xs rounded-full font-semibold ${getStatusColor(
-                  wf.isPublished
-                )}`}
-              >
-                {wf.isPublished}
-              </span>
-            </div>
-
-          
-            <p className="text-gray-300 font-semibold mb-4">
-              Price: ₹{wf.pricePerMonth}/{wf.currency} | Trial: {wf.trialDays} days
-            </p>
-
-            <div className="mt-2 flex items-center gap-2 mb-4">
-              {getStatusIcon(wf.isPublished)}
-              <span className="text-sm text-gray-300">
-                {wf.isPublished === "ACTIVE"
-                  ? "Workflow is live"
-                  : "Workflow is paused"}
-              </span>
-            </div>
-
-            <div className="flex gap-3">
-              <Link
-                href={`/admin/service/view?id=${wf._id}`}
-                className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-secondary transition"
-              >
-                View
-              </Link>
-              <Link
-                href={`/admin/service/edit?id=${wf._id}`}
-                className="px-4 py-2 rounded-full border border-white/30 text-white font-semibold hover:bg-white hover:text-primary transition"
-              >
-                Edit
-              </Link>
-            </div>
-          </motion.div>
-        ))}
+      {/* Filters */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Search by name or ID"
+          value={filters.search}
+          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+          className="p-2 border border-gray-300 rounded"
+        />
+        <select
+          value={filters.status}
+          onChange={(e) => setFilters({ ...filters, status: e.target.value as any })}
+          className="p-2 border border-gray-300 rounded"
+        >
+          <option value="">All Status</option>
+          <option value="ACTIVE">Active</option>
+          <option value="PAUSE">Paused</option>
+        </select>
+        <input
+          type="date"
+          value={filters.dateFrom}
+          onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
+          className="p-2 border border-gray-300 rounded"
+        />
+        <input
+          type="date"
+          value={filters.dateTo}
+          onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
+          className="p-2 border border-gray-300 rounded"
+        />
+        <button
+          onClick={() => { setAppliedFilters(filters); setPage(1); }}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Apply
+        </button>
+        <button
+          onClick={() => { 
+            setFilters({ search: "", status: "", dateFrom: "", dateTo: "" });
+            setAppliedFilters({ search: "", status: "", dateFrom: "", dateTo: "" });
+            setPage(1);
+          }}
+          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+        >
+          Reset
+        </button>
       </div>
+
+      {/* Statistics */}
+      <div className="flex gap-4 mb-6">
+        <div className="p-4 bg-gray-100 rounded text-center flex-1">
+          <p className="text-xl font-bold">{statistics.totalWorkflows}</p>
+          <p className="text-sm">Total Workflows</p>
+        </div>
+        <div className="p-4 bg-green-100 rounded text-center flex-1">
+          <p className="text-xl font-bold">{statistics.activeWorkflows}</p>
+          <p className="text-sm">Active</p>
+        </div>
+        <div className="p-4 bg-yellow-100 rounded text-center flex-1">
+          <p className="text-xl font-bold">{statistics.inactiveWorkflows}</p>
+          <p className="text-sm">Inactive</p>
+        </div>
+      </div>
+
+      {/* Workflow List */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {workflows.length === 0 ? (
+          <p className="text-center col-span-2 py-12 text-gray-500">No workflows found.</p>
+        ) : (
+          workflows.map((wf) => (
+            <div key={wf._id} className="bg-white p-4 rounded-lg border shadow-sm">
+              {wf.serviceImage ? (
+                <Image
+                  src={wf.serviceImage}
+                  alt={wf.name}
+                  width={300}
+                  height={200}
+                  className="w-full h-40 object-cover rounded mb-2"
+                />
+              ) : (
+                <div className="w-full h-40 bg-gray-200 rounded mb-2 flex items-center justify-center text-gray-400">No Image</div>
+              )}
+              <h3 className="text-lg font-semibold">{wf.name}</h3>
+              <p className="text-sm text-gray-600 mb-2">
+                Price: ₹{wf.pricePerMonth}/{wf.currency} | Trial: {wf.trialDays} days
+              </p>
+              <p className={`text-sm font-semibold mb-2 ${wf.isPublished === "ACTIVE" ? "text-green-600" : "text-yellow-600"}`}>
+                {wf.isPublished === "ACTIVE" ? "Live" : "Paused"}
+              </p>
+              <div className="flex gap-2 mt-2">
+                <Link href={`/admin/service/view?id=${wf._id}`} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">View</Link>
+                <Link href={`/admin/service/edit?id=${wf._id}`} className="px-3 py-1 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Edit</Link>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={(p) => { setPage(p); fetchWorkflows(p); }}
+      />
     </div>
   );
 }
