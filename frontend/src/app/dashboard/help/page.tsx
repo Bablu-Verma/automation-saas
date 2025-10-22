@@ -9,8 +9,8 @@ export default function HelpSupport() {
     {
       icon: <FiMail size={28} />,
       title: "Email Us",
-      desc: '"support@autoflow.com" par hamesha available.',
-      href: "mailto:support@autoflow.com",
+      desc: '"support@Mate Mind .com" par hamesha available.',
+      href: "mailto:support@Mate Mind .com",
     },
     {
       icon: <FiPhone size={28} />,

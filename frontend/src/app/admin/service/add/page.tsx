@@ -30,7 +30,6 @@ export default function AddMasterWorkflow() {
     handleArrayChange,
     addField,
     removeField,
-
     description,
     setDescription,
     handleReset
@@ -54,6 +53,8 @@ export default function AddMasterWorkflow() {
         }
       }
 
+      console.log(formData)
+
       const res = await axios.post(
         admin_create_master_workflow_api,
         { ...formData, workflowJsonTemplate: parsedTemplate, description },
@@ -61,8 +62,8 @@ export default function AddMasterWorkflow() {
       );
 
       toast.success(res.data.message);
-      setFormData(initialFormData);
-      setDescription("");
+      // setFormData(initialFormData);
+      // setDescription("");
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Error adding workflow.");
     } finally {

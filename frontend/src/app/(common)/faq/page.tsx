@@ -11,60 +11,60 @@ type FAQItem = {
 
 const faqs: FAQItem[] = [
   {
-    question: "What is AutoFlow?",
-    answer: "AutoFlow is an automation platform that helps businesses streamline workflows, integrate tools, and save time.",
+    question: "What is Mate Mind ?",
+    answer: "Mate Mind  is an automation platform that helps businesses streamline workflows, integrate tools, and save time.",
   },
   {
-    question: "How does AutoFlow save time?",
+    question: "How does Mate Mind  save time?",
     answer: "It automates repetitive tasks such as data entry, reporting, and notifications so teams can focus on strategic work.",
   },
   {
-    question: "Can AutoFlow integrate with my CRM?",
-    answer: "Yes, AutoFlow integrates with popular CRMs like HubSpot, Salesforce, and Zoho.",
+    question: "Can Mate Mind  integrate with my CRM?",
+    answer: "Yes, Mate Mind  integrates with popular CRMs like HubSpot, Salesforce, and Zoho.",
   },
   {
-    question: "Do I need coding knowledge to use AutoFlow?",
-    answer: "No, AutoFlow is designed for non-technical users with an easy drag-and-drop interface.",
+    question: "Do I need coding knowledge to use Mate Mind ?",
+    answer: "No, Mate Mind  is designed for non-technical users with an easy drag-and-drop interface.",
   },
   {
-    question: "Is AutoFlow secure?",
-    answer: "Yes, AutoFlow uses enterprise-grade encryption and complies with GDPR standards to keep your data safe.",
+    question: "Is Mate Mind  secure?",
+    answer: "Yes, Mate Mind  uses enterprise-grade encryption and complies with GDPR standards to keep your data safe.",
   },
   {
-    question: "Can I try AutoFlow for free?",
+    question: "Can I try Mate Mind  for free?",
     answer: "Yes, we offer a free trial with limited features so you can test the platform before subscribing.",
   },
   {
-    question: "What industries use AutoFlow?",
+    question: "What industries use Mate Mind ?",
     answer: "Our clients include e-commerce, finance, healthcare, IT, real estate, and more.",
   },
   {
-    question: "How many integrations does AutoFlow support?",
-    answer: "AutoFlow integrates with over 200+ apps, including Google Workspace, Slack, and Shopify.",
+    question: "How many integrations does Mate Mind  support?",
+    answer: "Mate Mind  integrates with over 200+ apps, including Google Workspace, Slack, and Shopify.",
   },
   {
-    question: "Can AutoFlow automate email campaigns?",
-    answer: "Yes, AutoFlow can automate email campaigns, drip sequences, and personalized communications.",
+    question: "Can Mate Mind  automate email campaigns?",
+    answer: "Yes, Mate Mind  can automate email campaigns, drip sequences, and personalized communications.",
   },
   {
-    question: "Does AutoFlow provide analytics?",
-    answer: "Yes, AutoFlow includes detailed analytics dashboards to monitor performance and ROI.",
+    question: "Does Mate Mind  provide analytics?",
+    answer: "Yes, Mate Mind  includes detailed analytics dashboards to monitor performance and ROI.",
   },
   {
     question: "What support options are available?",
     answer: "We provide 24/7 email support, live chat, and dedicated account managers for enterprise clients.",
   },
   {
-    question: "Can AutoFlow handle bulk data processing?",
-    answer: "Yes, AutoFlow is designed to process bulk data efficiently without performance drops.",
+    question: "Can Mate Mind  handle bulk data processing?",
+    answer: "Yes, Mate Mind  is designed to process bulk data efficiently without performance drops.",
   },
   {
-    question: "Is AutoFlow mobile-friendly?",
+    question: "Is Mate Mind  mobile-friendly?",
     answer: "Yes, you can access and manage workflows from any mobile device.",
   },
   {
-    question: "Does AutoFlow replace employees?",
-    answer: "No, AutoFlow enhances productivity by handling repetitive tasks, allowing employees to focus on strategy and growth.",
+    question: "Does Mate Mind  replace employees?",
+    answer: "No, Mate Mind  enhances productivity by handling repetitive tasks, allowing employees to focus on strategy and growth.",
   },
   {
     question: "What pricing plans are available?",
@@ -72,23 +72,23 @@ const faqs: FAQItem[] = [
   },
   {
     question: "Can multiple team members collaborate on workflows?",
-    answer: "Yes, AutoFlow allows real-time collaboration with role-based access control.",
+    answer: "Yes, Mate Mind  allows real-time collaboration with role-based access control.",
   },
   {
-    question: "Does AutoFlow support AI?",
-    answer: "Yes, AutoFlow uses AI to optimize workflows and suggest automation improvements.",
+    question: "Does Mate Mind  support AI?",
+    answer: "Yes, Mate Mind  uses AI to optimize workflows and suggest automation improvements.",
   },
   {
     question: "Is training provided for new users?",
     answer: "Yes, we provide onboarding sessions, video tutorials, and documentation.",
   },
   {
-    question: "Can AutoFlow scale as my business grows?",
-    answer: "Absolutely. AutoFlow is built to scale with your needs, from startups to large enterprises.",
+    question: "Can Mate Mind  scale as my business grows?",
+    answer: "Absolutely. Mate Mind  is built to scale with your needs, from startups to large enterprises.",
   },
   {
     question: "How can I contact support?",
-    answer: "You can reach us via email at support@autoflow.com or through the Contact Us page.",
+    answer: "You can reach us via email at support@Mate Mind .com or through the Contact Us page.",
   },
 ]
 
@@ -119,7 +119,7 @@ export default function FAQPage() {
           Frequently Asked Questions
         </h1>
         <p className="mt-4 text-white/80 text-lg md:text-xl max-w-2xl mx-auto">
-          Find answers to common questions about AutoFlow. Use the search below to quickly find what you’re looking for.
+          Find answers to common questions about Mate Mind . Use the search below to quickly find what you’re looking for.
         </p>
       </motion.div>
 

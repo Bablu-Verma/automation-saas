@@ -22,6 +22,8 @@ export default function ContactPage() {
     name: "",
     email: "",
     message: "",
+    number: "",
+    subject: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -36,8 +38,16 @@ export default function ContactPage() {
       toast.error("Name is required");
       return false;
     }
+     if (!form.subject.trim()) {
+      toast.error("Subject is required");
+      return false;
+    }
     if (!form.email.trim()) {
       toast.error("Email is required");
+      return false;
+    }
+     if (!form.number.trim()) {
+      toast.error("Number is required");
       return false;
     }
     const emailRegex = /^\S+@\S+\.\S+$/;
@@ -59,10 +69,13 @@ export default function ContactPage() {
 
     setLoading(true);
     try {
+
+    
+
       const res = await axios.post(contact_create_api, form); 
       if (res.data.success) {
         toast.success("Message sent successfully!");
-        setForm({ name: "", email: "", message: "" }); // reset form
+        setForm({ name: "", email: "", message: "", subject:'', number:''}); // reset form
       } else {
         toast.error(res.data.message || "Something went wrong");
       }
@@ -103,7 +116,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-white/10 backdrop-blur-xl p-10 rounded-3xl shadow-xl flex flex-col gap-6"
+            className="bg-white/10 backdrop-blur-xl p-10 rounded-3xl shadow-xl flex flex-col gap-4"
           >
             <input
               type="text"
@@ -113,7 +126,7 @@ export default function ContactPage() {
               onChange={handleChange}
               className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
             />
-            <input
+         <input
               type="email"
               name="email"
               placeholder="Email Address"
@@ -121,10 +134,26 @@ export default function ContactPage() {
               onChange={handleChange}
               className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
             />
+             <input
+              type="number"
+              name="number"
+              placeholder="Phone Number"
+              value={form.number}
+              onChange={handleChange}
+              className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+             <input
+              type="text"
+              name="subject"
+              placeholder="Your Subject"
+              value={form.subject}
+              onChange={handleChange}
+              className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
             <textarea
               name="message"
               placeholder="Your Message"
-              rows={6}
+              rows={4}
               value={form.message}
               onChange={handleChange}
               className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -149,7 +178,7 @@ export default function ContactPage() {
               <FiMail className="text-primary text-3xl mt-1" />
               <div>
                 <h4 className="font-semibold text-xl text-white">Email</h4>
-                <p className="text-white/80">support@autoflow.com</p>
+                <p className="text-white/80">support@Mate Mind .com</p>
               </div>
             </div>
             <div className="bg-white/10 backdrop-blur-lg p-6 rounded-3xl shadow-lg flex items-start gap-4">
@@ -163,7 +192,7 @@ export default function ContactPage() {
               <FiMapPin className="text-primary text-3xl mt-1" />
               <div>
                 <h4 className="font-semibold text-xl text-white">Address</h4>
-                <p className="text-white/80">123 AutoFlow Street, Bangalore, India</p>
+                <p className="text-white/80">123 Mate Mind  Street, Bangalore, India</p>
               </div>
             </div>
 
@@ -184,7 +213,7 @@ export default function ContactPage() {
             className="w-full h-full border-0"
             allowFullScreen
             loading="lazy"
-            title="AutoFlow Office Map"
+            title="Mate Mind  Office Map"
           ></iframe>
         </div>
       </div>

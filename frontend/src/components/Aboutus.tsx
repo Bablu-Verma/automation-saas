@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { FiUsers, FiZap, FiShield } from "react-icons/fi"
+
 
 export default function AboutUs() {
 
@@ -39,11 +39,11 @@ export default function AboutUs() {
         >
           <div>
             <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              About AutoFlow
+              About Mate Mind 
             </h2>
 
             <p className="mt-6 text-white/80 text-lg md:text-xl leading-relaxed max-w-xl">
-              AutoFlow empowers businesses to automate repetitive workflows, integrate seamlessly with hundreds of tools, and scale operations without extra hires.
+              Mate Mind  empowers businesses to automate repetitive workflows, integrate seamlessly with hundreds of tools, and scale operations without extra hires.
             </p>
 
             <p className="mt-4 text-white/80 text-lg md:text-xl leading-relaxed max-w-xl">

@@ -5,11 +5,6 @@ import axios from "axios";
 import { toggleN8nWorkflow } from "../../../../lib/_n8n_helper";
 
 
-
-
-
-
-
 enum SystemStatus {
   TRIAL = "TRIAL",
   ACTIVE = "ACTIVE",

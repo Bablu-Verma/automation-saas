@@ -1,6 +1,7 @@
 import User from '../../../../models/User';
 import { Response } from 'express';
 import { AuthenticatedRequest } from '../../../../middlewares/loginCheck';
+import { user_delete_request_email } from '../../../../email/user_delete';
 
 const AccountDeleteRequest = async (req: AuthenticatedRequest, res: Response) => {
     try {
@@ -23,6 +24,8 @@ const AccountDeleteRequest = async (req: AuthenticatedRequest, res: Response) =>
         if (!deactivatedUser) {
             return res.status(404).json({ success: false, msg: 'User not found.' });
         }
+
+        await  user_delete_request_email(deactivatedUser.email, deactivatedUser.name)
 
         // 4. Send a success confirmation message
         return res.status(200).json({

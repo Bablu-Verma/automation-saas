@@ -18,10 +18,10 @@ export default function AboutUs() {
                 className="text-center mb-16"
             >
                 <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                    About AutoFlow
+                    About Mate Mind 
                 </h1>
                 <p className="mt-4 text-white/80 text-lg md:text-xl max-w-2xl mx-auto">
-                    AutoFlow helps businesses automate repetitive workflows, integrate with hundreds of tools, and scale operations without extra hires.
+                    Mate Mind  helps businesses automate repetitive workflows, integrate with hundreds of tools, and scale operations without extra hires.
                 </p>
             </motion.div>
 
@@ -37,7 +37,7 @@ export default function AboutUs() {
                     >
                         <Image
                             src="/about.png"
-                            alt="About AutoFlow"
+                            alt="About Mate Mind "
                             fill
                             className="object-cover object-center"
                         />
@@ -67,7 +67,7 @@ export default function AboutUs() {
 
                     <p className="text-white/60 text-lg md:text-xl mb-6 leading-relaxed">
                         By leveraging cutting-edge technology and seamless integrations,
-                        AutoFlow helps organizations optimize processes, increase
+                        Mate Mind  helps organizations optimize processes, increase
                         efficiency, and achieve measurable results.
                     </p>
 
@@ -92,12 +92,12 @@ export default function AboutUs() {
                     </h2>
                     <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-6">
                         From automating repetitive tasks to integrating multiple software
-                        tools, AutoFlow streamlines operations across departments. Our
+                        tools, Mate Mind  streamlines operations across departments. Our
                         clients report faster turnaround times, fewer errors, and more time
                         to focus on core business goals.
                     </p>
 
-                   <p className="text-white/60 text-lg md:text-xl mb-6"> Explore our <Link href="/services" className="underline text-primary">services</Link> or <Link href="/contact" className="underline text-primary">contact us</Link> to see how AutoFlow can transform your workflows and boost productivity. </p>
+                   <p className="text-white/60 text-lg md:text-xl mb-6"> Explore our <Link href="/services" className="underline text-primary">services</Link> or <Link href="/contact" className="underline text-primary">contact us</Link> to see how Mate Mind  can transform your workflows and boost productivity. </p>
                 </motion.div>
             </div>
             <Features />

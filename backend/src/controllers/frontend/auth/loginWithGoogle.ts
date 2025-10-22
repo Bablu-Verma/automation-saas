@@ -3,6 +3,7 @@ import { Request, Response } from "express"
 import admin from "../../../config/firebase_admin"
 import User from "../../../models/User"
 import { jsonwebtoken_create } from "../../../lib/jsonwebtoken_"
+import { user_welcome_email } from "../../../email/user_welcome_email"
 
 
 
@@ -109,6 +110,8 @@ const loginWithGoogle = async (req: Request, res: Response) => {
         })
 
         await user.save()
+
+         await user_welcome_email(user.email, user.name)
 
         const token = jsonwebtoken_create(
             {

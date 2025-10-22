@@ -73,7 +73,7 @@ export function RequiredInputsForm({
                     updated[injectIdx] = { ...updated[injectIdx], node: e.target.value };
                     handleArrayChange(idx, "inject", updated, arrayName);
                   }}
-                  className="border p-2 rounded-lg flex-1"
+                  className="border px-2 py-1 rounded-lg flex-1"
                 />
                 <input
                   type="text"
@@ -84,7 +84,7 @@ export function RequiredInputsForm({
                     updated[injectIdx] = { ...updated[injectIdx], field: e.target.value };
                     handleArrayChange(idx, "inject", updated, arrayName);
                   }}
-                  className="border p-2 rounded-lg flex-1"
+                  className="border px-2 py-1 rounded-lg flex-1"
                 />
                 <button
                   type="button"

@@ -2,10 +2,13 @@ import { Response } from "express";
 import { AuthenticatedRequest } from "../../../../middlewares/loginCheck";
 import AutomationInstance from "../../../../models/AutomationInstance";
 import Payment from "../../../../models/Payment";
+import { payment_request_success_email } from "../../../../email/payment_request_success_email";
+import { payment_request_success_email_admin_notify } from "../../../../email/payment_request_success_email_admin_notify";
 
 export const createPayment = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const userId = req.user?.id;
+        const userEmail = req.user?.email;
         const {
             instanceId,
             subscriptionMonths,
@@ -101,6 +104,9 @@ export const createPayment = async (req: AuthenticatedRequest, res: Response) =>
         };
 
         const payment = await new Payment(paymentData).save();
+
+      await  payment_request_success_email(userEmail || '', amountDetails.totalAmount,currency, payment.orderId)
+     await payment_request_success_email_admin_notify(amountDetails.totalAmount, currency, payment.orderId)
 
         return res.status(201).json({
             message: "Payment request created successfully (Status: Pending)",

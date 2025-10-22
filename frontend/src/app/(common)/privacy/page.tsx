@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-2xl font-bold  mb-3">1. Introduction</h2>
             <p>
-              At AutoFlow, we respect your privacy and are committed to protecting your personal
+              At Mate Mind , we respect your privacy and are committed to protecting your personal
               data. This Privacy Policy explains how we collect, use, and safeguard your information.
             </p>
           </section>
@@ -98,8 +98,8 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-2xl font-bold  mb-3">9. Contact Us</h2>
             <p>
               For questions or concerns about this Privacy Policy, please contact us at 
-               <a href="mailto:support@autoflow.com" className="text-secondary underline ml-1">
-                support@autoflow.com
+               <a href="mailto:support@Mate Mind .com" className="text-secondary underline ml-1">
+                support@Mate Mind .com
               </a>.
             </p>
           </section>

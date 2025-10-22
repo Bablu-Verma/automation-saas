@@ -43,7 +43,7 @@ export default function Navbar() {
 
             {/* Logo */}
             <div className="flex-shrink-0 text-2xl font-bold">
-              <Link href="/" className="text-white">⚡ AutoFlow</Link>
+              <Link href="/" className="text-white">⚡Mate Mind </Link>
             </div>
 
             {/* Desktop menu */}

@@ -62,8 +62,6 @@ const registerUser = async (req: Request, res: Response) => {
                     "30m"
                 );
 
-                
-
                 await user_verify_email(OTP, email)
                 return res.status(200).json({
                     success: true,

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Newsletter from "../../../models/Newsletter";
+import { send_newsletter_subscription_email } from "../../../email/send_newsletter_subscription_email";
 
 
 // ✅ Subscribe (POST /newsletter/subscribe)
@@ -36,6 +37,10 @@ export const subscribeNewsletter = async (req: Request, res: Response) => {
 
     // create new subscriber
     subscriber = await Newsletter.create({ email });
+
+    await  send_newsletter_subscription_email(email)
+
+    
     return res.status(201).json({
       success: true,
       message: "Subscribed successfully.",
@@ -49,6 +54,7 @@ export const subscribeNewsletter = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 export const unsubscribeNewsletter = async (req: Request, res: Response) => {
   try {

@@ -4,6 +4,7 @@ import User from '../../../../models/User';
 import { Response } from 'express';
 import { phoneRegex } from '../../../../utils/constant';
 import { jsonwebtoken_create } from '../../../../lib/jsonwebtoken_';
+import { user_profile_update_email } from '../../../../email/user_profile_update_email';
 
 
 
@@ -30,7 +31,6 @@ const updateUserProfile = async (req: AuthenticatedRequest, res: Response) => {
         if (Object.keys(updateData).length === 0) {
             return res.status(400).json({ success: false, msg: 'No profile data provided to update.' });
         }
-
        
         const updatedUser = await User.findByIdAndUpdate(
             userId,
@@ -38,12 +38,12 @@ const updateUserProfile = async (req: AuthenticatedRequest, res: Response) => {
             { new: true, runValidators: true } 
         ).select('-password -otp -__v');
 
-
-
        
         if (!updatedUser) {
             return res.status(404).json({ success: false, msg: 'User not found.' });
         }
+
+      await  user_profile_update_email(updatedUser.email, updatedUser.name)
 
          const token = jsonwebtoken_create(
                         {

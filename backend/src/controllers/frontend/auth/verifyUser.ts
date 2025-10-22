@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { jsonwebtoken_create, jsonwebtoken_decoded } from "../../../lib/jsonwebtoken_";
 import { JwtPayload } from "../../../types/types";
 import User from "../../../models/User";
+import { user_welcome_email } from "../../../email/user_welcome_email";
 
 
 const verifyUser = async (req: Request, res: Response) => {
@@ -60,6 +61,8 @@ const verifyUser = async (req: Request, res: Response) => {
     user.status = "active";
     user.otp = undefined;
     await user.save();
+
+   await user_welcome_email(user.email, user.name)
 
     // Issue fresh JWT token
     const newToken = jsonwebtoken_create(

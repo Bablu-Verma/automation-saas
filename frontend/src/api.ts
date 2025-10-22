@@ -78,3 +78,9 @@ export const admin_create_master_workflow_api = api_url + 'v1/admin/master-workf
 export const admin_list_master_workflow_api = api_url + 'v1/admin/master-workflow/list'
 export const admin_details_master_workflow_api = api_url + 'v1/admin/master-workflow/details'
 export const admin_edit_master_workflow_api = api_url + 'v1/admin/master-workflow/edit'
+
+
+export const admin_credential_schema_api = api_url + 'v1/admin/credential/schema'
+
+export const get_user_executions_api = api_url + 'v1/executions/get-user-executions'
+

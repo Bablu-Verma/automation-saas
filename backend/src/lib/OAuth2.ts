@@ -65,6 +65,15 @@ OAuthRouter.get("/oauth/google/callback", async (req, res) => {
 
     const { tokens } = await oauth2Client.getToken(code as string);
 
+     const oauthTokenData = JSON.stringify({
+      access_token: tokens.access_token || "",
+      refresh_token: tokens.refresh_token || "",
+      scope: tokens.scope || "",
+      token_type: tokens.token_type || "Bearer",
+      expiry_date: tokens.expiry_date || Date.now() + 3600000,
+      id_token: tokens.id_token || ""
+    });
+
     return res.send(`
       <html>
         <body>
@@ -76,10 +85,7 @@ OAuthRouter.get("/oauth/google/callback", async (req, res) => {
             window.opener.postMessage(
               {
                 success: true,
-                accessToken: "${tokens.access_token}",
-                refreshToken: "${tokens.refresh_token || ''}",
-                clientSecret: "process.env.GOOGLE_CLIENT_SECRET",
-                clientId: "process.env.GOOGLE_CLIENT_ID",
+                oauthTokenData: ${JSON.stringify(oauthTokenData)}
               },
              FRONTEND__ORIGIN
             );

@@ -10,7 +10,6 @@ import {
   FiCheckCircle,
   FiClock,
   FiXCircle,
-  FiDownload,
   FiCreditCard,
   FiUser,
   FiMail,
@@ -21,14 +20,16 @@ import {
 import toast from "react-hot-toast"
 import { payment_details_api } from "@/api"
 import LoadingSpiner from "@/app/admin/_components/LoadingSpiner"
+import Link from "next/link"
+import DownloadInvoice from "@/components/DownloadInvoice"
 
-type PaymentLog = {
+export type PaymentLog = {
   status: "pending" | "success" | "failed" | "refunded" | "cancelled"
   note?: string
   changedAt: string
 }
 
-type Payment = {
+export type Payment = {
   _id: string
   orderId: string
   user: {
@@ -42,6 +43,7 @@ type Payment = {
   }
   instanceId: {
     instanceName: string
+    _id:string
   }
   subscriptionMonths: number
   planDetails: {
@@ -230,7 +232,7 @@ export default function PaymentDetailsPage() {
         {/* Instance Info */}
         <div>
           <h3 className="font-semibold text-lg mb-2">Automation Instance</h3>
-          <p>{payment.instanceId?.instanceName || "-"}</p>
+          <Link className="hover:underline" href={`/dashboard/automation-view?id=${payment.instanceId?._id}`}>{payment.instanceId?.instanceName || "-"} <span className="text-sm">({payment.instanceId?._id || "-"})</span></Link> 
         </div>
 
         {/* Plan Details */}
@@ -357,13 +359,7 @@ export default function PaymentDetailsPage() {
 
         {/* Download Button */}
         <div className="flex justify-end gap-4 pt-4">
-          <button
-            onClick={handleDownloadInvoice}
-            className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg transition"
-          >
-            <FiDownload size={18} />
-            Download Invoice
-          </button>
+         <DownloadInvoice payments={payment} />
         </div>
       </div>
     </motion.div>

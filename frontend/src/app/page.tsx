@@ -114,7 +114,7 @@ export default function HomePage() {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="mt-4 text-lg md:text-xl text-white/90 max-w-2xl mx-auto"
         >
-          Join 100+ businesses saving time, reducing errors, and growing faster with AutoFlow.
+          Join 100+ businesses saving time, reducing errors, and growing faster with Mate Mind .
         </motion.p>
 
         <motion.div

@@ -27,8 +27,8 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold mb-3">1. Introduction</h2>
             <p>
-              Welcome to AutoFlow! These Terms and Conditions outline the rules and
-              regulations for using our website and services. By accessing or using AutoFlow,
+              Welcome to Mate Mind ! These Terms and Conditions outline the rules and
+              regulations for using our website and services. By accessing or using Mate Mind ,
               you agree to be bound by these terms. If you do not agree, please stop using our platform.
             </p>
           </section>
@@ -36,7 +36,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold  mb-3">2. Eligibility</h2>
             <p>
-              You must be at least 18 years old to use our services. By using AutoFlow, 
+              You must be at least 18 years old to use our services. By using Mate Mind , 
               you represent that you meet this requirement.
             </p>
           </section>
@@ -44,7 +44,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold  mb-3">3. Use of Services</h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li>You may not use AutoFlow for any illegal or unauthorized purposes.</li>
+              <li>You may not use Mate Mind  for any illegal or unauthorized purposes.</li>
               <li>You agree not to attempt to hack, disrupt, or misuse the platform.</li>
               <li>We may suspend or terminate accounts that violate these terms.</li>
             </ul>
@@ -61,7 +61,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold  mb-3">5. Intellectual Property</h2>
             <p>
-              All content, branding, and intellectual property on AutoFlow belong to us. 
+              All content, branding, and intellectual property on Mate Mind  belong to us. 
               You may not copy, reproduce, or distribute our content without permission.
             </p>
           </section>
@@ -69,7 +69,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold  mb-3">6. Limitation of Liability</h2>
             <p>
-              AutoFlow is provided "as is." We are not responsible for any damages or losses 
+              Mate Mind  is provided as is. We are not responsible for any damages or losses 
               that may result from using our services.
             </p>
           </section>
@@ -86,7 +86,7 @@ export default function TermsPage() {
             <h2 className="text-2xl font-bold mb-3">8. Contact Us</h2>
             <p>
               If you have any questions about these Terms, please contact us at 
-              <a href="mailto:support@autoflow.com" className="text-secondary underline ml-1">support@autoflow.com</a>.
+              <a href="mailto:support@Mate Mind .com" className="text-secondary underline ml-1">support@Mate Mind .com</a>.
             </p>
           </section>
         </div>

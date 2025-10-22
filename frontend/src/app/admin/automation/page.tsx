@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { FiSearch, FiTrash2, FiInfo, FiCalendar } from "react-icons/fi"; // ✅ Added FiCalendar
+import { FiSearch, FiTrash2, FiInfo } from "react-icons/fi"; // ✅ Added FiCalendar
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
@@ -68,7 +68,7 @@ export default function AdminAutomations() {
         page: pageNum,
         limit: limit,
         // Only include filters if they have a non-empty value
-        ...Object.fromEntries(Object.entries(appliedFilters).filter(([_, v]) => v)),
+        ...Object.fromEntries(Object.entries(appliedFilters).filter(([, v]) => v)),
       };
 
       const { data } = await axios.post(

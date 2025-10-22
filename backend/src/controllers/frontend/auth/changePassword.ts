@@ -5,6 +5,7 @@ import { JwtPayload } from '../../../types/types';
 import User from '../../../models/User';
 import { createHashedPassword } from '../../../utils/utils';
 import { passwordRegex } from '../../../utils/constant';
+import { send_password_changed_email } from '../../../email/send_password_changed_email';
 
 
 
@@ -35,6 +36,8 @@ const changePassword = async (req: Request, res: Response) => {
         user.password = hashedPassword
 
         await user.save()
+
+       await send_password_changed_email(user.email)
 
         return res.status(200).json({
             success: true,

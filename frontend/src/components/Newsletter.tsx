@@ -69,7 +69,7 @@ export default function NewsletterSection() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="mt-4 text-lg text-white/90 max-w-lg"
           >
-            Subscribe to our newsletter to get the latest updates on AutoFlow
+            Subscribe to our newsletter to get the latest updates on Mate Mind 
             features, tips, and exclusive offers.
           </motion.p>
         </div>

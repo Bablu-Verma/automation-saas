@@ -105,7 +105,7 @@ export default function PaymentPage() {
 
         // Generate subscription plans based on masterWorkflow pricing
         const monthlyPrice = data.automation.masterWorkflow.pricePerMonth;
-        const currency = data.automation.masterWorkflow.currency;
+        // const currency = data.automation.masterWorkflow.currency;
 
         // Common features for all plans
         const commonFeatures = [

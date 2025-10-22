@@ -1,8 +1,8 @@
 import axios from "axios";
 
 let cachedSchemas: Record<string, any> = {};
- 
-export  async function getCredentialSchema(credentialType: string) {
+
+export async function getCredentialSchema(credentialType: string) {
   // Return cached schema if already fetched
   if (cachedSchemas[credentialType]) return cachedSchemas[credentialType];
 
@@ -12,9 +12,9 @@ export  async function getCredentialSchema(credentialType: string) {
     { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } }
   );
 
-
   return res.data.properties
 }
+
 
 
 type SchemaField = {
@@ -23,138 +23,6 @@ type SchemaField = {
 };
 
 type SchemaData = Record<string, SchemaField>;
-
-type CredentialsReadyToUse = {
-  clientId?: string;
-  clientSecret?: string;
-  accessToken?: string;
-  refreshToken?: string;
-  tokenType?: string;
-  expiryDate?: string | number | null;
-  [key: string]: any; // fallback for other dynamic fields
-};
-
-export function buildCredentialData(
-  schemaData: SchemaData,
-  credentialsReadyToUse: CredentialsReadyToUse
-): Record<string, any> {
-  const data: Record<string, any> = {};
-  const now = Date.now();
-  const fiftyMinutesInMs = 50 * 60 * 1000;
-
-  // Check if credentialsReadyToUse has any meaningful data
-  const hasMeaningfulCredentials = Object.values(credentialsReadyToUse).some(value => 
-    value !== undefined && value !== "" && value !== null
-  );
-
-  for (const [field, schema] of Object.entries(schemaData)) {
-    // Special case: oauthTokenData
-    if (field === "oauthTokenData" && schema.type === "json") {
-      const accessToken = credentialsReadyToUse.accessToken || "";
-      const refreshToken = credentialsReadyToUse.refreshToken || "";
-      
-      // Only create oauthTokenData if we have at least one token
-      if (accessToken || refreshToken) {
-        const tokenType = credentialsReadyToUse.tokenType || "Bearer";
-        const expiryDate = credentialsReadyToUse.expiryDate || now + fiftyMinutesInMs;
-
-        data[field] = {
-          access_token: accessToken,
-          refresh_token: refreshToken,
-          token_type: tokenType,
-          expiry_date: expiryDate,
-        };
-      } else if (schema.required) {
-        // If required but no tokens, create empty structure
-        data[field] = {
-          access_token: "",
-          refresh_token: "",
-          token_type: "Bearer",
-          expiry_date: now + fiftyMinutesInMs,
-        };
-      }
-      // If optional and no tokens, skip this field
-      continue;
-    }
-
-    // For other fields, only include if we have meaningful credentials
-    // OR if the field is required
-    if (hasMeaningfulCredentials) {
-      // If we have meaningful data, use the existing logic
-      if (credentialsReadyToUse[field] !== undefined && credentialsReadyToUse[field] !== "") {
-        data[field] = credentialsReadyToUse[field];
-        continue;
-      }
-    } else {
-      // If no meaningful credentials, only include required fields with defaults
-      if (schema.required) {
-        switch (schema.type) {
-          case "string":
-            data[field] = "";
-            break;
-          case "boolean":
-            data[field] = false;
-            break;
-          case "json":
-            data[field] = {};
-            break;
-          case "notice":
-            data[field] = null;
-            break;
-          default:
-            data[field] = null;
-        }
-      }
-      // Skip optional fields when no meaningful credentials
-      continue;
-    }
-
-    // Required field check (only reached when hasMeaningfulCredentials is true)
-    if (schema.required) {
-      switch (schema.type) {
-        case "string":
-          data[field] = "";
-          break;
-        case "boolean":
-          data[field] = false;
-          break;
-        case "json":
-          data[field] = {};
-          break;
-        case "notice":
-          data[field] = null;
-          break;
-        default:
-          data[field] = null;
-      }
-      continue;
-    }
-
-    // Optional fields: only include if we have meaningful credentials
-    if (hasMeaningfulCredentials) {
-      switch (schema.type) {
-        case "string":
-          data[field] = "";
-          break;
-        case "boolean":
-          data[field] = false;
-          break;
-        case "json":
-          data[field] = {};
-          break;
-        case "notice":
-          data[field] = null;
-          break;
-        default:
-          data[field] = null;
-      }
-    }
-    // If no meaningful credentials and field is optional, it won't be included
-  }
-
-  return data;
-}
-
 
 
 
@@ -189,36 +57,66 @@ export function injectWorkflowInputs(workflowJson: any, requiredInputs: any[], i
 }
 
 
-export function injectWorkflowCredentials(workflowJson: any, requiredCredentials: any[], credMap: Record<string, any>) {
-  const workflowCopy = JSON.parse(JSON.stringify(workflowJson)); // deep clone
+export function injectWorkflowCredentials(
+  workflowJson: any,
+  requiredCredentials: any[],
+  credMap: Record<string, any>
+) {
+  const workflowCopy = JSON.parse(JSON.stringify(workflowJson));
 
   for (const credDef of requiredCredentials) {
     const credRes = credMap[credDef.service];
-    if (!credRes) continue; // skip if no credentials for this service
+    if (!credRes) continue;
 
     for (const injection of credDef.inject || []) {
       const node = workflowCopy.nodes.find((n: any) => n.name === injection.node);
       if (!node) continue;
 
-      // Navigate nested field using dot notation
       const pathParts = injection.field.split('.');
       let target = node;
       for (let i = 0; i < pathParts.length - 1; i++) {
-        const part = pathParts[i];
-        if (!target[part]) target[part] = {};
-        target = target[part];
+        if (!target[pathParts[i]]) target[pathParts[i]] = {};
+        target = target[pathParts[i]];
       }
-
-      // Inject credential reference (n8n expects { id: 'credentialId', name: 'credentialName' })
       target[pathParts[pathParts.length - 1]] = {
         id: credRes.id,
         name: credRes.name,
       };
+      
     }
   }
 
   return workflowCopy;
 }
+
+
+ export function removeWebhookIds(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map(removeWebhookIds);
+  } else if (obj && typeof obj === 'object') {
+    const newObj: any = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (key !== 'webhookId') {
+        newObj[key] = removeWebhookIds(value);
+      }
+    }
+    return newObj;
+  } else {
+    return obj; 
+  }
+}
+
+
+export function getCredName(creds: unknown, fallback: string) {
+  if (creds && typeof creds === "object" && "name" in creds) {
+    return (creds as Record<string, any>).name || fallback;
+  }
+  return fallback;
+}
+
+
+
+
 
 
 export async function toggleN8nWorkflow(workflowId?: string, activate: boolean = false) {

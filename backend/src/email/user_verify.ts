@@ -20,7 +20,7 @@ export const user_verify_email = async (otp:string, user_email:string) => {
       automation app Team
       `
   })
-  console.log(`Message sent`, info);
+    console.log(`Message sent`, info);
   } catch (error) {
     console.log(`error sent`, error);
   }

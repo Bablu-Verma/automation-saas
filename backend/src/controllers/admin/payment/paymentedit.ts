@@ -69,9 +69,6 @@ export const updatePaymentForAdmin = async (req: AuthenticatedRequest, res: Resp
       return res.status(404).json({ success: false, message: "Automation instance not found." });
     }
 
-    console.log("automation", automation);
-    console.log("payment", payment);
-
     // Define behavior based on payment status
     const pauseStatuses = ["failed", "refunded", "cancelled"];
     const activeStatuses = ["success"];
@@ -97,7 +94,6 @@ export const updatePaymentForAdmin = async (req: AuthenticatedRequest, res: Resp
       } else {
         automation.periods.endTime = now;
       }
-
 
       payment.note = "Subscription ended due to refund/cancel.";
     }  else if (activeStatuses.includes(status)) {

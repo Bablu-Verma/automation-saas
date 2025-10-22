@@ -35,6 +35,8 @@ export const getContacts = async (req: AuthenticatedRequest, res: Response) => {
         { name: { $regex: search, $options: "i" } },
         { email: { $regex: search, $options: "i" } },
         { message: { $regex: search, $options: "i" } },
+        { number: { $regex: search, $options: "i" } },
+        { subject: { $regex: search, $options: "i" } },
       ];
     }
 

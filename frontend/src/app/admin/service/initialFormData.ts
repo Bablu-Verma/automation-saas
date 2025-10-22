@@ -12,7 +12,6 @@
         service: "",
         label: "",
         credentialType: "",
-        inputType:'',
         fields: [],
         scopes: [],
         inject: [{ node: "", field: "" }],

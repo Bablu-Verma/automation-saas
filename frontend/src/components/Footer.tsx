@@ -24,15 +24,15 @@ export default function Footer() {
 
         {/* Brand Section */}
         <div>
-          <h1 className="text-2xl font-bold text-white">⚡ AutoFlow</h1>
+          <h1 className="text-2xl font-bold text-white">⚡Mate Mind </h1>
           <p className="mt-4 text-sm text-gray-400">
-            Automate your workflows, save time, and focus on what matters most.
+            Automate your work, save time, and focus on what matters most.
           </p>
           <div className="flex gap-4 mt-6">
             <a href="#" className="hover:text-primary"><FiFacebook size={20} /></a>
             <a href="#" className="hover:text-primary"><FiTwitter size={20} /></a>
             <a href="#" className="hover:text-primary"><FiLinkedin size={20} /></a>
-            <a href="mailto:info@autoflow.com" className="hover:text-primary"><FiMail size={20} /></a>
+            <a href="mailto:info@Mate Mind .com" className="hover:text-primary"><FiMail size={20} /></a>
           </div>
         </div>
 
@@ -82,7 +82,7 @@ export default function Footer() {
         <div>
           <h2 className="text-lg font-semibold text-white mb-4">Contact</h2>
           <ul className="space-y-2 text-sm">
-            <li>Email: <a href="mailto:info@autoflow.com" className="hover:text-primary">info@autoflow.com</a></li>
+            <li>Email: <a href="mailto:info@tasktantra.com" className="hover:text-primary">info@tasktantra.com</a></li>
             <li>Phone: <a href="tel:+910000000000" className="hover:text-primary">+91 00000 00000</a></li>
             <li>Address: 123, Tech Street, Bangalore</li>
           </ul>
@@ -91,7 +91,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-700 mt-10 py-6 text-center text-sm text-gray-400">
-        © {new Date().getFullYear()} AutoFlow. All rights reserved.
+        © {new Date().getFullYear()} Mate Mind . All rights reserved.
       </div>
     </footer>
   )

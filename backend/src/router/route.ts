@@ -43,6 +43,8 @@ import { AutomateupdateAutomationStatuses } from '../controllers/admin/automatio
 import { updateAutomationStatusById } from '../controllers/admin/automation/automationStatusUpdate';
 import { getPaymentDetails } from '../controllers/frontend/dashboard/payment/payment-details';
 import { updatePaymentForAdmin } from '../controllers/admin/payment/paymentedit';
+import { CredentialSchema } from '../controllers/admin/CredentialSchema';
+import { getUserExecutions } from '../controllers/frontend/dashboard/execution';
 
 
 
@@ -120,11 +122,6 @@ route.post(base + '/admin/payment/payment-edit',loginCheck, updatePaymentForAdmi
 
 
 
-
-
-
-
-
 // contactus 
 route.post( base + "/contact/create", createContact);             
 route.post( base + "/admin/contact/get",loginCheck, getContacts);    
@@ -137,6 +134,11 @@ route.post(base +"/newsletter/subscribe", subscribeNewsletter);
 route.post(base +"/newsletter/unsubscribe", unsubscribeNewsletter); 
 route.post(base +"/admin/newsletter/list",loginCheck, getAllSubscribers);   
 route.post(base +"/admin/newsletter/delete",loginCheck, deleteSubscriber);   
+
+
+route.post(base +"/admin/credential/schema",loginCheck, CredentialSchema);   
+
+route.post(base +"/executions/get-user-executions",loginCheck, getUserExecutions);   
 
 
 

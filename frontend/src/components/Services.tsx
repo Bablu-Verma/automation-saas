@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import Image from "next/image"
+
 import Link from "next/link"
 import { ServiceCard } from "./ServiceCard"
 import { useEffect, useState } from "react"
@@ -39,7 +39,7 @@ export default function Services() {
       }
     }
     fetchWorkflows();
-  }, []);
+  }, [dispatch]);
 
 
 

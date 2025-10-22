@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { FiCreditCard, FiCheckCircle, FiClock, FiXCircle, FiEye, FiDownload, FiUser, FiMail, FiPhone, FiMapPin, FiBriefcase } from "react-icons/fi"
+import { FiCreditCard, FiCheckCircle, FiClock, FiXCircle } from "react-icons/fi"
 import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux-store/redux_store"

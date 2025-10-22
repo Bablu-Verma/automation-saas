@@ -14,6 +14,8 @@ export type Contact = {
   name: string;
   email: string;
   message: string;
+  number: string;
+  subject: string;
   status: "UN_READ" | "READ";
   createdAt: string;
   updatedAt: string;
@@ -210,8 +212,8 @@ export default function AdminContacts() {
             <div key={contact._id} className="p-4 bg-white border rounded hover:shadow-sm transition-shadow">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="font-semibold">{contact.name}</h3>
-                  <p className="text-gray-600 text-sm">{contact.email}</p>
+                  <h3 className="font-semibold">{contact.name}</h3> 
+                  <p className="text-gray-600 text-sm">{contact.email} - {contact.number}</p> 
                 </div>
                 <span className={`text-sm px-2 py-1 border rounded ${
                   contact.status === "READ" 
@@ -221,8 +223,8 @@ export default function AdminContacts() {
                   {contact.status === "READ" ? "Read" : "Unread"}
                 </span>
               </div>
-              
-              <p className="mb-2 text-gray-700">{contact.message}</p>
+              <p className="mb-1 text-gray-700 text-sm capitalize">Subject: {contact.subject}</p>
+              <p className="mb-2 text-gray-700 text-sm ">{contact.message}</p>
               
               <div className="flex justify-between items-center">
                 <div className="text-sm text-gray-500">

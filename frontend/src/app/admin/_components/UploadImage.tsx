@@ -5,7 +5,6 @@ import { RootState } from "@/redux-store/redux_store";
 
 import axios from "axios";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";

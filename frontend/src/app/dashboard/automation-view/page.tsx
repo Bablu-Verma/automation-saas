@@ -38,6 +38,7 @@ export type AutomationDetail = {
     email: string;
   };
   n8nWorkflowId: string;
+  lastExecutedAt:Date;
 };
 
 export default function AutomationDetailPage() {
@@ -155,7 +156,7 @@ export default function AutomationDetailPage() {
             <div>
               <h1 className="text-2xl font-bold capitalize mb-2">{automation.instanceName}</h1>
               <p className="text-gray-400 text-sm">
-                Workflow: {automation.masterWorkflow.name}
+                Service: {automation.masterWorkflow.name}
               </p>
             </div>
             <span className={`px-3 py-1 text-xs rounded-full font-semibold ${getStatusColor(automation.isActive)} self-start`}>
@@ -174,7 +175,7 @@ export default function AutomationDetailPage() {
             <div className="flex items-center gap-3 text-gray-300">
               <FiActivity className="text-blue-400 text-lg" />
               <span className="font-medium">
-                Executions: <span className="text-white font-semibold">{automation.executionCount}</span>
+                Executions: <span className="text-white font-semibold pr-8">{automation.executionCount}</span>  Last Execution: <span className="text-white font-semibold">{new Date(automation.lastExecutedAt).toLocaleString()}</span>
               </span>
             </div>
           </div>
@@ -255,10 +256,10 @@ export default function AutomationDetailPage() {
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3">
           <Link
-            href="/dashboard/automation"
+            href={`/dashboard/execution?id=${automation._id}`}
             className="px-6 py-2 rounded-full border border-white/30 text-white font-semibold hover:bg-white hover:text-primary transition flex items-center gap-2"
           >
-            ← Back to List
+            ← Execution
           </Link>
 
           <StatusToggleButton

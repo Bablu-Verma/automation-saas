@@ -8,11 +8,19 @@ const ContactSchema = new mongoose.Schema(
       trim: true,
       maxlength: 100,
     },
+    number:{
+      type: Number,
+      required: [true, "Number is required"],
+    },
     email: {
       type: String,
       required: [true, "Email is required"],
       trim: true,
       lowercase: true,
+    },
+    subject:{
+      type: String,
+      required: [true, "Subject is required"],
     },
     message: {
       type: String,

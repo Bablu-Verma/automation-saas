@@ -24,7 +24,7 @@ export type WorkflowDetail = {
   requiredCredentials: {
     service: string;
     label: string;
-    inputType: string;
+    fields:[],
     scope: string[];
     credentialType: string;
   }[];
@@ -135,7 +135,7 @@ export default function WorkflowDetailPage() {
             <ul className="list-disc ml-5 text-gray-800">
               {workflow.requiredCredentials.map((cred, i) => (
                 <li key={i}>
-                  {cred.label} ({cred.inputType})
+                  {cred.label} ({cred.credentialType})
                 </li>
               ))}
             </ul>

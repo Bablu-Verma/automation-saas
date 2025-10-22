@@ -34,23 +34,24 @@ const MasterWorkflowSchema = new Schema({
 
  requiredCredentials: [
   {
-    service: { type: String },          // e.g. "Google Sheets"
-    label: { type: String },            // e.g. "Google OAuth2"
-    inputType: { type: String },        // "oauth2" | "apikey" | "httpBasic"
-    credentialType: { type: String },   // e.g. "googleSheetsOAuth2Api"
-    scopes: { type: [String] },         // For OAuth2 (optional)
-    fields: [                           // 👈 New: define actual fields
+    service: { type: String },         
+    label: { type: String },            
+    credentialType: { type: String },   
+    scopes: { type: [String] },         
+    fields: [                           
       {
-        name: { type: String },         // field key (e.g. "clientId")
-        label: { type: String },        // UI label (e.g. "Client ID")
-        inputType: { type: String },    // "text" | "password" | "token"
-        required: { type: Boolean }
+        name: { type: String },       
+        label: { type: String },        
+        inputType: { type: String },    
+        disabled: { type: Boolean },
+        require: { type: Boolean },
+        defaultValue:{type:String, default:''}
       }
     ],
     inject: [
       {
-        node: { type: String },         // node name to inject into
-        field: { type: String }         // node field name
+        node: { type: String },        
+        field: { type: String }         
       }
     ]
   }

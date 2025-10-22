@@ -53,7 +53,7 @@ export default function Features() {
         transition={{ duration: 0.6 }}
         className="text-4xl md:text-5xl font-bold text-left bg-gradient-to-r from-white to-secondary bg-clip-text text-transparent"
       >
-        Why Choose AutoFlow?
+        Why Choose Mate Mind ?
       </motion.h2>
 
       <motion.div
