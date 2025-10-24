@@ -1,13 +1,10 @@
 "use client"
 
-import { RootState } from "@/redux-store/redux_store"
-import { IUser } from "@/types"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { 
   FaHome, 
   FaUser, 
-  FaFileAlt, 
   FaCreditCard, 
   FaNewspaper, 
   FaEnvelope,
@@ -17,7 +14,6 @@ import {
   FaTimes,
   FaSignOutAlt
 } from 'react-icons/fa';
-import { useSelector } from "react-redux"
 import { useState } from "react"
 
 
@@ -69,7 +65,6 @@ const links = [
 
 export default function AdminSidebar() {
   const pathname = usePathname()
-  const user = useSelector((state: RootState) => state.user.user) as IUser | null
   const [isOpen, setIsOpen] = useState(false) // Mobile toggle
 
   return (
@@ -99,7 +94,7 @@ export default function AdminSidebar() {
         {/* Close button for mobile */}
         <div className="flex items-center justify-between mb-8">
         
-        <h2 className="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary ">
+        <h2 className="text-2xl font-extrabold text-white ">
           Admin
         </h2>
          <button

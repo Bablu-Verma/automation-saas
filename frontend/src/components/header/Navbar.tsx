@@ -7,6 +7,8 @@ import { FiMenu, FiX, FiSearch } from "react-icons/fi"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux-store/redux_store"
 import { IUser } from "@/types"
+import useTheme from "@/hooks/useTheam"
+import Image from "next/image"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -17,6 +19,8 @@ export default function Navbar() {
   const user = useSelector((state: RootState) => state.user.user) as IUser | null
   const loggedIn = Boolean(user)
   const router = useRouter()
+
+  const [theme, toggleTheme] = useTheme();
 
   // Scroll behavior
   useEffect(() => {
@@ -43,11 +47,12 @@ export default function Navbar() {
 
             {/* Logo */}
             <div className="flex-shrink-0 text-2xl font-bold">
-              <Link href="/" className="text-white">⚡Mate Mind </Link>
+              <Link href="/" className="text-white"><Image src='/loop_axis_2.png' className="w-auto h-auto" width={275} height={100} alt="logo" />
+                </Link>
             </div>
 
             {/* Desktop menu */}
-            <div className="hidden md:flex items-center space-x-6">
+            <div className="hidden md:flex items-center space-x-4">
               <Link href="/about" className="hover:text-primary text-white">About Us</Link>
               <Link href="/services" className="hover:text-primary text-white">Services</Link>
               <Link href="/contact" className="hover:text-primary text-white">Contact Us</Link>
@@ -66,23 +71,31 @@ export default function Navbar() {
                 </button>
               </div>
 
+              <button
+                onClick={toggleTheme}
+                className="px-4 py-1.5 rounded-full bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                {theme === "dark" ? "🌞 Light" : "🌙 Dark"}
+              </button>
               {loggedIn ? (
-                <Link href="/dashboard" title={user?.email} className="bg-primary text-white hover:text-primary px-8 py-1.5 rounded-full font-medium hover:bg-transparent border-primary border-2 transition flex items-center gap-2">
+                <Link href="/dashboard" title={user?.email} className="bg-primary text-white hover:text-primary px-4 py-1.5 rounded-full font-medium hover:bg-transparent border-transparent hover:border-primary border-2 transition flex items-center gap-2">
                   Dashboard
                 </Link>
               ) : (
-                <Link href="/login" className="bg-primary text-white hover:text-primary px-8 py-1.5 rounded-full font-medium hover:bg-transparent border-primary border-2 transition">
+                <Link href="/login" className="bg-primary text-white hover:text-primary px-4 py-1.5 rounded-full font-medium hover:bg-transparent border-transparent hover:border-primary border-2 transition">
                   Login
                 </Link>
               )}
+
+
             </div>
 
             {/* Mobile menu button */}
-            <div className="md:hidden flex items-center gap-4 text-white">
-              {loggedIn && <Link href="/dashboard" title={user?.email} className="block hover:text-primary text-white">Dashboard</Link>}
-              {!loggedIn && <Link href="/login" className="block hover:text-primary text-white">Login</Link>}
+            <div className="md:hidden flex items-center gap-3 text-white">
+              {loggedIn && <Link href="/dashboard" title={user?.email} className="bg-primary text-white px-4 py-1.5 rounded-full font-medium hover:shadow-2xl  transition flex items-center gap-2">Dashboard</Link>}
+              {!loggedIn && <Link href="/login" className="bg-primary text-white px-4 py-1.5 rounded-full font-medium hover:shadow-2xl  transition flex items-center gap-2">Login</Link>}
 
-              <button onClick={() => setIsOpen(true)}>
+              <button className="p-1.5 rounded-full bg-white/10" onClick={() => setIsOpen(true)}>
                 <FiMenu size={24} />
               </button>
             </div>
@@ -107,26 +120,72 @@ export default function Navbar() {
           <FiX size={24} />
         </button>
 
-        {/* Links */}
-        <nav className="flex flex-col gap-4 flex-1">
-          <Link href="/about" onClick={() => setIsOpen(false)}>About Us</Link>
-          <Link href="/services" onClick={() => setIsOpen(false)}>Services</Link>
-          <Link href="/contact" onClick={() => setIsOpen(false)}>Contact Us</Link>
+      <nav className="flex flex-col text-white gap-4 flex-1">
+ 
 
-          {/* Search */}
-          <div className="flex items-center bg-white/10 rounded-full px-3 py-2 mt-4">
-            <input
-              type="text"
-              value='Search...'
-              readOnly
-              onClick={() => router.push('/search')}
-              className="flex-1 bg-transparent text-white placeholder-gray-300 focus:outline-none"
-            />
-            <button type="submit" className="ml-2 text-white hover:text-primary">
-              <FiSearch />
-            </button>
-          </div>
-        </nav>
+  <button
+    onClick={() => { setIsOpen(false); router.push("/about"); }}
+    className="px-4 py-1.5 text-start rounded-full hover:bg-primary/20 transition"
+  >
+    About Us
+  </button>
+  <button
+    onClick={() => { setIsOpen(false); router.push("/services"); }}
+    className="px-4 py-1.5 text-start rounded-full hover:bg-primary/20 transition"
+  >
+    Services
+  </button>
+  <button
+    onClick={() => { setIsOpen(false); router.push("/contact"); }}
+    className="px-4 py-1.5 text-start rounded-full hover:bg-primary/20 transition"
+  >
+    Contact Us
+  </button>
+
+  {/* Search */}
+  <div className="flex mt-10 items-center rounded-full relative px-3 py-1.5 bg-white/20 dark:bg-black/30">
+    <input
+      type="text"
+      value="Search..."
+      readOnly
+      onClick={() => { router.push("/search"); setIsOpen(false); }}
+      className="flex-1 bg-transparent text-white placeholder-gray-300 focus:outline-none"
+    />
+    <button type="submit" className="ml-2 absolute right-2 text-white hover:text-primary transition">
+      <FiSearch />
+    </button>
+  </div>
+
+ 
+
+  
+   {!loggedIn && (
+    <Link
+      href="/login"
+      className="bg-primary text-white px-4 py-1.5 rounded-full font-medium hover:shadow-lg justify-center transition flex items-center gap-2"
+    >
+      Login
+    </Link>
+  )}
+   {loggedIn && (
+    <Link
+      href="/dashboard"
+      title={user?.email}
+      className="bg-primary text-white px-4 py-1.5 rounded-full font-medium hover:shadow-lg justify-center transition flex items-center gap-2"
+    >
+      Dashboard
+    </Link>
+  )}
+   <button
+    onClick={toggleTheme}
+    className="px-4 py-1.5  rounded-full bg-white/20 dark:bg-black/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-primary transition flex justify-center text-center gap-2"
+  >
+    {theme === "dark" ? "🌞 Light" : "🌙 Dark"}
+  </button>
+
+ 
+</nav>
+
       </div>
     </>
   )

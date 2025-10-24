@@ -9,32 +9,14 @@ import Image from "next/image";
 import Link from "next/link";
 import LoadingSpiner from "../../_components/LoadingSpiner";
 import { admin_details_master_workflow_api } from "@/api";
+import { IWorkflowDetail } from "@/types";
 
-export type WorkflowDetail = {
-  _id: string;
-  name: string;
-  description: string;
-  keyword: string[];
-  pricePerMonth: number;
-  currency: string;
-  isPublished: "ACTIVE" | "PAUSE";
-  serviceImage?: string;
-  trialDays: number;
-  requiredInputs: { key: string; label: string }[];
-  requiredCredentials: {
-    service: string;
-    label: string;
-    fields:[],
-    scope: string[];
-    credentialType: string;
-  }[];
-};
 
 export default function WorkflowDetailPage() {
   const searchParams = useSearchParams();
   const workflowId = searchParams.get("id");
 
-  const [workflow, setWorkflow] = useState<WorkflowDetail | null>(null);
+  const [workflow, setWorkflow] = useState<IWorkflowDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const token = useSelector((state: RootState) => state.user.token);
 

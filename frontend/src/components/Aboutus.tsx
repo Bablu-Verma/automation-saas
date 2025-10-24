@@ -38,12 +38,12 @@ export default function AboutUs() {
           className="flex-1 flex flex-col justify-between"
         >
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              About Mate Mind 
+            <h2 className="text-4xl md:text-5xl font-bold text-white">
+              About Loop Axis 
             </h2>
 
             <p className="mt-6 text-white/80 text-lg md:text-xl leading-relaxed max-w-xl">
-              Mate Mind  empowers businesses to automate repetitive workflows, integrate seamlessly with hundreds of tools, and scale operations without extra hires.
+              Loop Axis  empowers businesses to automate repetitive workflows, integrate seamlessly with hundreds of tools, and scale operations without extra hires.
             </p>
 
             <p className="mt-4 text-white/80 text-lg md:text-xl leading-relaxed max-w-xl">

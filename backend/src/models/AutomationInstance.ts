@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { IAutomationInstance } from "../types/types";
 const { Schema } = mongoose;
 
 const AutomationInstanceSchema = new Schema(
@@ -33,4 +34,6 @@ const AutomationInstanceSchema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("AutomationInstance", AutomationInstanceSchema);
+const AutomationInstance = mongoose.model<IAutomationInstance>("AutomationInstance", AutomationInstanceSchema);
+
+export default AutomationInstance

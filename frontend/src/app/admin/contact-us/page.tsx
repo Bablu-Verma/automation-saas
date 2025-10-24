@@ -8,6 +8,7 @@ import { RootState } from "@/redux-store/redux_store";
 import { admin_contact_delete_api, admin_contact_list_api, admin_contact_update_api } from "@/api";
 import Pagination from "@/components/Pagination";
 import LoadingSpiner from "../_components/LoadingSpiner";
+import { IContcatFiltersType } from "@/types";
 
 export type Contact = {
   _id: string;
@@ -29,9 +30,9 @@ export default function AdminContacts() {
   const [total, setTotal] = useState(0);
 
   // Simple filter state
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<IContcatFiltersType>({
     search: "",
-    status: "" as "UN_READ" | "READ" | "",
+    status: "",
     dateFrom: "",
     dateTo: ""
   });
@@ -72,13 +73,12 @@ export default function AdminContacts() {
     }
   };
 
-  useEffect(() => {
-    fetchContacts(1);
-  }, [token, appliedFilters]);
+
 
   useEffect(() => {
     fetchContacts(page);
-  }, [page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, token, appliedFilters]);
 
   const handleApplyFilters = () => {
     setAppliedFilters(filters);
@@ -86,7 +86,7 @@ export default function AdminContacts() {
   };
 
   const handleResetFilters = () => {
-    const resetFilters = {
+    const resetFilters: IContcatFiltersType = {
       search: "",
       status: "",
       dateFrom: "",
@@ -177,7 +177,7 @@ export default function AdminContacts() {
           className="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
           placeholder="From Date"
         />
-        
+
         <input
           type="date"
           value={filters.dateTo}
@@ -192,7 +192,7 @@ export default function AdminContacts() {
         >
           Apply Filters
         </button>
-        
+
         <button
           onClick={handleResetFilters}
           className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
@@ -212,20 +212,19 @@ export default function AdminContacts() {
             <div key={contact._id} className="p-4 bg-white border rounded hover:shadow-sm transition-shadow">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="font-semibold">{contact.name}</h3> 
-                  <p className="text-gray-600 text-sm">{contact.email} - {contact.number}</p> 
+                  <h3 className="font-semibold">{contact.name}</h3>
+                  <p className="text-gray-600 text-sm">{contact.email} - {contact.number}</p>
                 </div>
-                <span className={`text-sm px-2 py-1 border rounded ${
-                  contact.status === "READ" 
-                    ? "bg-blue-50 text-blue-700 border-blue-200" 
+                <span className={`text-sm px-2 py-1 border rounded ${contact.status === "READ"
+                    ? "bg-blue-50 text-blue-700 border-blue-200"
                     : "bg-green-50 text-green-700 border-green-200"
-                }`}>
+                  }`}>
                   {contact.status === "READ" ? "Read" : "Unread"}
                 </span>
               </div>
               <p className="mb-1 text-gray-700 text-sm capitalize">Subject: {contact.subject}</p>
               <p className="mb-2 text-gray-700 text-sm ">{contact.message}</p>
-              
+
               <div className="flex justify-between items-center">
                 <div className="text-sm text-gray-500">
                   <span>Received: {new Date(contact.createdAt).toLocaleDateString()}</span>
@@ -233,15 +232,14 @@ export default function AdminContacts() {
                     <span className="ml-3">Updated: {new Date(contact.updatedAt).toLocaleDateString()}</span>
                   )}
                 </div>
-                
+
                 <div className="flex gap-2">
                   <button
                     onClick={() => updateStatus(contact._id, contact.status === "READ" ? "UN_READ" : "READ")}
-                    className={`px-3 py-1 border rounded text-sm flex items-center gap-1 ${
-                      contact.status === "READ" 
-                        ? "border-blue-500 text-blue-700 hover:bg-blue-50" 
+                    className={`px-3 py-1 border rounded text-sm flex items-center gap-1 ${contact.status === "READ"
+                        ? "border-blue-500 text-blue-700 hover:bg-blue-50"
                         : "border-green-500 text-green-700 hover:bg-green-50"
-                    }`}
+                      }`}
                   >
                     {contact.status === "READ" ? <FiEyeOff /> : <FiEye />}
                     {contact.status === "READ" ? "Mark Unread" : "Mark Read"}
@@ -261,13 +259,13 @@ export default function AdminContacts() {
         )}
       </div>
 
-     <div className="mt-6">
-          <Pagination 
-            currentPage={page} 
-            totalPages={totalPages} 
-            onPageChange={setPage} 
-          />
-        </div>
+      <div className="mt-6">
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      </div>
     </div>
   );
 }

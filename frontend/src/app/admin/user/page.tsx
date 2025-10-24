@@ -53,7 +53,7 @@ export default function AdminUsers() {
         page: pageNum,
         limit: 20,
         ...Object.fromEntries(
-          Object.entries(appliedFilters).filter(([_, v]) => v)
+          Object.entries(appliedFilters).filter(([, v]) => v)
         )
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -73,6 +73,7 @@ export default function AdminUsers() {
 
   useEffect(() => {
     fetchUsers(page)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, page, appliedFilters])
 
 

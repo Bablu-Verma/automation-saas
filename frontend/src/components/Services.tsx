@@ -52,7 +52,7 @@ export default function Services() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-secondary bg-clip-text text-transparent"
+          className="text-4xl md:text-5xl font-bold text-white"
         >
           Our Services
         </motion.h2>

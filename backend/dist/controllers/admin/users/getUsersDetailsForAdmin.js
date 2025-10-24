@@ -1,0 +1,113 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getUserDetailsForAdmin = void 0;
+const User_1 = __importDefault(require("../../../models/User"));
+const AutomationInstance_1 = __importDefault(require("../../../models/AutomationInstance"));
+const Payment_1 = __importDefault(require("../../../models/Payment"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const getUserDetailsForAdmin = async (req, res) => {
+    try {
+        const requestUser = req.user;
+        const { id } = req.body;
+        // ✅ Access control: only admin
+        if (!requestUser || requestUser.role !== "admin") {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied. Only administrators can view user details.",
+            });
+        }
+        // ✅ Validate user ID
+        if (!id || !mongoose_1.default.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                success: false,
+                message: "Valid user ID is required.",
+            });
+        }
+        // ✅ Fetch user details
+        const user = await User_1.default.findById(id)
+            .select("-password -otp")
+            .lean();
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found.",
+            });
+        }
+        // ✅ Fetch automation stats
+        const automationStats = await AutomationInstance_1.default.aggregate([
+            { $match: { user: new mongoose_1.default.Types.ObjectId(id) } },
+            {
+                $group: {
+                    _id: null,
+                    totalAutomations: { $sum: 1 },
+                    activeAutomations: { $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] } },
+                    totalExecutions: { $sum: "$executionCount" },
+                    lastActivity: { $max: "$lastExecutedAt" }
+                }
+            }
+        ]);
+        const recentAutomations = await AutomationInstance_1.default.find({ user: id })
+            .populate("masterWorkflow", "name serviceIconUrl")
+            .select("instanceName executionCount lastExecutedAt createdAt isActive")
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .lean();
+        const automation = automationStats.length > 0 ? automationStats[0] : {
+            totalAutomations: 0,
+            activeAutomations: 0,
+            totalExecutions: 0,
+            lastActivity: null
+        };
+        // ✅ Fetch user payments
+        const payments = await Payment_1.default.find({ user: id })
+            .sort({ createdAt: -1 })
+            .select("orderId paymentId amountDetails currency status createdAt planDetails instanceId subscriptionMonths")
+            .populate("instanceId", "instanceName status")
+            .lean();
+        // Optional: payment statistics
+        const paymentStats = payments.reduce((acc, p) => {
+            acc.totalAmount += p.amountDetails?.totalAmount || 0;
+            if (p.status === "success")
+                acc.successfulPayments += 1;
+            else if (p.status === "failed")
+                acc.failedPayments += 1;
+            else if (p.status === "pending")
+                acc.pendingPayments += 1;
+            return acc;
+        }, { totalAmount: 0, successfulPayments: 0, failedPayments: 0, pendingPayments: 0 });
+        // ✅ Compile user details
+        const userDetails = {
+            ...user,
+            stats: {
+                totalAutomations: automation.totalAutomations,
+                activeAutomations: automation.activeAutomations,
+                totalExecutions: automation.totalExecutions,
+                lastActivity: automation.lastActivity,
+                accountAge: Math.floor((Date.now() - new Date(user.createdAt).getTime()) / (1000 * 60 * 60 * 24)),
+                totalPayments: payments.length,
+                totalAmount: paymentStats.totalAmount,
+                successfulPayments: paymentStats.successfulPayments,
+                failedPayments: paymentStats.failedPayments,
+                pendingPayments: paymentStats.pendingPayments
+            },
+            recentAutomations,
+            payments
+        };
+        return res.status(200).json({
+            success: true,
+            message: "User details fetched successfully.",
+            user: userDetails,
+        });
+    }
+    catch (error) {
+        console.error("Error fetching user details for admin:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Server error while fetching user details.",
+        });
+    }
+};
+exports.getUserDetailsForAdmin = getUserDetailsForAdmin;

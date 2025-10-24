@@ -65,7 +65,7 @@ export default function SearchPage() {
         transition={{ duration: 0.8 }}
         className="text-center mb-12"
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-white">
           Search Services
         </h1>
         <p className="mt-4 text-white/80 text-lg md:text-xl max-w-2xl mx-auto">

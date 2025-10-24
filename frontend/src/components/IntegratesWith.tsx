@@ -39,7 +39,7 @@ type AppIntegrationSliderProps = {
 export default function AppIntegrationSlider({ apps = defaultApps }: AppIntegrationSliderProps) {
   return (
     <section className="pt-28 px-6">
-      <h2 className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+      <h2 className="text-4xl md:text-5xl font-bold text-center text-white">
         Integrates with 100+ Apps
       </h2>
 

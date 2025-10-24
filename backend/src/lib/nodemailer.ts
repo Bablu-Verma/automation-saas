@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 
-export const sender_email = `"Saas app" saas@automation.com`
+export const sender_email = `loopaxis@support.in`
 
 export const email_transporter = nodemailer.createTransport({
   host: "smtp.ethereal.email",

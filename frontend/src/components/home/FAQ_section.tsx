@@ -6,14 +6,14 @@ import { FiZap, FiShield, FiUsers, FiSettings, FiCloud, FiBarChart2, FiMail, FiT
 import Link from "next/link"
 
 const faqs = [
-  { icon: <FiZap size={36} />, question: "What is Mate Mind ?", answer: "Mate Mind  is an automation platform that helps businesses streamline workflows and save time." },
-  { icon: <FiShield size={36} />, question: "Is it secure?", answer: "Yes! Mate Mind  uses enterprise-grade security to protect your data." },
-  { icon: <FiUsers size={36} />, question: "Who can use Mate Mind ?", answer: "Small to large businesses and freelancers can automate their workflows." },
-  { icon: <FiSettings size={36} />, question: "Does it require coding?", answer: "No coding required. Mate Mind  is user-friendly and intuitive." },
+  { icon: <FiZap size={36} />, question: "What is Loop Axis ?", answer: "Loop Axis  is an automation platform that helps businesses streamline workflows and save time." },
+  { icon: <FiShield size={36} />, question: "Is it secure?", answer: "Yes! Loop Axis  uses enterprise-grade security to protect your data." },
+  { icon: <FiUsers size={36} />, question: "Who can use Loop Axis ?", answer: "Small to large businesses and freelancers can automate their workflows." },
+  { icon: <FiSettings size={36} />, question: "Does it require coding?", answer: "No coding required. Loop Axis  is user-friendly and intuitive." },
   { icon: <FiCloud size={36} />, question: "Which apps can I integrate?", answer: "Integrate with 100+ apps including CRM, email, e-commerce, and project management tools." },
   { icon: <FiBarChart2 size={36} />, question: "Can I track analytics?", answer: "Yes! Real-time dashboards help you monitor performance easily." },
   { icon: <FiMail size={36} />, question: "Can I automate emails?", answer: "Yes! Automate marketing campaigns, reminders, and notifications." },
-  { icon: <FiTrendingUp size={36} />, question: "Is it scalable?", answer: "Absolutely! Mate Mind  grows with your business and workflow complexity." },
+  { icon: <FiTrendingUp size={36} />, question: "Is it scalable?", answer: "Absolutely! Loop Axis  grows with your business and workflow complexity." },
 ]
 
 export default function FAQSection() {
@@ -21,11 +21,11 @@ export default function FAQSection() {
 
   return (
     <section className="pt-28 px-6 max-w-7xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+      <h2 className="text-4xl md:text-5xl font-bold text-center text-white">
         Frequently Asked Questions
       </h2>
       <p className="mt-4 text-center text-white/70 max-w-2xl mx-auto text-lg">
-        Everything you need to know about Mate Mind  in one place.
+        Everything you need to know about Loop Axis  in one place.
       </p>
 
       <div className="mt-16 flex flex-col md:flex-row gap-10">

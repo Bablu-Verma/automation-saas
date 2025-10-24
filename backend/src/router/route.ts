@@ -45,6 +45,9 @@ import { getPaymentDetails } from '../controllers/frontend/dashboard/payment/pay
 import { updatePaymentForAdmin } from '../controllers/admin/payment/paymentedit';
 import { CredentialSchema } from '../controllers/admin/CredentialSchema';
 import { getUserExecutions } from '../controllers/frontend/dashboard/execution';
+import { getUserDashboard } from '../controllers/frontend/dashboard/dashboard';
+import { getAdminDashboard } from '../controllers/admin/adminDashboard';
+import { InvoiceDownload } from '../controllers/frontend/dashboard/payment/invoice-download';
 
 
 
@@ -139,6 +142,12 @@ route.post(base +"/admin/newsletter/delete",loginCheck, deleteSubscriber);
 route.post(base +"/admin/credential/schema",loginCheck, CredentialSchema);   
 
 route.post(base +"/executions/get-user-executions",loginCheck, getUserExecutions);   
+route.post(base +"/dashboard/get-user-dashboard",loginCheck, getUserDashboard);  
+
+route.post(base +"/admin/get-admin-dashboard",loginCheck, getAdminDashboard);
+
+
+route.post(base +"/get-invoice-download",loginCheck, InvoiceDownload);   
 
 
 

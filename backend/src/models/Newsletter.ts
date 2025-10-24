@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
+import { INewsletter } from "../types/types";
 
 const NewsletterSchema = new mongoose.Schema(
   {
@@ -23,5 +24,6 @@ const NewsletterSchema = new mongoose.Schema(
 );
 
 // Prevent OverwriteModelError in dev hot-reloads
-export default mongoose.models.Newsletter ||
-  mongoose.model("Newsletter", NewsletterSchema);
+ const Newsletter = mongoose.model<INewsletter>("Newsletter", NewsletterSchema);
+
+  export default Newsletter

@@ -12,12 +12,12 @@ export const getServiceDetail = async (req: AuthenticatedRequest, res: Response)
     if (!id) {
       return res.status(400).json({
         success: false,
-        message: "Workflow ID is required.",
+        message: "Service Slug is required.",
       });
     }
 
  
-    const workflow = await MasterWorkflow.findOne({_id:id, isPublished: "ACTIVE"} );
+    const workflow = await MasterWorkflow.findOne({slug:id, isPublished: "ACTIVE"} );
 
     if (!workflow) {
       return res.status(404).json({

@@ -13,6 +13,7 @@ import {
 } from "../../../../lib/_n8n_helper";
 import slug from "slug";
 import { automation_create_success_email } from "../../../../email/automation_create_success_email";
+import { IMasterWorkflow } from "../../../../types/types";
 
 // Helper function to safely get credential name
 
@@ -45,7 +46,7 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
     workflowJson = removeWebhookIds(workflowJson);
 
     // Inject inputs
-    let workflowWithInputs = injectWorkflowInputs(workflowJson, masterWorkflow.requiredInputs, inputs);
+    let workflowWithInputs = injectWorkflowInputs(workflowJson, masterWorkflow.requiredInputs || [] , inputs);
 
     // Handle credentials
     const credMap: Record<string, any> = {};
@@ -98,7 +99,7 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
       }
     }
 
-    workflowWithInputs = injectWorkflowCredentials(workflowWithInputs, masterWorkflow.requiredCredentials, credMap);
+    workflowWithInputs = injectWorkflowCredentials(workflowWithInputs, masterWorkflow.requiredCredentials || [], credMap);
 
     const { meta, versionId, id, tags, pinData, active, ...allowedWorkflow } = workflowWithInputs;
 

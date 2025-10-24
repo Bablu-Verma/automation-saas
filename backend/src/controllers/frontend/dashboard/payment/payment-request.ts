@@ -16,7 +16,7 @@ export const createPayment = async (req: AuthenticatedRequest, res: Response) =>
             amountDetails,
             currency,
             paymentMethod,
-            note 
+            note
         } = req.body;
 
         if (!userId) {
@@ -91,10 +91,10 @@ export const createPayment = async (req: AuthenticatedRequest, res: Response) =>
                 totalAmount: amountDetails.totalAmount || 0,
             },
             currency: currency || "INR",
-            paymentMethod: paymentMethod || "manual", 
-            
+            paymentMethod: paymentMethod || "manual",
+
             status: initialStatus,
-          
+
             note: note,
             Log: [{
                 status: initialStatus,
@@ -105,16 +105,18 @@ export const createPayment = async (req: AuthenticatedRequest, res: Response) =>
 
         const payment = await new Payment(paymentData).save();
 
-      await  payment_request_success_email(userEmail || '', amountDetails.totalAmount,currency, payment.orderId)
-     await payment_request_success_email_admin_notify(amountDetails.totalAmount, currency, payment.orderId)
+        if (userEmail) {
+            await payment_request_success_email(userEmail, amountDetails.totalAmount, currency, payment.orderId ?? 'unknown-order');
+        }
+        await payment_request_success_email_admin_notify(amountDetails.totalAmount, currency, payment.orderId ?? 'unknown-order');
 
         return res.status(201).json({
             message: "Payment request created successfully (Status: Pending)",
             success: true,
-            data: { 
-                paymentId: payment._id, 
+            data: {
+                paymentId: payment._id,
                 orderId: payment.orderId,
-                status: payment.status 
+                status: payment.status
             }
         });
 

@@ -1,0 +1,14 @@
+User-agent: *
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /admin
+
+
+# Allow legal pages for SEO
+Allow: /privacy
+Allow: /terms
+
+# Allow everything else
+Allow: /
+
+Sitemap: https://loopaxis.babluverma.site/sitemap.xml

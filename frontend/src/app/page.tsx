@@ -29,7 +29,7 @@ export default function HomePage() {
      
       <Services />
       <section className="pt-28 px-6 max-w-7xl mx-auto relative">
-        <h2 className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-white to-secondary bg-clip-text text-transparent">
+        <h2 className="text-4xl md:text-5xl font-bold text-center text-white">
           How It Works
         </h2>
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -61,7 +61,7 @@ export default function HomePage() {
       <AppIntegrationSlider />
 
  <section className="pt-28 px-6 max-w-7xl mx-auto relative  text-center">
-      <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+      <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r text-white">
         Awards & Recognition
       </h2>
 
@@ -114,7 +114,7 @@ export default function HomePage() {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="mt-4 text-lg md:text-xl text-white/90 max-w-2xl mx-auto"
         >
-          Join 100+ businesses saving time, reducing errors, and growing faster with Mate Mind .
+          Join 100+ businesses saving time, reducing errors, and growing faster with Loop Axis .
         </motion.p>
 
         <motion.div

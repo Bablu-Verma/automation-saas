@@ -66,7 +66,7 @@ export default function BillingRequests() {
           page: pageNum,
           limit: 20,
           ...Object.fromEntries(
-            Object.entries(appliedFilters).filter(([_, v]) => v) // only non-empty filters
+            Object.entries(appliedFilters).filter(([, v]) => v) // only non-empty filters
           )
         },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -87,6 +87,7 @@ export default function BillingRequests() {
   // Fetch payments whenever page changes or filters applied
   useEffect(() => {
     fetchPayments(page)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, page, appliedFilters])
 
   const formatDate = (date: string) => new Date(date).toLocaleDateString("en-GB")

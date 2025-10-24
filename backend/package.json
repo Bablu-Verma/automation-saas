@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon",
+    "typecheck": "tsc --noEmit",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -26,6 +27,7 @@
     "nodemailer": "^7.0.6",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
+    "pdfkit": "^0.17.2",
     "sharp": "^0.34.4",
     "slug": "^11.0.0",
     "uuid": "^13.0.0"
@@ -38,6 +40,7 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^24.3.0",
     "@types/nodemailer": "^7.0.1",
+    "@types/pdfkit": "^0.17.3",
     "@types/slug": "^5.0.9",
     "concurrently": "^9.2.1",
     "ts-node": "^10.9.2",

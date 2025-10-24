@@ -156,25 +156,7 @@ export default function PaymentDetailsPage() {
     }
   }
 
-  const handleDownloadInvoice = async () => {
-    if (!payment) return
-    try {
-      const response = await axios.get(`/api/payments/${payment._id}/invoice`, {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: "blob",
-      })
-      const url = window.URL.createObjectURL(new Blob([response.data]))
-      const link = document.createElement("a")
-      link.href = url
-      link.setAttribute("download", `invoice-${payment.orderId}.pdf`)
-      document.body.appendChild(link)
-      link.click()
-      link.remove()
-    } catch {
-      alert("Invoice download feature coming soon!")
-    }
-  }
-
+  
   if (loading) {
     return <LoadingSpiner />
   }
@@ -359,7 +341,7 @@ export default function PaymentDetailsPage() {
 
         {/* Download Button */}
         <div className="flex justify-end gap-4 pt-4">
-         <DownloadInvoice payments={payment} />
+         <DownloadInvoice payments={payment._id} />
         </div>
       </div>
     </motion.div>

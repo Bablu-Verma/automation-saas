@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { FiPlusCircle, FiList } from "react-icons/fi"
 import Link from "next/link"
 

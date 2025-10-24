@@ -8,7 +8,7 @@ import "swiper/css"
 import Image from "next/image"
 
 const testimonials = [
-  { name: "Amit Kumar", text: "Mate Mind  saved us 20+ hrs/week. Insane ROI!", image: "/client.jpg" },
+  { name: "Amit Kumar", text: "Loop Axis  saved us 20+ hrs/week. Insane ROI!", image: "/client.jpg" },
   { name: "Sarah Lee", text: "Email campaigns are now fully automated.", image: "/client.jpg" },
   { name: "Rajesh Singh", text: "Shopify orders sync without errors.", image: "/client.jpg" },
   { name: "Priya Sharma", text: "Seamless integration with all our tools.", image: "/client.jpg" },
@@ -18,7 +18,7 @@ const testimonials = [
 export default function Testimonials() {
   return (
     <section className="pt-28 px-6 relative">
-      <h2 className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+      <h2 className="text-4xl md:text-5xl font-bold text-center text-white">
         Hear From Our Happy Clients
       </h2>
 
@@ -28,7 +28,7 @@ export default function Testimonials() {
         transition={{ delay: 0.2, duration: 0.6 }}
         className="mt-6 text-lg text-white/70 max-w-2xl text-center mx-auto"
       >
-        Discover how businesses are saving time, boosting productivity, and scaling effortlessly with Mate Mind .
+        Discover how businesses are saving time, boosting productivity, and scaling effortlessly with Loop Axis .
       </motion.p>
 
       <Swiper

@@ -83,4 +83,8 @@ export const admin_edit_master_workflow_api = api_url + 'v1/admin/master-workflo
 export const admin_credential_schema_api = api_url + 'v1/admin/credential/schema'
 
 export const get_user_executions_api = api_url + 'v1/executions/get-user-executions'
+export const get_user_dashboard_api = api_url + 'v1/dashboard/get-user-dashboard'
+export const get_admin_dashboard_api = api_url + 'v1/admin/get-admin-dashboard'
+
+export const get_invoice_download_api = api_url + 'v1/get-invoice-download'
 

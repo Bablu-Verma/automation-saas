@@ -104,6 +104,7 @@ export default function AutomationDetailsPage() {
 
   useEffect(() => {
     fetchAutomation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, token]);
 
   if (loading) return <LoadingSpiner />;

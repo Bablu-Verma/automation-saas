@@ -4,6 +4,8 @@ import { AuthenticatedRequest } from "../../../middlewares/loginCheck";
 import Payment from "../../../models/Payment";
 import AutomationInstance from "../../../models/AutomationInstance";
 import { toggleN8nWorkflow } from "../../../lib/_n8n_helper";
+import { sendPaymentStatusEmail } from "../../../email/sendPaymentStatusEmail";
+import { IUser } from "../../../types/types";
 
 // ✅ Update payment controller (POST)
 export const updatePaymentForAdmin = async (req: AuthenticatedRequest, res: Response) => {
@@ -58,13 +60,12 @@ export const updatePaymentForAdmin = async (req: AuthenticatedRequest, res: Resp
       return res.status(404).json({ success: false, message: "Payment not found." });
     }
 
-    // Ensure payment.period exists
     if (!payment.period) {
-      payment.period = { startDate: null, endDate: null };
-    }
+  payment.period = { startDate: undefined, endDate: undefined };
+}
 
     // Fetch automation instance
-    const automation = await AutomationInstance.findById(payment.instanceId);
+    const automation = await AutomationInstance.findById(payment.instanceId).populate<{user:IUser}>('user', 'name email');
     if (!automation) {
       return res.status(404).json({ success: false, message: "Automation instance not found." });
     }
@@ -121,10 +122,11 @@ export const updatePaymentForAdmin = async (req: AuthenticatedRequest, res: Resp
       if (!automation.periods) {
         automation.periods = { startTime: startDate, endTime: endDate };
       } else {
+        automation.periods.startTime = startDate; 
         automation.periods.endTime = endDate;
       }
 
-      automation.isActive = "RUNNING";
+      // automation.isActive = "RUNNING";
       automation.systemStatus = "ACTIVE";
     }
 
@@ -142,14 +144,19 @@ export const updatePaymentForAdmin = async (req: AuthenticatedRequest, res: Resp
     if (paymentMethod) payment.paymentMethod = paymentMethod;
     if (note) payment.note = note;
 
-    // Log update
-    payment.Log.push({
-      status: status || payment.status,
-      note: note || `Changed status to ${status}`,
-      changedAt: new Date(),
-    });
+    payment.Log!.push({
+  status: status || payment.status,
+  note: note || `Changed status to ${status}`,
+  changedAt: new Date(),
+});
 
     await payment.save();
+
+     await sendPaymentStatusEmail(
+    automation.user.email,
+    automation.user.name,
+    payment
+  );
 
     return res.status(200).json({
       success: true,

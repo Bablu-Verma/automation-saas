@@ -1,6 +1,15 @@
 import { FaChevronLeft, FaChevronRight, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
-const Pagination = ({ 
+// Props interface define करें
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  showPageNumbers?: boolean;
+  compact?: boolean;
+}
+
+const Pagination: React.FC<PaginationProps> = ({ 
   currentPage, 
   totalPages, 
   onPageChange,
@@ -19,7 +28,7 @@ const Pagination = ({
     }
   };
 
-  const getVisiblePages = () => {
+  const getVisiblePages = (): number[] => {
     if (compact || totalPages <= 5) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
@@ -33,7 +42,7 @@ const Pagination = ({
       start = totalPages - 4;
     }
 
-    const pages = [];
+    const pages: number[] = [];
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }

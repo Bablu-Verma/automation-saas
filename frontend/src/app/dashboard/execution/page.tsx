@@ -56,6 +56,7 @@ export default function ExecutionRequests() {
     }
 
     fetchExecutions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, page])
 
   const getStatusIcon = (status: string) => {

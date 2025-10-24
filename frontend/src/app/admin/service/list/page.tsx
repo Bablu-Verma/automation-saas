@@ -13,6 +13,7 @@ import Image from "next/image";
 export type Workflow__ = {
   _id: string;
   name: string;
+  slug:string;
   description: string;
   pricePerMonth: number;
   currency: string;
@@ -51,7 +52,7 @@ export default function MasterWorkflows() {
         {
           page: pageNum,
           limit: 10,
-          ...Object.fromEntries(Object.entries(appliedFilters).filter(([_, v]) => v)),
+          ...Object.fromEntries(Object.entries(appliedFilters).filter(([, v]) => v)),
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );

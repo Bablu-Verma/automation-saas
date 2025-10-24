@@ -128,6 +128,8 @@ export default function AutomationDetailPage() {
 
   const statusConfig = getSystemStatusConfig(automation.systemStatus);
 
+  console.log(automation.periods)
+
   return (
     <div className="max-w-4xl mx-auto pb-28 text-white px-6">
       <motion.div

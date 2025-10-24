@@ -20,6 +20,7 @@ export const automationList = async (req: AuthenticatedRequest, res: Response) =
     const automations = await AutomationInstance.find({ user: userId })
       .select("-userInputs -n8nCredential")
       .populate("user", "name email")
+      .populate("masterWorkflow", "name slug")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);

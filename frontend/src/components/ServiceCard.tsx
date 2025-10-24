@@ -28,7 +28,7 @@ export function ServiceCard({ workflows }: ServiceCardProps) {
 
       {/* Content */}
       <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-xl font-bold text-gray-900 mb-3">
+        <h3 className="text-xl capitalize font-bold text-gray-900 mb-3">
           {workflows.name}
         </h3>
         <p className="text-gray-600 flex-1">
@@ -37,7 +37,7 @@ export function ServiceCard({ workflows }: ServiceCardProps) {
 
         {/* CTA */}
         <Link
-          href={`/services/view?id=${workflows._id}`}
+          href={`/services/view?id=${workflows.slug}`}
           className="mt-6 inline-block w-fit px-5 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-primary to-secondary text-white shadow hover:shadow-lg transition"
         >
           Learn More →

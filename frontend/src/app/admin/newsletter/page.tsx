@@ -8,6 +8,7 @@ import { RootState } from "@/redux-store/redux_store";
 import { admin_newsletter_delete_api, admin_newsletter_list_api } from "@/api";
 import Pagination from "@/components/Pagination";
 import LoadingSpiner from "../_components/LoadingSpiner";
+import { INewsleterFiltersType } from "@/types";
 
 export type Subscriber = {
   _id: string;
@@ -22,7 +23,7 @@ export default function AdminSubscribers() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
+  const [, setTotal] = useState(0);
   const [stats, setStats] = useState({
     totalSubscribers: 0,
     activeSubscribers: 0,
@@ -30,9 +31,9 @@ export default function AdminSubscribers() {
   });
 
   // Simple filter state
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<INewsleterFiltersType>({
     search: "",
-    status: "" as "SUBSCRIBED" | "UNSUBSCRIBED" | "",
+    status: "" ,
     dateFrom: "",
     dateTo: ""
   });
@@ -79,13 +80,12 @@ export default function AdminSubscribers() {
     }
   };
 
-  useEffect(() => {
-    fetchSubscribers(1);
-  }, [token, appliedFilters]);
+
 
   useEffect(() => {
     fetchSubscribers(page);
-  }, [page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, token, appliedFilters]);
 
   const handleApplyFilters = () => {
     setAppliedFilters(filters);
@@ -93,7 +93,7 @@ export default function AdminSubscribers() {
   };
 
   const handleResetFilters = () => {
-    const resetFilters = {
+    const resetFilters:INewsleterFiltersType = {
       search: "",
       status: "",
       dateFrom: "",

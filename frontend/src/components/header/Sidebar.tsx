@@ -5,7 +5,7 @@ import { logout } from "@/redux-store/slice/userSlice"
 import { IUser } from "@/types"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { FaHome, FaUser, FaFileAlt, FaLifeRing, FaSignOutAlt, FaEnvelope, FaUikit, FaBars, FaTimes } from "react-icons/fa"
+import { FaHome, FaUser, FaFileAlt, FaLifeRing, FaSignOutAlt, FaEnvelope, FaUikit, FaBars, FaTimes, FaPlayCircle } from "react-icons/fa"
 import { useDispatch, useSelector } from "react-redux"
 import { useState } from "react"
 
@@ -14,7 +14,7 @@ const links = [
   { href: "/dashboard/profile", label: "Profile", icon: <FaUser size={18} /> },
   { href: "/dashboard/automation", label: "My Automation", icon: <FaFileAlt size={18} /> },
   { href: "/dashboard/billing", label: "Billing", icon: <FaEnvelope size={18} /> },
-  { href: "/dashboard/execution", label: "Execution", icon: <FaEnvelope size={18} /> },
+  { href: "/dashboard/execution", label: "Execution", icon: <FaPlayCircle size={18} /> },
   { href: "/dashboard/help", label: "Help & Support", icon: <FaLifeRing size={18} /> },
 ]
 
@@ -60,7 +60,7 @@ export default function Sidebar() {
         <div className="mb-8 flex justify-between items-center">
       
         {/* Logo / Title */}
-        <h2 className="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary ">
+        <h2 className="text-2xl font-extrabold text-white ">
           Dashboard
         </h2>
 

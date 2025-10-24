@@ -1,7 +1,10 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { toggleN8nWorkflow } from "../../../lib/_n8n_helper";
 import AutomationInstance from "../../../models/AutomationInstance";
 import { AuthenticatedRequest } from "../../../middlewares/loginCheck";
+
+import { IUser } from "../../../types/types";
+import { sendAutomationStatusUpdateEmail } from "../../../email/sendAutomationStatusUpdateEmail";
 
 export async function updateAutomationStatusById(req: AuthenticatedRequest, res: Response) {
   try {
@@ -24,7 +27,7 @@ export async function updateAutomationStatusById(req: AuthenticatedRequest, res:
     }
 
     // Find automation
-    const automation = await AutomationInstance.findById(automationId);
+    const automation = await AutomationInstance.findById(automationId).populate<{user:IUser}>("user", "name email");;
     if (!automation) {
       return res.status(404).json({
         success: false,
@@ -60,6 +63,8 @@ export async function updateAutomationStatusById(req: AuthenticatedRequest, res:
     automation.systemStatus = systemStatus;
     automation.isActive = isPaused ? "PAUSE" : "RUNNING";
     await automation.save();
+
+   await sendAutomationStatusUpdateEmail(automation.user?.email, automation.user?.name, automation.instanceName, systemStatus)
 
     return res.status(200).json({
       success: true,

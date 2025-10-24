@@ -1,4 +1,5 @@
 import axios from "axios";
+import { IRequiredInput } from "../types/types";
 
 let cachedSchemas: Record<string, any> = {};
 
@@ -22,11 +23,9 @@ type SchemaField = {
   required?: boolean;
 };
 
-type SchemaData = Record<string, SchemaField>;
 
 
-
-export function injectWorkflowInputs(workflowJson: any, requiredInputs: any[], inputs: any[]) {
+export function injectWorkflowInputs(workflowJson: any, requiredInputs :IRequiredInput[], inputs: any[]) {
   const workflowCopy = JSON.parse(JSON.stringify(workflowJson)); // deep clone to avoid mutation
 
   // Loop over each required input

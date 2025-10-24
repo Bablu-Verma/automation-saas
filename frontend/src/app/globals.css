@@ -5,30 +5,49 @@
   --light: #ffffff;
   --secondary: #131D4F;
   --primary: #E6521F;
-  --main-color:#E6521F
+  --main-color: #E6521F;
 }
 
 @theme inline {
-
-  --color-primary: #E6521F;   /* Dark Blue */
-  --color-secondary: #131D4F; /* Orange Accent */
-  --color-dark: #06202B;      /* Black Shade */
-
-  /* Gradient */
+  --color-primary: #E6521F;
+  --color-secondary: #131D4F;
+  --color-dark: #06202B;
   --color-gradient-brand: linear-gradient(90deg, #131D4F, #E6521F);
-
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+/* 🌓 Light Mode */
 body {
   @apply min-h-screen text-[var(--color-foreground)];
-  background: linear-gradient(135deg, #131D4F 0%, #06202B 35%, #E6521F 100%);
-  background-attachment: fixed; 
+background: linear-gradient(135deg, #1A237E 0%, #0D1B2A 40%, #E6521F 100%);
+  background-attachment: fixed;
   background-size: cover;
   color: var(--secondary);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* 🌑 Dark Mode */
+.dark body {
+  background: linear-gradient(135deg, #000000 0%, #06202B 50%, #131D4F 100%);
+  color: var(--light);
+}
+
+/* 🖱️ Optional: Hide native cursor for custom cursor */
+body {
   cursor: none;
+}
+
+/* Example for a custom cursor if you want it */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
 }
 
 ::-moz-selection { /* Code for Firefox */

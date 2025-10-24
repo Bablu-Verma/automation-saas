@@ -1,9 +1,9 @@
 "use client";
 
 import { instance_create_api, service_detail_api } from "@/api";
-import { WorkflowDetail } from "@/app/admin/service/view/page";
 import Loading_ from "@/components/Loading";
 import { RootState } from "@/redux-store/redux_store";
+import { ICredentialField, IRequiredCredential, IWorkflowDetail } from "@/types";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -13,13 +13,6 @@ import { FcGoogle } from "react-icons/fc";
 import { useSelector } from "react-redux";
 
 const allowedOrigins = [process.env.NEXT_PUBLIC_BACKEND_BASE_URL];
-interface CredentialField {
-  name: string;
-  label: string;
-  inputType: 'text' | 'password' | 'number' | 'email';
-  disabled: boolean;
-  require: boolean;
-}
 
 
 export default function StartFormPage() {
@@ -27,7 +20,7 @@ export default function StartFormPage() {
   const workflowId = searchParams.get("id");
   const token = useSelector((state: RootState) => state.user.token);
 
-  const [workflow, setWorkflow] = useState<WorkflowDetail | null>(null);
+  const [workflow, setWorkflow] = useState<IWorkflowDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [formLoading, setFormLoading] = useState(false);
 
@@ -44,7 +37,7 @@ export default function StartFormPage() {
     async function fetchWorkflow() {
       try {
         const { data } = await axios.post(service_detail_api, { id: workflowId });
-        const wf: WorkflowDetail = data.workflow;
+        const wf: IWorkflowDetail = data.workflow;
         setWorkflow(wf);
 
         // ✅ Initialize inputData with default values
@@ -91,7 +84,7 @@ export default function StartFormPage() {
     }));
   };
 
-  const handleOAuth2Connect = async (cred) => {
+  const handleOAuth2Connect = async (cred:IRequiredCredential) => {
     try {
       // 1️⃣ Dynamic scopes from the credential object
       const scopesParam = encodeURIComponent((cred.scopes || []).join(" "));
@@ -215,7 +208,7 @@ export default function StartFormPage() {
         transition={{ duration: 0.8 }}
         className="text-center max-w-2xl mx-auto mb-16"
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-white">
           Start {workflow?.name}
         </h1>
         <p className="mt-4 text-white/80 text-lg md:text-xl">
@@ -271,7 +264,7 @@ export default function StartFormPage() {
             </div>
 
             <div className="grid grid-cols-1 m gap-4">
-              {(cred.fields || []).map((field: CredentialField, fIdx) => {
+              {(cred.fields || []).map((field: ICredentialField, fIdx) => {
                 const fieldValue = credentialsData[cred.service]?.[field.name] || "";
                 if (field.disabled) {
                   return

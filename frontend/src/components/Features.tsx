@@ -51,9 +51,9 @@ export default function Features() {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-4xl md:text-5xl font-bold text-left bg-gradient-to-r from-white to-secondary bg-clip-text text-transparent"
+        className="text-4xl md:text-5xl font-bold text-left text-white"
       >
-        Why Choose Mate Mind ?
+        Why Choose Loop Axis ?
       </motion.h2>
 
       <motion.div

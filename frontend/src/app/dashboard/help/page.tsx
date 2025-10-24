@@ -9,8 +9,8 @@ export default function HelpSupport() {
     {
       icon: <FiMail size={28} />,
       title: "Email Us",
-      desc: '"support@Mate Mind .com" par hamesha available.',
-      href: "mailto:support@Mate Mind .com",
+      desc: '"support@Loop Axis .com" par hamesha available.',
+      href: "mailto:support@Loop Axis .com",
     },
     {
       icon: <FiPhone size={28} />,

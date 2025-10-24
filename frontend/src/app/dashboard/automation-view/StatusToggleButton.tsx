@@ -33,7 +33,7 @@ export default function StatusToggleButton({ instanceId, currentStatus, onUpdate
       if (onUpdate) onUpdate(newStatus);
     } catch (err) {
       console.error("Failed to update status:", err);
-      toast.error(err.response.data.message)
+     toast.error((err as any)?.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

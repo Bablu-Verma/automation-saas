@@ -2,6 +2,7 @@
 
 import { RootState } from "@/redux-store/redux_store";
 import { IUser } from "@/types";
+import Image from "next/image";
 import Link from "next/link"
 import { FiFacebook, FiTwitter, FiLinkedin, FiMail } from "react-icons/fi"
 import { useSelector } from "react-redux";
@@ -24,7 +25,7 @@ export default function Footer() {
 
         {/* Brand Section */}
         <div>
-          <h1 className="text-2xl font-bold text-white">⚡Mate Mind </h1>
+          <Link className="" href='/'><Image src='/loop_axis.png' className="w-auto h-auto" width={275} height={100} alt="logo" /> </Link>
           <p className="mt-4 text-sm text-gray-400">
             Automate your work, save time, and focus on what matters most.
           </p>
@@ -32,7 +33,7 @@ export default function Footer() {
             <a href="#" className="hover:text-primary"><FiFacebook size={20} /></a>
             <a href="#" className="hover:text-primary"><FiTwitter size={20} /></a>
             <a href="#" className="hover:text-primary"><FiLinkedin size={20} /></a>
-            <a href="mailto:info@Mate Mind .com" className="hover:text-primary"><FiMail size={20} /></a>
+            <a href="mailto:info@Loop Axis .com" className="hover:text-primary"><FiMail size={20} /></a>
           </div>
         </div>
 
@@ -59,7 +60,7 @@ export default function Footer() {
             {
               service.slice(0, 5).map((item, i) => {
                 return (
-                  <li key={i}><Link href={`/services/view?id=${item._id}`} className="hover:text-primary line-clamp-1">{item.name}</Link></li>
+                  <li key={i}><Link href={`/services/view?id=${item.slug}`} className="hover:text-primary line-clamp-1">{item.name}</Link></li>
                 )
               })
             }
@@ -91,7 +92,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-700 mt-10 py-6 text-center text-sm text-gray-400">
-        © {new Date().getFullYear()} Mate Mind . All rights reserved.
+        © {new Date().getFullYear()} Loop Axis . All rights reserved.
       </div>
     </footer>
   )

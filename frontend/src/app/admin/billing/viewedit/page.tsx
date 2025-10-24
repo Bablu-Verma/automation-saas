@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
-import { FiSave, FiDownload, FiList } from "react-icons/fi";
+import { FiSave, FiList } from "react-icons/fi";
 import { admin_get_payment_dtails_api, admin_payment_edit_api } from "@/api";
 import toast from "react-hot-toast";
 import LoadingSpiner from "../../_components/LoadingSpiner";
 import Link from "next/link";
+import { ILogItem, IPaymentDetails } from "@/types";
 
 interface PaymentFormData {
   paymentMethod: string;
@@ -17,49 +18,15 @@ interface PaymentFormData {
   note: ''
 }
 
-interface PaymentDetails {
-  _id: string;
-  orderId: string;
-  amountDetails: {
-    totalAmount: number;
-    baseAmount: number;
-    discountAmount: number;
-    taxAmount: number;
-  };
-  currency: string;
-  paymentMethod: string;
-  status: string;
-  createdAt: string;
-  user: {
-    name: string;
-    email: string;
-    _id: string;
-  };
-  instanceId: {
-    instanceName: string;
-    _id: string;
-  };
-  subscriptionMonths: number;
-  period: {
-    startDate: string;
-    endDate: string;
-  };
-  planDetails: {
-    name: string;
-    duration: number;
-    price: number;
-    discountPercentage: number;
-  };
-  Log: []
-}
+
 
 export default function PaymentUpdatePage() {
   const searchParams = useSearchParams();
   const paymentId = searchParams.get("id");
-  const router = useRouter();
+
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails | null>(null);
+  const [paymentDetails, setPaymentDetails] = useState<IPaymentDetails | null>(null);
   const [formData, setFormData] = useState<PaymentFormData>({
     paymentMethod: "",
     status: "pending",
@@ -100,7 +67,7 @@ export default function PaymentUpdatePage() {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -145,16 +112,12 @@ export default function PaymentUpdatePage() {
   }
 };
 
-  const handleDownloadInvoice = () => {
-    if (!paymentDetails) return;
-    toast.success("Downloading invoice...");
-  
-  };
 
   useEffect(() => {
     if (paymentId) {
       fetchPaymentDetails();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentId, token]);
 
   if (loading) return <LoadingSpiner />;
@@ -284,7 +247,7 @@ export default function PaymentUpdatePage() {
 
           {paymentDetails.Log && paymentDetails.Log.length > 0 ? (
             <div className="space-y-2">
-              {paymentDetails.Log.map((item, i) => (
+              {paymentDetails.Log.map((item:ILogItem, i) => (
                 <div key={i} className="border-b border-gray-200 pb-2 last:border-b-0">
                   <div className="flex justify-between items-center mb-1">
                     <span className="font-medium text-gray-800">{item.status}</span>
@@ -373,14 +336,7 @@ export default function PaymentUpdatePage() {
                 Go to List
               </Link>
 
-              <button
-                type="button"
-                onClick={handleDownloadInvoice}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition flex items-center gap-2 text-sm"
-              >
-                <FiDownload size={16} />
-                Download Invoice
-              </button>
+             
             </div>
 
             <div className="flex gap-3 ml-auto">

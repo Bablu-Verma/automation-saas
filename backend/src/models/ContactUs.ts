@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
+import { IContact } from '../types/types';
 
 const ContactSchema = new mongoose.Schema(
   {
@@ -41,4 +42,6 @@ const ContactSchema = new mongoose.Schema(
 );
 
 // Prevent OverwriteModelError in dev hot-reloads
-export default mongoose.models.Contact || mongoose.model("Contact", ContactSchema);
+ const Contact = mongoose.model<IContact>("Contact", ContactSchema);
+
+ export default Contact

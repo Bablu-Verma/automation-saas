@@ -32,7 +32,8 @@ export function RequiredCredentialForm({
       schemaCache[credentialType] = properties;
       return properties;
     } catch (error) {
-      toast.error("Error fetching credential schema");
+      toast.error("Error fetching credential schema", );
+      console.log(error)
       return {};
     }
   }

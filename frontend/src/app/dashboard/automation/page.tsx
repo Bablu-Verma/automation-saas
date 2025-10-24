@@ -10,6 +10,7 @@ import { RootState } from "@/redux-store/redux_store";
 import Link from "next/link";
 import Pagination from "@/components/Pagination";
 import LoadingSpiner from "@/app/admin/_components/LoadingSpiner";
+import { FaPager } from "react-icons/fa";
 
 export type AutomationInstance__ = {
   _id: string;
@@ -18,6 +19,7 @@ export type AutomationInstance__ = {
   executionCount: number;
   systemStatus: string;
   masterWorkflow: string;
+  slug: string;
   n8nWorkflowId:string;
   createdAt: string;
   updatedAt: string;
@@ -37,6 +39,7 @@ export default function AutomationInstances() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [error, setError] = useState(false)
 
   const token = useSelector((state: RootState) => state.user.token);
 
@@ -57,7 +60,9 @@ export default function AutomationInstances() {
         );
         setInstances(data.automations);
         setTotalPages(data.pagination.totalPages);
+        setError(false)
       } catch (err) {
+        setError(true)
         console.error("Failed to fetch automations:", err);
       } finally {
         setLoading(false);
@@ -66,7 +71,6 @@ export default function AutomationInstances() {
     fetchAutomation();
   }, [token, page]);
 
-  // console.log(instances)
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -94,6 +98,12 @@ export default function AutomationInstances() {
     return (
      <LoadingSpiner />
     );
+
+    if(error) return  <div className="text-center py-12">
+          <FaPager className="mx-auto text-gray-400 mb-4" size={48} />
+          <h3 className="text-xl font-semibold mb-2">No Automation found</h3>
+          <p className="text-gray-400">Create Some error plese Refrash Again.</p>
+        </div>
 
   return (
     <div className="max-w-7xl mx-auto pb-28 text-white px-6">
@@ -161,7 +171,7 @@ export default function AutomationInstances() {
 
             <div className="flex gap-3">
               <Link
-                href={`/services/view?id=${inst.masterWorkflow}`}
+                href={`/services/view?id=${inst.slug}`}
                 className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-secondary transition"
               >
                 View

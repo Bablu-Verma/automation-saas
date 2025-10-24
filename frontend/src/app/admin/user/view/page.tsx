@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import { admin_user_details_api } from "@/api";
 import LoadingSpiner from "../../_components/LoadingSpiner";
-import Link from "next/link";
+
 
 interface UserDetails {
   _id: string;
@@ -69,6 +69,7 @@ export default function UserDetailsPage() {
 
   useEffect(() => {
     fetchUserDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, token]);
 
   if (loading) return <LoadingSpiner />;

@@ -189,14 +189,12 @@ export default function BillingRequests() {
         <div className="text-center py-12">
           <FiCreditCard className="mx-auto text-gray-400 mb-4" size={48} />
           <h3 className="text-xl font-semibold mb-2">No payments found</h3>
-          <p className="text-gray-400">You haven't made any payments yet.</p>
+          <p className="text-gray-400">You haven t made any payments yet.</p>
         </div>
       ) : (
         <>
           <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {payments.map((payment, i) => {
-
-
+            {payments.map((payment) => {
               return (
                 <Link
                   key={payment._id}

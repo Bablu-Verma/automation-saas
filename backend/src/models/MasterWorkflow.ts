@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
+import { IMasterWorkflow } from "../types/types";
 const { Schema } = mongoose;
 
 const MasterWorkflowSchema = new Schema({
@@ -59,5 +60,7 @@ const MasterWorkflowSchema = new Schema({
 
 }, { timestamps: true });
 
-export default mongoose.model("MasterWorkflow", MasterWorkflowSchema);
+const MasterWorkflow = mongoose.model<IMasterWorkflow>("MasterWorkflow", MasterWorkflowSchema);
+
+export default MasterWorkflow;
 
