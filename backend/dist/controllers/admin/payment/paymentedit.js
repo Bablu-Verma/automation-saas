@@ -51,7 +51,7 @@ const updatePaymentForAdmin = async (req, res) => {
             });
         }
         // Fetch payment
-        const payment = await Payment_1.default.findById(id);
+        const payment = await Payment_1.default.findById(id).populate('instanceId', 'instanceName');
         if (!payment) {
             return res.status(404).json({ success: false, message: "Payment not found." });
         }

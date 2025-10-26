@@ -29,7 +29,7 @@ export default function HomePage() {
      
       <Services />
       <section className="pt-28 px-6 max-w-7xl mx-auto relative">
-        <h2 className="text-4xl md:text-5xl font-bold text-center text-white">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-white">
           How It Works
         </h2>
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -61,7 +61,7 @@ export default function HomePage() {
       <AppIntegrationSlider />
 
  <section className="pt-28 px-6 max-w-7xl mx-auto relative  text-center">
-      <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r text-white">
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r text-white">
         Awards & Recognition
       </h2>
 

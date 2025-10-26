@@ -21,7 +21,7 @@ export default function FAQSection() {
 
   return (
     <section className="pt-28 px-6 max-w-7xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-bold text-center text-white">
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-white">
         Frequently Asked Questions
       </h2>
       <p className="mt-4 text-center text-white/70 max-w-2xl mx-auto text-lg">

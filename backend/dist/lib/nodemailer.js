@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.email_transporter = exports.sender_email = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
-exports.sender_email = `loopaxis@support.in`;
+exports.sender_email = `loopaxisautomation@gmail.com`;
 exports.email_transporter = nodemailer_1.default.createTransport({
-    host: "smtp.ethereal.email",
+    host: "smtp-relay.brevo.com",
     port: 587,
     secure: false,
     auth: {

@@ -83,9 +83,9 @@ export default function Footer() {
         <div>
           <h2 className="text-lg font-semibold text-white mb-4">Contact</h2>
           <ul className="space-y-2 text-sm">
-            <li>Email: <a href="mailto:info@tasktantra.com" className="hover:text-primary">info@tasktantra.com</a></li>
-            <li>Phone: <a href="tel:+910000000000" className="hover:text-primary">+91 00000 00000</a></li>
-            <li>Address: 123, Tech Street, Bangalore</li>
+            <li>Email: <a href="mailto:info@tasktantra.com" className="hover:text-primary">{process.env.NEXT_PUBLIC_EMAIL}</a></li>
+            <li>Phone: <a href="tel:+910000000000" className="hover:text-primary">{process.env.NEXT_PUBLIC_NUMBER}</a></li>
+            <li>Noida Sector 121, India - 201309</li>
           </ul>
         </div>
       </div>

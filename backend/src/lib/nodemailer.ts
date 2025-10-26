@@ -1,10 +1,10 @@
 import nodemailer from 'nodemailer';
 
 
-export const sender_email = `loopaxis@support.in`
+export const sender_email = `loopaxisautomation@gmail.com`
 
 export const email_transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
+  host: "smtp-relay.brevo.com",
   port: 587,
   secure: false, 
   auth: {

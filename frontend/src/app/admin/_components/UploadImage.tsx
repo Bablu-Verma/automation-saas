@@ -48,8 +48,7 @@ const UploadImageGetLink = () => {
       });
 
       toast.success("Image uploaded successfully");
-
-      setImgLink(data.filePath);
+      setImgLink(data.imageUrl);
     } catch (error) {
       console.log(error)
       if (axios.isAxiosError(error)) {
@@ -123,7 +122,7 @@ const UploadImageGetLink = () => {
           <div className="flex items-center justify-start gap-5">
             <button
               onClick={() => {
-                navigator.clipboard.writeText(process.env.NEXT_PUBLIC_BACKEND_BASE_URL+imgLink);
+                navigator.clipboard.writeText(imgLink);
                 toast.success("Link copied to clipboard!");
               }}
               className="text-base rounded-full bg-gray-200 hover:bg-primary px-8 py-1 "

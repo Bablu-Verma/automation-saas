@@ -178,21 +178,21 @@ export default function ContactClient() {
               <FiMail className="text-primary text-3xl mt-1" />
               <div>
                 <h4 className="font-semibold text-xl text-white">Email</h4>
-                <p className="text-white/80">support@Loop Axis .com</p>
+                <p className="text-white/80">{process.env.NEXT_PUBLIC_EMAIL} </p>
               </div>
             </div>
             <div className="bg-white/10 backdrop-blur-lg p-6 rounded-3xl shadow-lg flex items-start gap-4">
               <FiPhone className="text-primary text-3xl mt-1" />
               <div>
                 <h4 className="font-semibold text-xl text-white">Phone</h4>
-                <p className="text-white/80">+91 98765 43210</p>
+                <p className="text-white/80">{process.env.NEXT_PUBLIC_NUMBER}</p>
               </div>
             </div>
             <div className="bg-white/10 backdrop-blur-lg p-6 rounded-3xl shadow-lg flex items-start gap-4">
               <FiMapPin className="text-primary text-3xl mt-1" />
               <div>
                 <h4 className="font-semibold text-xl text-white">Address</h4>
-                <p className="text-white/80">123 Loop Axis  Street, Bangalore, India</p>
+                <p className="text-white/80">Noida Sector 121, India - 201309</p>
               </div>
             </div>
 

@@ -42,13 +42,13 @@ export default function ServicesClientPage({ initialWorkflows }: ServicesClientP
   };
 
   return (
-    <section className="pt-28 px-6 max-w-7xl mx-auto">
+    <section className="pt-28  max-w-7xl mx-auto">
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center mb-16"
+        className="text-center px-6 mb-16"
       >
         <h1 className="text-4xl md:text-5xl font-extrabold text-white">
           Our Services
@@ -59,7 +59,7 @@ export default function ServicesClientPage({ initialWorkflows }: ServicesClientP
       </motion.div>
 
       {/* Services Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 px-6 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {workflows.map((service, i) => (
           <motion.div
             key={i}

@@ -38,7 +38,7 @@ export default function AboutUs() {
           className="flex-1 flex flex-col justify-between"
         >
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
               About Loop Axis 
             </h2>
 

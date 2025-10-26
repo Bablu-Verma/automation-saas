@@ -33,12 +33,12 @@ export default function HomeHero() {
        <div className="absolute top-20  w-96 h-64 bg-gradient-to-tr from-primary/40 to-secondary/30 rounded-full blur-3xl -z-10"></div>
 
       {/* Hero Content */}
-      <div className="text-center max-w-3xl pb-10 px-6">
+      <div className="text-center w-full max-w-3xl pb-10 px-4 sm:px-6">
         <motion.h1
           initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-5xl md:text-7xl font-extrabold tracking-tight relative z-10"
+          className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-wraps tracking-tight relative z-10"
         >
           Automate. Scale. Grow.
         </motion.h1>
@@ -69,7 +69,7 @@ export default function HomeHero() {
                 transition={{ duration: 0.6 }}
                 className="flex items-center justify-center  gap-4 bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl shadow-lg border border-white/20 hover:scale-101 transition-transform"
               >
-                <span className="text-secondary">{item.icon}</span>
+                <span className="text-primary">{item.icon}</span>
                 <p className="text-lg md:text-xl text-white/90">{item.text}</p>
               </motion.div>
             </SwiperSlide>

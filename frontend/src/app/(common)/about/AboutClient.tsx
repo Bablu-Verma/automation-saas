@@ -11,13 +11,13 @@ import Link from "next/link"
 
 export default function AboutUsClinet() {
     return (
-        <section className="relative pt-28 px-6 max-w-7xl mx-auto">
+        <section className="relative pt-28  max-w-7xl mx-auto">
             {/* Hero */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="text-center mb-16"
+                className="text-center mb-16 px-6"
             >
                 <h1 className="text-4xl md:text-5xl font-extrabold text-white">
                     About Loop Axis 
@@ -28,7 +28,7 @@ export default function AboutUsClinet() {
             </motion.div>
 
             {/* Image + Text */}
-            <div className="flex flex-col lg:flex-row items-start gap-12">
+            <div className="flex flex-col px-4 md:px-6 lg:flex-row items-start gap-12">
                 {/* LEFT STICKY SIDEBAR */}
                 <div className="w-full lg:w-1/2 lg:sticky lg:top-10 self-start">
                     <motion.div

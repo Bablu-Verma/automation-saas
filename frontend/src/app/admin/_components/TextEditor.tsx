@@ -187,9 +187,9 @@ const TiptapEditor: React.FC<{
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("data=",data)
-        if (data.filePath) {
-          editor.chain().focus().setImage({ src: process.env.NEXT_PUBLIC_BACKEND_BASE_URL +data.filePath }).run();
+        // console.log("data=",data)
+        if (data.success) {
+          editor.chain().focus().setImage({ src:data.imageUrl }).run();
         } else {
           toast.error("Failed to upload image");
 

@@ -5,7 +5,7 @@ import Payment from "../../../models/Payment";
 import AutomationInstance from "../../../models/AutomationInstance";
 import { toggleN8nWorkflow } from "../../../lib/_n8n_helper";
 import { sendPaymentStatusEmail } from "../../../email/sendPaymentStatusEmail";
-import { IUser } from "../../../types/types";
+import { IAutomationInstance, IUser } from "../../../types/types";
 
 // ✅ Update payment controller (POST)
 export const updatePaymentForAdmin = async (req: AuthenticatedRequest, res: Response) => {
@@ -55,7 +55,7 @@ export const updatePaymentForAdmin = async (req: AuthenticatedRequest, res: Resp
     }
 
     // Fetch payment
-    const payment = await Payment.findById(id);
+    const payment = await Payment.findById(id).populate<{instanceId:IAutomationInstance}>('instanceId', 'instanceName');
     if (!payment) {
       return res.status(404).json({ success: false, message: "Payment not found." });
     }
