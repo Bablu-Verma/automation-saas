@@ -16,7 +16,6 @@ const userProfile_1 = __importDefault(require("../controllers/frontend/dashboard
 const updateUser_1 = __importDefault(require("../controllers/frontend/dashboard/user/updateUser"));
 const deleteRequest_1 = __importDefault(require("../controllers/frontend/dashboard/user/deleteRequest"));
 const Home_1 = require("../controllers/frontend/public/Home");
-const serviceDetails_1 = require("../controllers/frontend/public/service/serviceDetails");
 const addMasterWorkflow_1 = require("../controllers/admin/master-workflow/addMasterWorkflow");
 const listMasterWorkflows_1 = require("../controllers/admin/master-workflow/listMasterWorkflows");
 const editMasterWorkflow_1 = require("../controllers/admin/master-workflow/editMasterWorkflow");
@@ -53,6 +52,7 @@ const execution_1 = require("../controllers/frontend/dashboard/execution");
 const dashboard_1 = require("../controllers/frontend/dashboard/dashboard");
 const adminDashboard_1 = require("../controllers/admin/adminDashboard");
 const invoice_download_1 = require("../controllers/frontend/dashboard/payment/invoice-download");
+const getServiceDetail_1 = require("../controllers/frontend/public/service/getServiceDetail");
 const route = express_1.default.Router();
 const base = '/v1';
 // image upload by admin 
@@ -74,7 +74,7 @@ route.post(base + '/admin/user/details', loginCheck_1.loginCheck, getUsersDetail
 route.post(base + '/admin/user/update', loginCheck_1.loginCheck, updateUserByAdmin_1.updateUserByAdmin);
 // Service
 route.post(base + '/service/list', listService_1.listService);
-route.post(base + '/service/details', serviceDetails_1.getServiceDetail);
+route.post(base + '/service/details', getServiceDetail_1.getServiceDetail);
 // master workflow 
 route.post(base + '/admin/master-workflow/create', loginCheck_1.loginCheck, addMasterWorkflow_1.addMasterWorkflow);
 route.post(base + '/admin/master-workflow/list', loginCheck_1.loginCheck, listMasterWorkflows_1.listMasterWorkflows);

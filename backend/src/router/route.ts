@@ -11,7 +11,7 @@ import getUserProfile from '../controllers/frontend/dashboard/user/userProfile';
 import updateUserProfile from '../controllers/frontend/dashboard/user/updateUser';
 import AccountDeleteRequest from '../controllers/frontend/dashboard/user/deleteRequest';
 import { listHomeService } from '../controllers/frontend/public/Home';
-import { getServiceDetail } from '../controllers/frontend/public/service/serviceDetails';
+
 import { addMasterWorkflow } from '../controllers/admin/master-workflow/addMasterWorkflow';
 import { listMasterWorkflows } from '../controllers/admin/master-workflow/listMasterWorkflows';
 import { editMasterWorkflow } from '../controllers/admin/master-workflow/editMasterWorkflow';
@@ -48,6 +48,7 @@ import { getUserExecutions } from '../controllers/frontend/dashboard/execution';
 import { getUserDashboard } from '../controllers/frontend/dashboard/dashboard';
 import { getAdminDashboard } from '../controllers/admin/adminDashboard';
 import { InvoiceDownload } from '../controllers/frontend/dashboard/payment/invoice-download';
+import { getServiceDetail } from '../controllers/frontend/public/service/getServiceDetail';
 
 
 
