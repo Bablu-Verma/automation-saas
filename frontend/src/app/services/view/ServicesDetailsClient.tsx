@@ -32,7 +32,7 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
       toast.error("You need to login before getting started 👋");
       return router.push("/login");
     }
-    router.push(`/dashboard/start-form?id=${workflow._id}`);
+    router.push(`/dashboard/start-form?id=${workflow.slug}`);
   };
 
   return (

@@ -99,6 +99,7 @@ export type IWorkflowDetail = {
   name: string;
   description: string;
   keyword: string[];
+  slug:string;
   pricePerMonth: number;
   currency: string;
   isPublished: "ACTIVE" | "PAUSE";

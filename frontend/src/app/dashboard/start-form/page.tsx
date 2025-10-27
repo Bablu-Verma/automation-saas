@@ -89,7 +89,7 @@ export default function StartFormPage() {
       // 1️⃣ Dynamic scopes from the credential object
       const scopesParam = encodeURIComponent((cred.scopes || []).join(" "));
 
-      console.log('scopesParam', scopesParam)
+      // console.log('scopesParam', scopesParam)
 
       // 2️⃣ Fetch OAuth URL from backend, pass scopes
       const response = await axios.get(
@@ -167,7 +167,7 @@ export default function StartFormPage() {
     }
 
     const payload = {
-      workflowId,
+      workflowId:workflow?._id,
       instanceName,
       inputs: Object.entries(inputData).map(([key, value]) => ({ key, value })),
       credentials: credentialsData
