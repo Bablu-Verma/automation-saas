@@ -199,7 +199,7 @@ export const payment_request_success_email_admin_notify = async (
 
     const info = await email_transporter.sendMail({
       from: `LoopAxis System <${sender_email}>`,
-      to: "babluverma@gmail.com", 
+      to: `${process.env.OWNER_EMAIL}`, 
       subject,
       html,
     });

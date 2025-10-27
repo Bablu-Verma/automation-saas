@@ -6,6 +6,7 @@ import connectDB from './config/db';
 import cors from 'cors';
 import route from './router/route';
 import OAuthRouter from './lib/OAuth2';
+import "./cron/cron";
 
 connectDB();
 
