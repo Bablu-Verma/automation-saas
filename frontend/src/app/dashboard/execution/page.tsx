@@ -62,13 +62,13 @@ export default function ExecutionRequests() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "success":
-        return <FiCheckCircle className="text-green-400" size={22} />
+        return <FiCheckCircle className="text-green-400" size={16} />
       case "failed":
-        return <FiXCircle className="text-red-400" size={22} />
+        return <FiXCircle className="text-red-400" size={16} />
       case "running":
-        return <FiClock className="text-yellow-400" size={22} />
+        return <FiClock className="text-yellow-400" size={16} />
       default:
-        return <FiPlayCircle size={22} />
+        return <FiPlayCircle size={16} />
     }
   }
 
@@ -120,19 +120,19 @@ export default function ExecutionRequests() {
         </div>
       ) : (
         <>
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
             {executions.map((exec, i) => (
               <div
                 key={exec.id || i}
-                className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-white/10 hover:shadow-[0_0_20px_rgba(230,82,31,0.4)] transition"
+                className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl shadow-lg border border-white/10 hover:shadow-[0_0_20px_rgba(230,82,31,0.4)] transition"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-3 rounded-full bg-primary/20">
+                    <div className="">
                       {getStatusIcon(exec.status)}
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold">{exec.instanceName || "Unnamed Service"}</h3>
+                      <h3 className="text-sm font-semibold">{exec.instanceName || "Unnamed Service"}</h3>
                     </div>
                   </div>
                   <span className={`px-3 py-1 text-xs rounded-full font-semibold ${getStatusColor(exec.status)}`}>
@@ -142,7 +142,7 @@ export default function ExecutionRequests() {
 
                 <div className="space-y-2">
                  
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-gray-400 text-xs">
                     Started at: {exec.startedAt ? formatDate(exec.startedAt) : "-"}
                   </p>
                 </div>

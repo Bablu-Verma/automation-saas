@@ -32,23 +32,48 @@ background: linear-gradient(135deg, #1A237E 0%, #0D1B2A 40%, #E6521F 100%);
   background: linear-gradient(135deg, #000000 0%, #06202B 50%, #131D4F 100%);
   color: var(--light);
 }
+/* 🖱️ Custom cursor — visible only on md (768px) and above */
+@media (min-width: 768px) {
+  body {
+    cursor: none;
+  }
 
-/* 🖱️ Optional: Hide native cursor for custom cursor */
-body {
-  cursor: none;
+  .cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #E6521F; 
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+    z-index: 9999;
+  }
+
+  .cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: #E6521F;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+  }
 }
 
-/* Example for a custom cursor if you want it */
-.custom-cursor {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  position: fixed;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
+/* 📱 Mobile (<768px): show normal cursor / touch behavior */
+@media (max-width: 767px) {
+  body {
+    cursor: auto;
+  }
+  .cursor,
+  .cursor-dot {
+    display: none;
+  }
 }
+
+
 
 ::-moz-selection { /* Code for Firefox */
   color: #E6521F;
@@ -97,29 +122,6 @@ body {
 }
 
 
-/* Custom cursor */
-.cursor {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #E6521F; 
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease;
-  z-index: 9999;
-}
-
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: #E6521F;
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-}
 
 
 /* tip tap editor style  */

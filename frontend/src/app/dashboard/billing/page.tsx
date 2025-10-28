@@ -198,10 +198,8 @@ export default function BillingRequests() {
               return (
                 <Link
                   key={payment._id}
-                  href={`http://localhost:3000/dashboard/billing/view?id=${payment._id}`}
-                  className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-white/10 hover:shadow-[0_0_20px_rgba(230,82,31,0.4)] transition cursor-pointer"
-                  
-                >
+                  href={`/dashboard/billing/view?id=${payment._id}`}
+                  className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-white/10 hover:shadow-[0_0_20px_rgba(230,82,31,0.4)] transition cursor-pointer" >
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className="p-3 rounded-full bg-primary/20">

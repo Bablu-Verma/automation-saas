@@ -116,7 +116,7 @@ export default function ContactClient() {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-white/10 backdrop-blur-xl p-10 rounded-3xl shadow-xl flex flex-col gap-4"
+            className="bg-white/10 backdrop-blur-xl p-6 ms:p-10 rounded-3xl shadow-xl flex flex-col gap-3 "
           >
             <input
               type="text"

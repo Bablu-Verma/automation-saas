@@ -222,7 +222,7 @@ export default function StartFormPage() {
         initial={{ opacity: 0, x: -50 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}
-        className="bg-white/10 backdrop-blur-xl p-10 rounded-3xl shadow-xl m-auto max-w-3xl flex flex-col gap-6"
+        className="bg-white/10 backdrop-blur-xl p-6 sm:p-10 rounded-3xl shadow-xl m-auto max-w-3xl flex flex-col gap-6"
       >
         {/* Instance Name */}
         <div className="relative">
@@ -239,7 +239,7 @@ export default function StartFormPage() {
 
         {/* Dynamic Required Inputs */}
         {workflow?.requiredInputs?.filter(inp => inp.key).map((inp, idx) => (
-          <div key={idx} className="relative">
+          <div key={idx} className="relative p-3 sm:p-6">
             <input
               type="text"
               placeholder={inp.label}
@@ -254,7 +254,7 @@ export default function StartFormPage() {
         {workflow?.requiredCredentials?.filter(cred => cred.service).map((cred, idx) => (
           <div
             key={idx}
-            className="flex flex-col gap-4 bg-white/5 p-6 rounded-xl border border-white/20"
+            className="flex flex-col gap-4 bg-white/5 p-3 sm:p-6 rounded-xl border border-white/20"
           >
             <div className="flex items-center justify-between">
               <span className="text-white/90 font-semibold text-lg">

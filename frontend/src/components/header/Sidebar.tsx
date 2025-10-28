@@ -23,7 +23,6 @@ export default function Sidebar() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.user) as IUser | null;
 
-  const [isOpen, setIsOpen] = useState(false) // Mobile toggle
 
   const logOut_user = () => {
     setTimeout(() => {
@@ -35,26 +34,26 @@ export default function Sidebar() {
   return (
     <>
       {/* Hamburger button for mobile */}
-      <button 
+      {/* <button 
         className="md:hidden fixed top-16 left-4 z-10 p-2 bg-white/10 rounded-md text-white"
         onClick={() => setIsOpen(true)}
       >
         <FaBars size={24} />
-      </button>
+      </button> */}
 
       {/* Overlay */}
-      <div 
+      {/* <div 
         className={`fixed inset-0 bg-black/50 z-20 transition-opacity ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         onClick={() => setIsOpen(false)}
-      />
+      /> */}
 
       {/* Sidebar */}
       <aside className={`
-        fixed top-0 left-0 h-screen w-64 bg-white/5 backdrop-blur-lg p-6 pt-18 md:pt-6 flex flex-col
-        border-r border-white/20 z-30
-        transform transition-transform duration-300
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} 
-        md:translate-x-0 md:sticky md:flex
+     hidden md:flex
+  bg-white/5 backdrop-blur-lg p-6 pt-18 md:pt-6 flex-col
+  border-r border-white/20 h-screen
+  transform transition-transform duration-300
+  md:translate-x-0 md:sticky top-0
       `}>
         {/* Close button for mobile */}
         <div className="mb-8 flex justify-between items-center">
@@ -64,12 +63,7 @@ export default function Sidebar() {
           Dashboard
         </h2>
 
-          <button 
-          className="md:hidden  text-white" 
-          onClick={() => setIsOpen(false)}
-        >
-          <FaTimes size={20} />
-        </button>
+        
         </div>
 
         <nav className="flex flex-col gap-2 flex-1 overflow-auto">
@@ -82,7 +76,7 @@ export default function Sidebar() {
                   ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg"
                   : "text-white/70 hover:text-white hover:bg-white/10"
                 }`}
-              onClick={() => setIsOpen(false)} // close sidebar on mobile
+            
             >
               {link.icon}
               {link.label}
@@ -93,7 +87,7 @@ export default function Sidebar() {
             <Link
               href='/admin'
               className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-white/70 hover:text-white hover:bg-white/10"
-              onClick={() => setIsOpen(false)}
+        
             >
               <FaUikit size={18} />
               Admin
