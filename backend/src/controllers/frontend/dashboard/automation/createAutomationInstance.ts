@@ -6,6 +6,7 @@ import AutomationInstance from "../../../../models/AutomationInstance";
 import User from "../../../../models/User";
 import { getIndiaTimeFormatted } from "../../../../utils/dateformate";
 import {
+  extractTriggersFromNodes,
   getCredName,
   injectWorkflowCredentials,
   injectWorkflowInputs,
@@ -13,15 +14,26 @@ import {
 } from "../../../../lib/_n8n_helper";
 import slug from "slug";
 import { automation_create_success_email } from "../../../../email/automation_create_success_email";
-import { IMasterWorkflow } from "../../../../types/types";
+import util from 'util';
+import { autoSaveN8nWorkflow } from "../../../../lib/puppeteer_code_save_workflow";
+
 
 // Helper function to safely get credential name
+
+const wait = (ms: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 
 // Main controller
 export const createAutomationInstance = async (req: AuthenticatedRequest, res: Response) => {
   const createdN8nCredentialIds: string[] = [];
   let createdN8nWorkflowId: string | null = null;
+
+
+
+
+
 
   try {
     const { workflowId, instanceName, inputs, credentials } = req.body;
@@ -46,7 +58,7 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
     workflowJson = removeWebhookIds(workflowJson);
 
     // Inject inputs
-    let workflowWithInputs = injectWorkflowInputs(workflowJson, masterWorkflow.requiredInputs || [] , inputs);
+    let workflowWithInputs = injectWorkflowInputs(workflowJson, masterWorkflow.requiredInputs || [], inputs);
 
     // Handle credentials
     const credMap: Record<string, any> = {};
@@ -55,24 +67,39 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
       for (const [key, value] of Object.entries(creds as Record<string, any>)) {
         let resolvedValue = value;
+
+        // 🔹 1️⃣ Replace env vars (e.g., GOOGLE_CLIENT_ID → actual value)
         if (typeof value === "string" && /^[A-Z0-9_]+$/.test(value)) {
           if (process.env[value] !== undefined) {
             resolvedValue = process.env[value];
           }
         }
 
+        // 🔹 2️⃣ Convert common string types → native types
         if (typeof resolvedValue === "string") {
-          try {
-            const parsed = JSON.parse(resolvedValue);
-            if (typeof parsed === "object" && parsed !== null) {
-              resolvedValue = parsed;
+          const trimmed = resolvedValue.trim().toLowerCase();
+
+          // ✅ Convert "true" / "false" to booleans
+          if (trimmed === "true") {
+            resolvedValue = true;
+          } else if (trimmed === "false") {
+            resolvedValue = false;
+          } else {
+            // ✅ Try parsing JSON (for JSON objects or arrays)
+            try {
+              const parsed = JSON.parse(resolvedValue);
+              if (typeof parsed === "object" && parsed !== null) {
+                resolvedValue = parsed;
+              }
+            } catch {
+              // ignore parsing errors, keep as string
             }
-          } catch {
-          
           }
         }
+
         credentialsReadyToUse[key] = resolvedValue;
       }
+
 
       let n8nCredentialId = (creds as any).n8nCredentialId;
       const credType = masterWorkflow.requiredCredentials?.find(c => c.service === service)?.credentialType || service;
@@ -82,10 +109,11 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
         const credPayload = {
           name: `${instance_name_slug}_${user.email}_${service}_${Date.now()}`,
           type: credType,
-          data: credentialsReadyToUse,
+          data: credentialsReadyToUse
         };
 
-  
+        // console.log("credPayload", JSON.stringify(credPayload, null, 2));
+
         const credRes = await axios.post(`${process.env.N8N_API_URL}/api/v1/credentials`, credPayload, {
           headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY },
         });
@@ -96,6 +124,7 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
       } else {
         credMap[service] = { id: n8nCredentialId, name: getCredName(creds, service) || service };
+
       }
     }
 
@@ -103,9 +132,11 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
     const { meta, versionId, id, tags, pinData, active, ...allowedWorkflow } = workflowWithInputs;
 
+    const uniqueName = `${instance_name_slug}_${user.email}_${getIndiaTimeFormatted()}`;
+
     const newWorkflowJson = {
       ...allowedWorkflow,
-      name: `${instance_name_slug}_${user.email}_${getIndiaTimeFormatted()}`,
+      name: uniqueName,
     };
 
     const n8nResponse = await axios.post(`${process.env.N8N_API_URL}/api/v1/workflows`, newWorkflowJson, {
@@ -117,6 +148,24 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
     if (!createdN8nWorkflowId) throw new Error("n8n API did not return a workflow ID.");
 
+
+    await autoSaveN8nWorkflow(createdN8nWorkflowId)
+
+    const n8nGetJson = await axios.get(
+      `${process.env.N8N_API_URL}/api/v1/workflows/${createdN8nWorkflowId}`,
+      { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } }
+    );
+
+    // console.log(
+    //   "🧠 Full Workflow Data ==>",
+    //   util.inspect(n8nGetJson.data, { showHidden: false, depth: null, colors: true })
+    // );
+
+    await wait(1500);
+
+    const triggers = extractTriggersFromNodes(n8nGetJson.data.nodes);
+    // console.log("🚀 Extracted triggers:", triggers);
+
     // Save automation instance
     const automationInstance = new AutomationInstance({
       user: userId,
@@ -125,6 +174,8 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
       instanceName: instance_name_slug,
       isActive: "PAUSE",
       executionCount: 0,
+      userCredentialsId: createdN8nCredentialIds,
+      trigger: triggers,
     });
 
     if (!existingInstance) {
@@ -140,13 +191,15 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
     await automationInstance.save();
 
-   await automation_create_success_email(user.email, user.name,instance_name_slug )
+    await automation_create_success_email(user.email, user.name, instance_name_slug)
 
     return res.status(201).json({
       message: "Automation instance created successfully!",
       automation: automationInstance,
       success: true
     });
+
+
 
   } catch (err) {
     console.error("Error creating automation instance. Starting cleanup process...");
@@ -174,7 +227,7 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
     }
 
     const error = err as AxiosError;
-    console.error("Original Error Details:", error.response?.data ?? error.message);
+    console.error("Original Error Details:", error.response ? error.response.data : error.response);
 
     return res.status(500).json({
       message:

@@ -5,9 +5,9 @@ import { logout } from "@/redux-store/slice/userSlice"
 import { IUser } from "@/types"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { FaHome, FaUser, FaFileAlt, FaLifeRing, FaSignOutAlt, FaEnvelope, FaUikit, FaBars, FaTimes, FaPlayCircle } from "react-icons/fa"
+import { FaHome, FaUser, FaFileAlt, FaLifeRing, FaSignOutAlt, FaEnvelope, FaUikit, FaPlayCircle } from "react-icons/fa"
 import { useDispatch, useSelector } from "react-redux"
-import { useState } from "react"
+
 
 const links = [
   { href: "/dashboard", label: "Home", icon: <FaHome size={18} /> },

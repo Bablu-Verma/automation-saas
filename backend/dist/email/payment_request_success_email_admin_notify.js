@@ -193,7 +193,7 @@ const payment_request_success_email_admin_notify = async (amount, currency, requ
     `;
         const info = await nodemailer_1.email_transporter.sendMail({
             from: `LoopAxis System <${nodemailer_1.sender_email}>`,
-            to: "babluverma@gmail.com",
+            to: `${process.env.OWNER_EMAIL}`,
             subject,
             html,
         });

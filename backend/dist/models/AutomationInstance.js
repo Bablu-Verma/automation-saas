@@ -25,6 +25,10 @@ const AutomationInstanceSchema = new Schema({
         startTime: Date,
         endTime: Date,
     },
+    trigger: [{
+            type: String
+        }],
+    userCredentialsId: [String],
     executionCount: { type: Number, default: 0 },
     lastExecutedAt: { type: Date },
 }, { timestamps: true });

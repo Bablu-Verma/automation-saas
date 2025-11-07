@@ -13,12 +13,14 @@ import Link from "next/link";
 import StatusToggleButton from "./StatusToggleButton";
 import { TrialPeriodCircle } from "./TrialPeriodCircle";
 import LoadingSpiner from "@/app/admin/_components/LoadingSpiner";
+import { FaPager } from "react-icons/fa";
 
 export type AutomationDetail = {
   _id: string;
   instanceName: string;
   isActive: "RUNNING" | "PAUSE";
   executionCount: number;
+  trigger:string[],
   systemStatus: string;
   createdAt: string;
   updatedAt: string;
@@ -121,14 +123,16 @@ export default function AutomationDetailPage() {
 
   if (!automation)
     return (
-      <div className="h-[50vh] flex items-center justify-center text-red-400">
-        Automation not found.
-      </div>
+     <div className="text-center py-12">
+               <FaPager className="mx-auto text-gray-400 mb-4" size={48} />
+               <h3 className="text-xl font-semibold mb-2">No Automation found</h3>
+               <p className="text-gray-400">Create Some error plese Refrash Again.</p>
+             </div>
     );
 
   const statusConfig = getSystemStatusConfig(automation.systemStatus);
 
-  console.log(automation.periods)
+  // console.log(automation)
 
   return (
     <div className="max-w-4xl mx-auto pb-28 text-white px-6">
@@ -183,6 +187,25 @@ export default function AutomationDetailPage() {
           </div>
         </div>
 
+
+<div className="flex flex-wrap items-center gap-2 mb-8">
+  {automation.trigger && automation.trigger.length > 0 ? (
+    automation.trigger.map((trigger, index) => {
+    
+
+      return(
+      <span
+        key={index}
+        className="px-3 py-1 text-sm tracking-wider font-medium capitalize rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-sm"
+      >
+        {trigger}
+      </span>
+      )
+    })
+  ) : (
+    <span className="text-gray-400 text-sm italic">No triggers configured</span>
+  )}
+</div>
 
         {/* System Status Section */}
         <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700/50 mb-6">

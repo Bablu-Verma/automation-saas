@@ -9,7 +9,7 @@ import { RootState } from "@/redux-store/redux_store"
 import { IUser } from "@/types"
 import useTheme from "@/hooks/useTheam"
 import Image from "next/image"
-import { FaChartArea, FaChartBar, FaEnvelope, FaFileAlt, FaHome, FaLifeRing, FaPlayCircle, FaSignOutAlt, FaUikit, FaUser } from "react-icons/fa"
+import {  FaChartBar, FaEnvelope, FaFileAlt, FaHome, FaLifeRing, FaPlayCircle, FaSignOutAlt, FaUikit, FaUser } from "react-icons/fa"
 import { logout } from "@/redux-store/slice/userSlice"
 
 export default function Navbar() {
@@ -75,7 +75,7 @@ export default function Navbar() {
         className={`fixed top-0 left-0 w-full z-40 transition-transform duration-300 ${visible ? "translate-y-0" : "-translate-y-full"
           } ${atTop ? "bg-transparent" : "bg-dark/90 backdrop-blur-md shadow-md"}`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 ">
           <div className="flex justify-between h-18 items-center">
 
             {/* Logo */}

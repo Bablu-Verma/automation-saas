@@ -32,7 +32,8 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
       toast.error("You need to login before getting started 👋");
       return router.push("/login");
     }
-    router.push(`/dashboard/start-form?id=${workflow.slug}`);
+    // router.push(`/dashboard/start-form?id=${workflow.slug}`);
+    window.open(`/dashboard/start-form?id=${workflow.slug}`, '_blank');
   };
 
   return (
@@ -45,22 +46,22 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
         transition={{ duration: 0.8 }}
       >
         {/* Image */}
-        <div className="relative w-full lg:w-1/2 h-96 rounded-3xl overflow-hidden shadow-xl">
+        <div className="relative w-full lg:w-1/2 min-h-80 rounded-3xl overflow-hidden shadow-xl">
           <Image src={workflow.serviceImage || ""} alt={workflow.name} fill className="object-cover" />
         </div>
 
         {/* Info */}
         <div className="w-full lg:w-1/2 text-white flex flex-col gap-6">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white">{workflow.name}</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-white">{workflow.name}</h1>
           <p className="text-2xl md:text-3xl font-bold text-white">
             ₹{workflow.pricePerMonth}
-            <span className="text-lg font-medium text-white/80">/Month</span> 
+            <span className="text-lg font-medium text-white/80"> /Month</span> 
             <span className="text-lg font-medium text-white/80"> | Trial: {workflow.trialDays} days</span>
           </p>
 
           <button
             onClick={getstart}
-            className="mt-4 inline-block px-10 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-center font-semibold text-lg shadow-xl hover:shadow-xl transition-transform transform hover:-translate-y-1"
+            className="mt-4 inline-block max-w-[300px] px-10 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-center font-semibold text-lg shadow-xl hover:shadow-xl transition-transform transform hover:-translate-y-1"
           >
             Get Started
           </button>

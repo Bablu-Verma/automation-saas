@@ -47,12 +47,12 @@ export default function Services() {
  
 
   return (
-    <section className=" max-w-7xl pt-28 px-6  text-center m-auto">
+    <section className=" max-w-7xl pt-28 px-4 sm:px-6  text-center m-auto">
      <motion.h2
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-white"
+          className="text-2xl sm:text-3xl md:text-4xl font-bold text-white"
         >
           Our Services
         </motion.h2>

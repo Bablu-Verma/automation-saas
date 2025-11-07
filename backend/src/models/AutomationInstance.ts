@@ -6,7 +6,7 @@ const AutomationInstanceSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
     masterWorkflow: { type: Schema.Types.ObjectId, ref: "MasterWorkflow", required: true },
-    
+
     n8nWorkflowId: { type: String, required: true, index: true },
     instanceName: { type: String, required: true },
 
@@ -27,6 +27,12 @@ const AutomationInstanceSchema = new Schema(
       startTime: Date,
       endTime: Date,
     },
+
+    trigger: [{
+      type: String
+    }],
+
+    userCredentialsId: [String],
 
     executionCount: { type: Number, default: 0 },
     lastExecutedAt: { type: Date },

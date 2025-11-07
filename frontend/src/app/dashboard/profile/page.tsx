@@ -35,9 +35,10 @@ export default function UserProfile() {
         {/* Edit Profile Button */}
         <Link
           href="/dashboard/profile-edit"
+          title="Edit Profile"
           className="absolute top-6 right-6 bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-lg transition duration-300"
         >
-          <FiEdit2 /> Edit Profile
+          <FiEdit2 /> <span className='hidden sm:inline-block'>Edit Profile</span>
         </Link>
 
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">

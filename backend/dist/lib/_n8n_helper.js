@@ -9,6 +9,7 @@ exports.injectWorkflowCredentials = injectWorkflowCredentials;
 exports.removeWebhookIds = removeWebhookIds;
 exports.getCredName = getCredName;
 exports.toggleN8nWorkflow = toggleN8nWorkflow;
+exports.extractTriggersFromNodes = extractTriggersFromNodes;
 const axios_1 = __importDefault(require("axios"));
 let cachedSchemas = {};
 async function getCredentialSchema(credentialType) {
@@ -18,6 +19,18 @@ async function getCredentialSchema(credentialType) {
     // Otherwise, fetch from n8n API
     const res = await axios_1.default.get(`${process.env.N8N_API_URL}/api/v1/credentials/schema/${credentialType}`, { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } });
     return res.data.properties;
+}
+function removeCachedResultUrl(obj) {
+    if (!obj || typeof obj !== "object")
+        return;
+    for (const key in obj) {
+        if (key === "cachedResultUrl") {
+            delete obj[key];
+        }
+        else if (typeof obj[key] === "object") {
+            removeCachedResultUrl(obj[key]);
+        }
+    }
 }
 function injectWorkflowInputs(workflowJson, requiredInputs, inputs) {
     const workflowCopy = JSON.parse(JSON.stringify(workflowJson)); // deep clone to avoid mutation
@@ -32,6 +45,7 @@ function injectWorkflowInputs(workflowJson, requiredInputs, inputs) {
             const node = workflowCopy.nodes.find((n) => n.name === injection.node);
             if (!node)
                 continue;
+            removeCachedResultUrl(node);
             // Navigate to the nested field using dot notation
             const pathParts = injection.field.split('.');
             let target = node;
@@ -109,4 +123,22 @@ async function toggleN8nWorkflow(workflowId, activate = false) {
         console.error(`Failed to update n8n workflow ${workflowId}:`, err.response?.data || err.message);
         return false;
     }
+}
+// ✅ Helper function to extract triggers from nodes array
+function extractTriggersFromNodes(nodes) {
+    if (!nodes || !Array.isArray(nodes))
+        return [];
+    const triggerNodes = nodes.filter((node) => node?.type && (node.type.includes("Trigger") ||
+        node.type === "n8n-nodes-base.webhook" ||
+        node.type === "n8n-nodes-base.start"));
+    const triggers = [];
+    console.log("triggerNodes", triggerNodes);
+    for (const triggerNode of triggerNodes) {
+        let webhookId = triggerNode.webhookId ||
+            triggerNode.parameters?.webhookPath ||
+            triggerNode.parameters?.path;
+        let triggerType = triggerNode.type.split('.').pop();
+        triggers.push(`${triggerType}:${webhookId}`);
+    }
+    return triggers;
 }

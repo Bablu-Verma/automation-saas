@@ -38,8 +38,8 @@ type AppIntegrationSliderProps = {
 
 export default function AppIntegrationSlider({ apps = defaultApps }: AppIntegrationSliderProps) {
   return (
-    <section className="pt-28 px-6">
-      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-white">
+    <section className="pt-28 px-4 sm:px-6 max-w-7xl mx-auto">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-white">
         Integrates with 100+ Apps
       </h2>
 
@@ -55,7 +55,7 @@ export default function AppIntegrationSlider({ apps = defaultApps }: AppIntegrat
           768: { slidesPerView: 5, spaceBetween: 40 },
           1024: { slidesPerView: 6, spaceBetween: 50 },
         }}
-        className="mt-16 max-w-6xl mx-auto"
+        className="mt-16 "
       >
         {apps.map((app, i) => (
           <SwiperSlide key={i}>

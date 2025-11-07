@@ -45,7 +45,7 @@ export default function AboutUsClinet() {
                         />
                     </motion.div>
 
-                    <div className="flex pt-8 flex-col sm:flex-row justify-center lg:justify-start gap-4">
+                    <div className="flex pt-8 flex-row justify-center lg:justify-start gap-4">
                        <Link href="/services" className="inline-block px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl hover:from-secondary hover:to-primary transition duration-300" > Explore Services </Link> <Link href="/contact" className="inline-block px-8 py-3 rounded-full bg-white text-primary font-semibold shadow-lg hover:shadow-2xl hover:bg-primary hover:text-white transition duration-300" > Contact Us </Link>
                     </div>
                 </div>

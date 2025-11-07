@@ -11,6 +11,7 @@ const db_1 = __importDefault(require("./config/db"));
 const cors_1 = __importDefault(require("cors"));
 const route_1 = __importDefault(require("./router/route"));
 const OAuth2_1 = __importDefault(require("./lib/OAuth2"));
+require("./cron/cron");
 (0, db_1.default)();
 exports.app_ = (0, express_1.default)();
 exports.app_.use("/images", express_1.default.static("images"));

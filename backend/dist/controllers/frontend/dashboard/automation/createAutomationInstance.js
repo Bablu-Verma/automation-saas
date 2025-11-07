@@ -12,7 +12,11 @@ const dateformate_1 = require("../../../../utils/dateformate");
 const _n8n_helper_1 = require("../../../../lib/_n8n_helper");
 const slug_1 = __importDefault(require("slug"));
 const automation_create_success_email_1 = require("../../../../email/automation_create_success_email");
+const puppeteer_code_save_workflow_1 = require("../../../../lib/puppeteer_code_save_workflow");
 // Helper function to safely get credential name
+const wait = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+};
 // Main controller
 const createAutomationInstance = async (req, res) => {
     const createdN8nCredentialIds = [];
@@ -45,19 +49,33 @@ const createAutomationInstance = async (req, res) => {
             const credentialsReadyToUse = {};
             for (const [key, value] of Object.entries(creds)) {
                 let resolvedValue = value;
+                // 🔹 1️⃣ Replace env vars (e.g., GOOGLE_CLIENT_ID → actual value)
                 if (typeof value === "string" && /^[A-Z0-9_]+$/.test(value)) {
                     if (process.env[value] !== undefined) {
                         resolvedValue = process.env[value];
                     }
                 }
+                // 🔹 2️⃣ Convert common string types → native types
                 if (typeof resolvedValue === "string") {
-                    try {
-                        const parsed = JSON.parse(resolvedValue);
-                        if (typeof parsed === "object" && parsed !== null) {
-                            resolvedValue = parsed;
-                        }
+                    const trimmed = resolvedValue.trim().toLowerCase();
+                    // ✅ Convert "true" / "false" to booleans
+                    if (trimmed === "true") {
+                        resolvedValue = true;
                     }
-                    catch {
+                    else if (trimmed === "false") {
+                        resolvedValue = false;
+                    }
+                    else {
+                        // ✅ Try parsing JSON (for JSON objects or arrays)
+                        try {
+                            const parsed = JSON.parse(resolvedValue);
+                            if (typeof parsed === "object" && parsed !== null) {
+                                resolvedValue = parsed;
+                            }
+                        }
+                        catch {
+                            // ignore parsing errors, keep as string
+                        }
                     }
                 }
                 credentialsReadyToUse[key] = resolvedValue;
@@ -68,8 +86,9 @@ const createAutomationInstance = async (req, res) => {
                 const credPayload = {
                     name: `${instance_name_slug}_${user.email}_${service}_${Date.now()}`,
                     type: credType,
-                    data: credentialsReadyToUse,
+                    data: credentialsReadyToUse
                 };
+                // console.log("credPayload", JSON.stringify(credPayload, null, 2));
                 const credRes = await axios_1.default.post(`${process.env.N8N_API_URL}/api/v1/credentials`, credPayload, {
                     headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY },
                 });
@@ -83,9 +102,10 @@ const createAutomationInstance = async (req, res) => {
         }
         workflowWithInputs = (0, _n8n_helper_1.injectWorkflowCredentials)(workflowWithInputs, masterWorkflow.requiredCredentials || [], credMap);
         const { meta, versionId, id, tags, pinData, active, ...allowedWorkflow } = workflowWithInputs;
+        const uniqueName = `${instance_name_slug}_${user.email}_${(0, dateformate_1.getIndiaTimeFormatted)()}`;
         const newWorkflowJson = {
             ...allowedWorkflow,
-            name: `${instance_name_slug}_${user.email}_${(0, dateformate_1.getIndiaTimeFormatted)()}`,
+            name: uniqueName,
         };
         const n8nResponse = await axios_1.default.post(`${process.env.N8N_API_URL}/api/v1/workflows`, newWorkflowJson, {
             headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY },
@@ -94,6 +114,15 @@ const createAutomationInstance = async (req, res) => {
         createdN8nWorkflowId = n8nResponse.data.id;
         if (!createdN8nWorkflowId)
             throw new Error("n8n API did not return a workflow ID.");
+        await (0, puppeteer_code_save_workflow_1.autoSaveN8nWorkflow)(createdN8nWorkflowId);
+        const n8nGetJson = await axios_1.default.get(`${process.env.N8N_API_URL}/api/v1/workflows/${createdN8nWorkflowId}`, { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } });
+        // console.log(
+        //   "🧠 Full Workflow Data ==>",
+        //   util.inspect(n8nGetJson.data, { showHidden: false, depth: null, colors: true })
+        // );
+        await wait(1500);
+        const triggers = (0, _n8n_helper_1.extractTriggersFromNodes)(n8nGetJson.data.nodes);
+        // console.log("🚀 Extracted triggers:", triggers);
         // Save automation instance
         const automationInstance = new AutomationInstance_1.default({
             user: userId,
@@ -102,6 +131,8 @@ const createAutomationInstance = async (req, res) => {
             instanceName: instance_name_slug,
             isActive: "PAUSE",
             executionCount: 0,
+            userCredentialsId: createdN8nCredentialIds,
+            trigger: triggers,
         });
         if (!existingInstance) {
             automationInstance.systemStatus = "TRIAL";
@@ -147,7 +178,7 @@ const createAutomationInstance = async (req, res) => {
             }
         }
         const error = err;
-        console.error("Original Error Details:", error.response?.data ?? error.message);
+        console.error("Original Error Details:", error.response ? error.response.data : error.response);
         return res.status(500).json({
             message: "Failed to create automation due to a server error. Any partial setup has been automatically rolled back. Please try again.",
             success: false,

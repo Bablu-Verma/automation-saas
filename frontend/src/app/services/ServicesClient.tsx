@@ -8,6 +8,7 @@ import Features from "@/components/Features";
 import AppIntegrationSlider from "@/components/IntegratesWith";
 import NewsletterSection from "@/components/Newsletter";
 import { service_list_api } from "@/api";
+import CustomAutomationCTA from "@/components/CustomAutomationCTA";
 
 interface ServicesClientPageProps {
   initialWorkflows: any[];
@@ -42,7 +43,7 @@ export default function ServicesClientPage({ initialWorkflows }: ServicesClientP
   };
 
   return (
-    <section className="pt-28  max-w-7xl mx-auto">
+    <section className="pt-28  mx-auto">
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -59,7 +60,7 @@ export default function ServicesClientPage({ initialWorkflows }: ServicesClientP
       </motion.div>
 
       {/* Services Grid */}
-      <div className="grid grid-cols-1 px-6 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 px-6 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
         {workflows.map((service, i) => (
           <motion.div
             key={i}
@@ -84,6 +85,8 @@ export default function ServicesClientPage({ initialWorkflows }: ServicesClientP
           </button>
         </div>
       )}
+
+         <CustomAutomationCTA />
 
       <Features />
       <AppIntegrationSlider />

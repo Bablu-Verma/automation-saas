@@ -208,7 +208,7 @@ export default function StartFormPage() {
         transition={{ duration: 0.8 }}
         className="text-center max-w-2xl mx-auto mb-16"
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white">
+        <h1 className="text-2xl md:text-3xl font-extrabold text-white">
           Start {workflow?.name}
         </h1>
         <p className="mt-4 text-white/80 text-lg md:text-xl">
@@ -238,8 +238,9 @@ export default function StartFormPage() {
         </div>
 
         {/* Dynamic Required Inputs */}
-        {workflow?.requiredInputs?.filter(inp => inp.key).map((inp, idx) => (
-          <div key={idx} className="relative p-3 sm:p-6">
+        <div className="flex flex-col gap-4 bg-white/5 p-3 sm:p-6 rounded-xl border border-white/20">
+ {workflow?.requiredInputs?.filter(inp => inp.key).map((inp, idx) => (
+          <div key={idx} className="relative bg-white/5 ">
             <input
               type="text"
               placeholder={inp.label}
@@ -249,6 +250,8 @@ export default function StartFormPage() {
             />
           </div>
         ))}
+        </div>
+       
 
         {/* Dynamic Credentials */}
         {workflow?.requiredCredentials?.filter(cred => cred.service).map((cred, idx) => (

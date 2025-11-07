@@ -17,12 +17,17 @@ export async function getCredentialSchema(credentialType: string) {
 }
 
 
+function removeCachedResultUrl(obj: any) {
+  if (!obj || typeof obj !== "object") return;
 
-type SchemaField = {
-  type: 'string' | 'boolean' | 'json' | 'notice';
-  required?: boolean;
-};
-
+  for (const key in obj) {
+    if (key === "cachedResultUrl") {
+      delete obj[key];
+    } else if (typeof obj[key] === "object") {
+      removeCachedResultUrl(obj[key]);
+    }
+  }
+}
 
 
 export function injectWorkflowInputs(workflowJson: any, requiredInputs :IRequiredInput[], inputs: any[]) {
@@ -39,6 +44,9 @@ export function injectWorkflowInputs(workflowJson: any, requiredInputs :IRequire
     for (const injection of inputDef.inject || []) {
       const node = workflowCopy.nodes.find((n: any) => n.name === injection.node);
       if (!node) continue;
+
+       removeCachedResultUrl(node);
+
 
       // Navigate to the nested field using dot notation
       const pathParts = injection.field.split('.');
@@ -115,9 +123,6 @@ export function getCredName(creds: unknown, fallback: string) {
 
 
 
-
-
-
 export async function toggleN8nWorkflow(workflowId?: string, activate: boolean = false) {
   if (!workflowId) return;
 
@@ -142,6 +147,37 @@ export async function toggleN8nWorkflow(workflowId?: string, activate: boolean =
 }
 
 
+// ✅ Helper function to extract triggers from nodes array
+export function extractTriggersFromNodes(nodes: any[]): string[] {
+  if (!nodes || !Array.isArray(nodes)) return [];
+
+  const triggerNodes = nodes.filter((node: any) => 
+    node?.type && (
+      node.type.includes("Trigger") || 
+      node.type === "n8n-nodes-base.webhook" ||  
+      node.type === "n8n-nodes-base.start"     
+    )
+  );
 
 
+  const triggers: string[] = [];
 
+  console.log("triggerNodes",triggerNodes)
+  
+  for (const triggerNode of triggerNodes) {
+    let webhookId = triggerNode.webhookId ||
+                    triggerNode.parameters?.webhookPath ||
+                    triggerNode.parameters?.path 
+
+    let triggerType = triggerNode.type.split('.').pop();
+    
+    triggers.push(`${triggerType}:${webhookId}`);
+  }
+  
+
+  
+
+  return triggers;
+
+ 
+}

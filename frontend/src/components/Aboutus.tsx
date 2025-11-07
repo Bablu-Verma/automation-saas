@@ -8,7 +8,7 @@ export default function AboutUs() {
 
 
   return (
-    <section className="relative pt-28 px-6 max-w-7xl mx-auto">
+    <section className="relative pt-28 px-4 sm:px-6 max-w-7xl mx-auto">
       {/* Background Gradient Shapes */}
       <div className="absolute -top-32 -left-32 w-72 h-72 bg-gradient-to-tr from-primary/40 to-secondary/30 rounded-full blur-3xl -z-10"></div>
       <div className="absolute -bottom-32 -right-32 w-72 h-72 bg-gradient-to-tr from-secondary/40 to-primary/30 rounded-full blur-3xl -z-10"></div>
@@ -38,7 +38,7 @@ export default function AboutUs() {
           className="flex-1 flex flex-col justify-between"
         >
           <div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
               About Loop Axis 
             </h2>
 

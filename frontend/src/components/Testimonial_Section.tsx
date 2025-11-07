@@ -17,8 +17,8 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="pt-28 px-6 relative">
-      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-white">
+    <section className="pt-28 px-4 sm:px-6 relative max-w-7xl  mx-auto">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold  text-white">
         Hear From Our Happy Clients
       </h2>
 
@@ -26,7 +26,7 @@ export default function Testimonials() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.6 }}
-        className="mt-6 text-lg text-white/70 max-w-2xl text-center mx-auto"
+        className="mt-6 text-lg text-white/70 max-w-2xl"
       >
         Discover how businesses are saving time, boosting productivity, and scaling effortlessly with Loop Axis .
       </motion.p>
@@ -39,19 +39,19 @@ export default function Testimonials() {
         spaceBetween={10}
 
         breakpoints={{
-          640: { slidesPerView: 1, spaceBetween: 10 },
-          768: { slidesPerView: 2, spaceBetween: 15 },
-          1024: { slidesPerView: 2, spaceBetween: 20 },
+          640: { slidesPerView: 2, spaceBetween: 5 },
+          768: { slidesPerView: 3, spaceBetween: 5 },
+          1024: { slidesPerView: 4, spaceBetween: 5 },
         }}
-        className="mt-12 max-w-5xl mx-auto"
+        className="mt-12 "
       >
         {testimonials.map((t, i) => (
-          <SwiperSlide key={i} className="p-3">
+          <SwiperSlide key={i} className="p-2">
             <motion.div
               initial={{ opacity: 0, y: 0, scale: 0.97 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.6 }}
-              className="relative bg-white/10 backdrop-blur-xl p-10 rounded-3xl shadow-xl flex flex-col items-center text-center hover:scale-101 transition-transform duration-300"
+              className="relative bg-white/10 backdrop-blur-xl p-10 rounded-3xl  flex flex-col items-center text-center hover:scale-101 transition-transform duration-300"
             >
               {/* Client Image */}
               <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-gradient-to-r from-primary to-secondary">
@@ -64,7 +64,7 @@ export default function Testimonials() {
                 />
               </div>
 
-              <p className="italic text-white/80 text-lg md:text-xl max-w-xl">
+              <p className="italic font-normal text-white/80 text-lg md:text-xl max-w-xl">
                 “{t.text}”
               </p>
               <h4 className="mt-6 font-semibold text-white text-lg md:text-xl">

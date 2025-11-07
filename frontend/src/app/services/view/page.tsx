@@ -9,7 +9,7 @@ interface ServiceDetailsPageProps {
 }
 
 export default async function ServiceDetailsPage({ searchParams }: ServiceDetailsPageProps) {
-  const workflowId = searchParams.id;
+  const workflowId = searchParams?.id;
   let workflow: any = null;
 
   try {
@@ -24,7 +24,7 @@ export default async function ServiceDetailsPage({ searchParams }: ServiceDetail
 
 // Dynamic metadata
 export async function generateMetadata({ searchParams }: ServiceDetailsPageProps): Promise<Metadata> {
-  const workflowId = searchParams.id;
+  const workflowId = searchParams?.id;
   let workflow: any = null;
 
   try {

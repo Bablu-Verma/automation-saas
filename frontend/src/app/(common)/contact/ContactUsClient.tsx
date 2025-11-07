@@ -109,14 +109,14 @@ export default function ContactClient() {
           </p>
         </motion.div>
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Contact Form */}
           <motion.form
             onSubmit={handleSubmit}
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-white/10 backdrop-blur-xl p-6 ms:p-10 rounded-3xl shadow-xl flex flex-col gap-3 "
+            className="bg-white/10 backdrop-blur-xl p-6 ms:p-10 col-span-3 rounded-3xl shadow-xl flex flex-col gap-3 "
           >
             <input
               type="text"
@@ -124,15 +124,7 @@ export default function ContactClient() {
               placeholder="Full Name"
               value={form.name}
               onChange={handleChange}
-              className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-         <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={form.email}
-              onChange={handleChange}
-              className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-5 py-2 rounded-md bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
             />
              <input
               type="number"
@@ -140,15 +132,24 @@ export default function ContactClient() {
               placeholder="Phone Number"
               value={form.number}
               onChange={handleChange}
-              className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-5 py-2 rounded-md bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
             />
+          <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full px-5 py-2 rounded-md bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            
              <input
               type="text"
               name="subject"
               placeholder="Your Subject"
               value={form.subject}
               onChange={handleChange}
-              className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-5 py-2 rounded-md bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <textarea
               name="message"
@@ -156,12 +157,12 @@ export default function ContactClient() {
               rows={4}
               value={form.message}
               onChange={handleChange}
-              className="w-full px-5 py-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-5 py-2 rounded-md bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <button
               type="submit"
               disabled={loading}
-              className="px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition hover:from-secondary hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-3 rounded-full w-[250px] sm:w-[300px] mx-auto bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition hover:from-secondary hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Sending..." : "Send Message"}
             </button>
@@ -172,7 +173,7 @@ export default function ContactClient() {
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex flex-col gap-8"
+            className="flex flex-col col-span-2 gap-8"
           >
             <div className="bg-white/10 backdrop-blur-lg p-6 rounded-3xl shadow-lg flex items-start gap-4">
               <FiMail className="text-primary text-3xl mt-1" />

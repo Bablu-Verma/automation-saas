@@ -158,30 +158,28 @@ export default function AutomationInstances() {
               </span>
             </div>
 
-            <div className="flex items-center gap-2 text-gray-300 mb-2">
+           
+
+            <p className="text-gray-400 text-xs mb-4">
+              Created: {new Date(inst.createdAt).toLocaleString()}
+            </p>
+
+            <div className="flex gap-6 items-center justify-start">
+            
+              <Link
+                href={`/dashboard/automation-view?id=${inst._id}`}
+                className="px-4 py-2 rounded-full border border-white/30 text-white font-semibold hover:bg-white hover:text-primary transition"
+              >
+                Logs Detail
+              </Link>
+
+ <div className="flex items-center gap-2 text-gray-300 mb-2">
               <FiActivity className="text-blue-400" />{" "}
               <span className="text-sm">
                 Executions: {inst.executionCount}
               </span>
             </div>
 
-            <p className="text-gray-400 text-xs mb-4">
-              Created: {new Date(inst.createdAt).toLocaleString()}
-            </p>
-
-            <div className="flex gap-3">
-              <Link
-                href={`/services/view?id=${inst.slug}`}
-                className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-secondary transition"
-              >
-                View
-              </Link>
-              <Link
-                href={`/dashboard/automation-view?id=${inst._id}`}
-                className="px-4 py-2 rounded-full border border-white/30 text-white font-semibold hover:bg-white hover:text-primary transition"
-              >
-                Logs
-              </Link>
             </div>
           </motion.div>
         ))}
