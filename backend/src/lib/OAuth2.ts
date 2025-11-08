@@ -22,7 +22,6 @@ OAuthRouter.get("/oauth/google", (req, res) => {
     const scopeArray: string[] = scopes
       ? (scopes as string).split(" ").map((s) => s.trim()).filter(Boolean)
       : [
-          "https://www.googleapis.com/auth/userinfo.email",
           "https://www.googleapis.com/auth/drive.readonly",
         ];
 

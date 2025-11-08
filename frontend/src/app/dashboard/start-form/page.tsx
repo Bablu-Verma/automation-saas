@@ -93,7 +93,7 @@ export default function StartFormPage() {
 
       // 2️⃣ Fetch OAuth URL from backend, pass scopes
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/oauth/google?scopes=${scopesParam}`
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}oauth/google?scopes=${scopesParam}`
       );
 
       const { url } = response.data;

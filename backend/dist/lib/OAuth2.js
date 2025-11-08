@@ -18,7 +18,6 @@ OAuthRouter.get("/oauth/google", (req, res) => {
         const scopeArray = scopes
             ? scopes.split(" ").map((s) => s.trim()).filter(Boolean)
             : [
-                "https://www.googleapis.com/auth/userinfo.email",
                 "https://www.googleapis.com/auth/drive.readonly",
             ];
         // 3️⃣ Generate Google OAuth URL
