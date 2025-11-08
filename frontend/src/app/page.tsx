@@ -93,10 +93,10 @@ export default function HomePage() {
           <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl hover:border-white/20 transition-all duration-500 h-full flex flex-col">
             
             {/* Step Number with Gradient */}
-            <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r ${item.color} flex items-center justify-center text-white font-bold text-2xl shadow-lg mb-6 relative`}>
+            <div className={`w-16 h-16 mx-auto rounded-full bg-gradient-to-r ${item.color} flex items-center justify-center text-white font-bold text-2xl shadow-lg mb-6 relative`}>
               {i + 1}
               {/* Animated Ring */}
-              <div className="absolute inset-0 rounded-2xl border-2 border-white/30 animate-ping"></div>
+              <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-ping"></div>
             </div>
 
             {/* Icon */}

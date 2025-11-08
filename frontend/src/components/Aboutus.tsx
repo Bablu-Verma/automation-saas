@@ -19,7 +19,7 @@ export default function AboutUs() {
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="relative w-full lg:w-1/2 h-96 rounded-3xl overflow-hidden shadow-lg"
+          className="relative w-full lg:w-1/2 h-96 rounded-xl overflow-hidden "
         >
           <Image
             src="/about.png"

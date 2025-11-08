@@ -48,12 +48,12 @@ export default function AppIntegrationSlider({ apps = defaultApps }: AppIntegrat
         autoplay={{ delay: 2000 }}
         loop
        
-        slidesPerView={2}
-        spaceBetween={30}
+        slidesPerView={3}
+        spaceBetween={10}
         breakpoints={{
-          640: { slidesPerView: 3, spaceBetween: 30 },
-          768: { slidesPerView: 5, spaceBetween: 40 },
-          1024: { slidesPerView: 6, spaceBetween: 50 },
+          640: { slidesPerView: 4, spaceBetween: 14 },
+          768: { slidesPerView: 6, spaceBetween: 14 },
+          1024: { slidesPerView: 8, spaceBetween: 14 },
         }}
         className="mt-16 "
       >

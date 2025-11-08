@@ -4,30 +4,7 @@ import path from "path";
 import fs from "fs";
 import { AuthenticatedRequest } from "../../middlewares/loginCheck";
 import { promises as fsp } from "fs";
-import axios from "axios";
-import FormData from "form-data";
-
-async function uploadToImgBB(filePath: string, apiKey: string): Promise<string> {
-    try {
-        const form = new FormData();
-        form.append("image", fs.createReadStream(filePath));
-
-        const response = await axios.post(
-            `https://api.imgbb.com/1/upload?key=${apiKey}`,
-            form,
-            { 
-                headers: form.getHeaders(),
-                timeout: 30000
-            }
-        );
-
-        return response.data.data.url; 
-    } catch (error: any) {
-        console.error("Upload failed:", error.response?.data || error.message);
-        throw error;
-    }
-}
-
+import { cloudinary_config } from "../../config/cloudinary";
 
 
 export const uploadImageByAdmin = async (req: AuthenticatedRequest, res: Response) => {
@@ -55,24 +32,15 @@ export const uploadImageByAdmin = async (req: AuthenticatedRequest, res: Respons
     inputPath = req.file.path;
     console.log("Temporary file saved at:", inputPath);
 
-    const imgBBApiKey = process.env.IMGBB_API_KEY; 
-
-    if (!imgBBApiKey) {
-      return res.status(500).json({
-        success: false,
-        message: "ImgBB API key not configured.",
-      });
-    }
-
     // ✅ Temporary optimized file create karo
     const tempOptimizedDir = path.join(process.cwd(), "temp_optimized");
     if (!fs.existsSync(tempOptimizedDir)) {
       fs.mkdirSync(tempOptimizedDir, { recursive: true });
     }
 
-   const originalName = path.parse(req.file.originalname).name;
-   tempOutputPath = path.join(tempOptimizedDir, `${originalName}-${Date.now()}.jpg`);
-    
+    const originalName = path.parse(req.file.originalname).name;
+    tempOutputPath = path.join(tempOptimizedDir, `${originalName}-${Date.now()}.jpg`);
+
     console.log("Creating optimized file at:", tempOutputPath);
 
     // ✅ Sharp optimization
@@ -83,17 +51,24 @@ export const uploadImageByAdmin = async (req: AuthenticatedRequest, res: Respons
 
     console.log("Image optimized successfully");
 
-    // ✅ Upload to ImgBB
-    let imgBBUrl: string;
+    // ✅ Upload to Cloudinary
+    const cloudinary = await cloudinary_config();
+
+    let uploadResult;
     try {
-      console.log("Uploading to ImgBB...");
-      imgBBUrl = await uploadToImgBB(tempOutputPath, imgBBApiKey);
-      console.log("ImgBB upload successful:", imgBBUrl);
-    } catch (uploadError) {
-      console.error("ImgBB upload failed:", uploadError);
+      console.log("Uploading to Cloudinary...");
+      const uniqueName = `${originalName}-${Date.now()}`;
+      uploadResult = await cloudinary.uploader.upload(tempOutputPath, {
+        folder: "service",
+        public_id: uniqueName,   
+        use_filename: false,     
+      });
+      console.log("Cloudinary upload successful:", uploadResult.secure_url);
+    } catch (uploadError: any) {
+      console.error("Cloudinary upload failed:", uploadError);
       return res.status(500).json({
         success: false,
-        message: "Failed to upload image to ImgBB.",
+        message: "Failed to upload image to Cloudinary.",
       });
     }
 
@@ -101,7 +76,7 @@ export const uploadImageByAdmin = async (req: AuthenticatedRequest, res: Respons
     return res.status(200).json({
       success: true,
       message: "Image uploaded & optimized successfully.",
-      imageUrl: imgBBUrl,
+      imageUrl: uploadResult.secure_url,
     });
 
   } catch (error) {
@@ -113,14 +88,11 @@ export const uploadImageByAdmin = async (req: AuthenticatedRequest, res: Respons
   } finally {
     // ✅ Cleanup - dono temporary files delete karo
     const cleanupFiles = [inputPath, tempOutputPath].filter(Boolean);
-    
-    // console.log("Cleaning up files:", cleanupFiles);
-    
+
     for (const filePath of cleanupFiles) {
       if (filePath && fs.existsSync(filePath)) {
         try {
           await fsp.unlink(filePath);
-          // console.log("Successfully deleted:", filePath);
         } catch (err: any) {
           if (err.code !== "ENOENT") {
             console.error("Error deleting file:", err);

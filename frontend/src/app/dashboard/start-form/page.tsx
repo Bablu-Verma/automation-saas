@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { useSelector } from "react-redux";
 
-const allowedOrigins = [process.env.NEXT_PUBLIC_BACKEND_BASE_URL];
+const allowedOrigins = [process.env.NEXT_PUBLIC_ALLOW_ORIGIN1];
 
 
 export default function StartFormPage() {
