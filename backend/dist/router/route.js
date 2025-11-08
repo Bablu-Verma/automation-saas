@@ -1,0 +1,118 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const registerUser_1 = __importDefault(require("../controllers/frontend/auth/registerUser"));
+const verifyUser_1 = __importDefault(require("../controllers/frontend/auth/verifyUser"));
+const login_1 = __importDefault(require("../controllers/frontend/auth/login"));
+const resendOTP_1 = __importDefault(require("../controllers/frontend/auth/resendOTP"));
+const forgotPassword_1 = __importDefault(require("../controllers/frontend/auth/forgotPassword"));
+const changePassword_1 = __importDefault(require("../controllers/frontend/auth/changePassword"));
+const loginWithGoogle_1 = __importDefault(require("../controllers/frontend/auth/loginWithGoogle"));
+const loginCheck_1 = require("../middlewares/loginCheck");
+const userProfile_1 = __importDefault(require("../controllers/frontend/dashboard/user/userProfile"));
+const updateUser_1 = __importDefault(require("../controllers/frontend/dashboard/user/updateUser"));
+const deleteRequest_1 = __importDefault(require("../controllers/frontend/dashboard/user/deleteRequest"));
+const Home_1 = require("../controllers/frontend/public/Home");
+const addMasterWorkflow_1 = require("../controllers/admin/master-workflow/addMasterWorkflow");
+const listMasterWorkflows_1 = require("../controllers/admin/master-workflow/listMasterWorkflows");
+const editMasterWorkflow_1 = require("../controllers/admin/master-workflow/editMasterWorkflow");
+const deleteMasterWorkflow_1 = require("../controllers/admin/master-workflow/deleteMasterWorkflow");
+const getMasterWorkflowDetail_1 = require("../controllers/admin/master-workflow/getMasterWorkflowDetail");
+const listService_1 = require("../controllers/frontend/public/service/listService");
+const Search_1 = require("../controllers/frontend/public/Search");
+const createAutomationInstance_1 = require("../controllers/frontend/dashboard/automation/createAutomationInstance");
+const multer_1 = require("../config/multer_");
+const imageupload_1 = require("../controllers/image_upload/imageupload");
+const ContactUs_1 = require("../controllers/frontend/public/ContactUs");
+const ContactUsAdmin_1 = require("../controllers/admin/ContactUsAdmin");
+const NewsletterController_1 = require("../controllers/frontend/public/NewsletterController");
+const NewsletterAdminController_1 = require("../controllers/admin/NewsletterAdminController");
+const automationList_1 = require("../controllers/frontend/dashboard/automation/automationList");
+const automationDetails_1 = require("../controllers/frontend/dashboard/automation/automationDetails");
+const automationUpdateStatus_1 = require("../controllers/frontend/dashboard/automation/automationUpdateStatus");
+const payment_details_request_1 = require("../controllers/frontend/dashboard/payment/payment-details-request");
+const payment_request_1 = require("../controllers/frontend/dashboard/payment/payment-request");
+const payment_get_1 = require("../controllers/frontend/dashboard/payment/payment-get");
+const getUserListForAdmin_1 = require("../controllers/admin/users/getUserListForAdmin");
+const getUsersDetailsForAdmin_1 = require("../controllers/admin/users/getUsersDetailsForAdmin");
+const updateUserByAdmin_1 = require("../controllers/admin/users/updateUserByAdmin");
+const adminautomationList_1 = require("../controllers/admin/automation/adminautomationList");
+const adminautomationDetails_1 = require("../controllers/admin/automation/adminautomationDetails");
+const payment_list_1 = require("../controllers/admin/payment/payment-list");
+const paymentdetails_1 = require("../controllers/admin/payment/paymentdetails");
+const Automate_automationStatusUpdate_1 = require("../controllers/admin/automation/Automate_automationStatusUpdate");
+const automationStatusUpdate_1 = require("../controllers/admin/automation/automationStatusUpdate");
+const payment_details_1 = require("../controllers/frontend/dashboard/payment/payment-details");
+const paymentedit_1 = require("../controllers/admin/payment/paymentedit");
+const CredentialSchema_1 = require("../controllers/admin/CredentialSchema");
+const execution_1 = require("../controllers/frontend/dashboard/execution");
+const dashboard_1 = require("../controllers/frontend/dashboard/dashboard");
+const adminDashboard_1 = require("../controllers/admin/adminDashboard");
+const invoice_download_1 = require("../controllers/frontend/dashboard/payment/invoice-download");
+const getServiceDetail_1 = require("../controllers/frontend/public/service/getServiceDetail");
+const route = express_1.default.Router();
+const base = '/v1';
+// image upload by admin 
+route.post(base + "/admin/upload", loginCheck_1.loginCheck, multer_1.upload_, imageupload_1.uploadImageByAdmin);
+// auth 
+route.post(base + '/auth/register', registerUser_1.default);
+route.post(base + '/auth/verify-user', verifyUser_1.default);
+route.post(base + '/auth/login', login_1.default);
+route.post(base + '/auth/resend-otp', resendOTP_1.default);
+route.post(base + '/auth/forgot-password', forgotPassword_1.default);
+route.post(base + '/auth/change-password', changePassword_1.default);
+route.post(base + '/auth/google-login', loginWithGoogle_1.default);
+// user 
+route.post(base + '/user/get-profile', loginCheck_1.loginCheck, userProfile_1.default);
+route.post(base + '/user/update-profile', loginCheck_1.loginCheck, updateUser_1.default);
+route.post(base + '/user/delete-request', loginCheck_1.loginCheck, deleteRequest_1.default);
+route.post(base + '/admin/user/list', loginCheck_1.loginCheck, getUserListForAdmin_1.getUserListForAdmin);
+route.post(base + '/admin/user/details', loginCheck_1.loginCheck, getUsersDetailsForAdmin_1.getUserDetailsForAdmin);
+route.post(base + '/admin/user/update', loginCheck_1.loginCheck, updateUserByAdmin_1.updateUserByAdmin);
+// Service
+route.post(base + '/service/list', listService_1.listService);
+route.post(base + '/service/details', getServiceDetail_1.getServiceDetail);
+// master workflow 
+route.post(base + '/admin/master-workflow/create', loginCheck_1.loginCheck, addMasterWorkflow_1.addMasterWorkflow);
+route.post(base + '/admin/master-workflow/list', loginCheck_1.loginCheck, listMasterWorkflows_1.listMasterWorkflows);
+route.post(base + '/admin/master-workflow/edit', loginCheck_1.loginCheck, editMasterWorkflow_1.editMasterWorkflow);
+route.post(base + '/admin/master-workflow/delete', loginCheck_1.loginCheck, deleteMasterWorkflow_1.deleteMasterWorkflow);
+route.post(base + '/admin/master-workflow/details', loginCheck_1.loginCheck, getMasterWorkflowDetail_1.getMasterWorkflowDetail);
+route.post(base + '/admin/automation/list', loginCheck_1.loginCheck, adminautomationList_1.adminUserAutomations);
+route.post(base + '/admin/automation/details', loginCheck_1.loginCheck, adminautomationDetails_1.AdminautomationDetail);
+route.post(base + '/admin/automation/automateupdate', Automate_automationStatusUpdate_1.AutomateupdateAutomationStatuses);
+route.post(base + '/admin/automation/update', loginCheck_1.loginCheck, automationStatusUpdate_1.updateAutomationStatusById);
+// home 
+route.post(base + '/home/service', Home_1.listHomeService);
+route.post(base + '/home/search', Search_1.searchService);
+// automation
+route.post(base + '/instance/automation-create', loginCheck_1.loginCheck, createAutomationInstance_1.createAutomationInstance);
+route.post(base + '/instance/automation-list', loginCheck_1.loginCheck, automationList_1.automationList);
+route.post(base + '/instance/automation-details', loginCheck_1.loginCheck, automationDetails_1.automationDetail);
+route.post(base + '/instance/automation-update-status', loginCheck_1.loginCheck, automationUpdateStatus_1.updateAutomationStatus);
+route.post(base + '/payment/payment-details-request', loginCheck_1.loginCheck, payment_details_request_1.PaymentDetailsRequest);
+route.post(base + '/payment/create-payment', loginCheck_1.loginCheck, payment_request_1.createPayment);
+route.post(base + '/payment/get-payment', loginCheck_1.loginCheck, payment_get_1.getUserPayments);
+route.post(base + '/payment/get-payment-details', loginCheck_1.loginCheck, payment_details_1.getPaymentDetails);
+route.post(base + '/admin/payment/list-payment', loginCheck_1.loginCheck, payment_list_1.getPaymentslistforAdmin);
+route.post(base + '/admin/payment/payment-details', loginCheck_1.loginCheck, paymentdetails_1.getPaymentDetailsForAdmin);
+route.post(base + '/admin/payment/payment-edit', loginCheck_1.loginCheck, paymentedit_1.updatePaymentForAdmin);
+// contactus 
+route.post(base + "/contact/create", ContactUs_1.createContact);
+route.post(base + "/admin/contact/get", loginCheck_1.loginCheck, ContactUsAdmin_1.getContacts);
+route.post(base + "/admin/contact/status", loginCheck_1.loginCheck, ContactUsAdmin_1.updateContactStatus);
+route.post(base + "/admin/contact/delete", loginCheck_1.loginCheck, ContactUsAdmin_1.deleteContactus);
+// newsletter 
+route.post(base + "/newsletter/subscribe", NewsletterController_1.subscribeNewsletter);
+route.post(base + "/newsletter/unsubscribe", NewsletterController_1.unsubscribeNewsletter);
+route.post(base + "/admin/newsletter/list", loginCheck_1.loginCheck, NewsletterAdminController_1.getAllSubscribers);
+route.post(base + "/admin/newsletter/delete", loginCheck_1.loginCheck, NewsletterAdminController_1.deleteSubscriber);
+route.post(base + "/admin/credential/schema", loginCheck_1.loginCheck, CredentialSchema_1.CredentialSchema);
+route.post(base + "/executions/get-user-executions", loginCheck_1.loginCheck, execution_1.getUserExecutions);
+route.post(base + "/dashboard/get-user-dashboard", loginCheck_1.loginCheck, dashboard_1.getUserDashboard);
+route.post(base + "/admin/get-admin-dashboard", loginCheck_1.loginCheck, adminDashboard_1.getAdminDashboard);
+route.post(base + "/get-invoice-download", loginCheck_1.loginCheck, invoice_download_1.InvoiceDownload);
+exports.default = route;
