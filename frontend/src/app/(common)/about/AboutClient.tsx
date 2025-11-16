@@ -55,7 +55,7 @@ export default function AboutUsClinet() {
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="flex-1 text-center lg:text-left"
+                    className="flex-1 text-left"
                 >
                     <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
                         Our Mission

@@ -49,7 +49,7 @@ export default function NewsletterSection() {
   };
 
   return (
-    <section className="py-28 px-6 max-w-7xl mx-auto text-white rounded-3xl relative">
+    <section className="py-28 px-4 sm:px-6 max-w-7xl mx-auto text-white rounded-3xl relative">
     
       <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
         {/* Text */}

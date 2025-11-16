@@ -31,7 +31,7 @@ export default function HomePage() {
       <Services />
       <CustomAutomationCTA />
       
-  <section className="pt-32 px-6 max-w-7xl mx-auto relative">
+  <section className="pt-32 px-4 sm:px-6 max-w-7xl mx-auto relative">
   {/* Section Header with Animation */}
   <motion.div
     initial={{ opacity: 0, y: 30 }}
@@ -171,7 +171,7 @@ export default function HomePage() {
 
       <FAQSection />
 
-      <section className="relative  text-white pt-28 px-6 text-center ">
+      <section className="relative  text-white pt-28 px-4 sm:px-6 text-center ">
        <div className="absolute -top-32 -left-32 w-72 h-72 bg-gradient-to-tr from-primary/40 to-secondary/30 rounded-full blur-3xl -z-10"></div>
       <div className="absolute -bottom-32 -right-32 w-72 h-72 bg-gradient-to-tr from-secondary/40 to-primary/30 rounded-full blur-3xl -z-10"></div>
 

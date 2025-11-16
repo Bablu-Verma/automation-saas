@@ -37,7 +37,7 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
   };
 
   return (
-    <section className="py-28 px-6 max-w-7xl mx-auto">
+    <section className="py-28 px-4 sm:px-6 max-w-7xl mx-auto">
       {/* Hero Section */}
       <motion.div
         className="flex flex-col lg:flex-row items-center gap-12 mb-16"
@@ -46,7 +46,7 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
         transition={{ duration: 0.8 }}
       >
         {/* Image */}
-        <div className="relative w-full lg:w-1/2 min-h-80 rounded-3xl overflow-hidden shadow-xl">
+        <div className="relative w-full lg:w-1/2 min-h-80 rounded-xl overflow-hidden shadow-lg">
           <Image src={workflow.serviceImage || ""} alt={workflow.name} fill className="object-cover" />
         </div>
 
@@ -61,7 +61,7 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
 
           <button
             onClick={getstart}
-            className="mt-4 inline-block max-w-[300px] px-10 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-center font-semibold text-lg shadow-xl hover:shadow-xl transition-transform transform hover:-translate-y-1"
+            className="mt-4 inline-block sm:max-w-[300px] px-10 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-center font-semibold text-lg shadow-xl hover:shadow-xl transition-transform transform hover:-translate-y-1"
           >
             Get Started
           </button>
@@ -69,17 +69,17 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
       </motion.div>
 
       {/* Keywords */}
-      <p className="flex items-center text-lg text-white/80 gap-2">
-        <FiCheckCircle className="text-green-400" size={20} />
-        Keywords: 
-        <div className="flex gap-x-3 flex-wrap gap-y-1">
+     <div className="flex gap-3 items-center justify-start flex-wrap ">
+          <span className="flex gap-1.5 text-lg justify-center items-center text-white">
+            <FiCheckCircle className="text-green-400" size={20} />
+           <strong>Keywords:</strong>
+          </span>
           {workflow.keyword.map((item, i) => (
             <span key={i} className="font-normal capitalize px-4 py-.5 rounded-full bg-amber-600">
               {item}
             </span>
           ))}
         </div>
-      </p>
 
       {/* Description */}
       {workflow.description && (
@@ -89,7 +89,7 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mx-4 dangerouslyHTML"
+            className="sm:mx-4 dangerouslyHTML"
             dangerouslySetInnerHTML={{ __html: workflow.description }}
           />
         </div>

@@ -125,18 +125,21 @@
   text-align: left;
 }
 
-.dangerouslyHTML th {
-  background-color: #f4f4f4;
+/* .dangerouslyHTML th {
+  background-color: rgba(133, 205, 24, 0.658);
+  color: var(--color-secondary);
   font-weight: bold;
-}
+} */
 
-.dangerouslyHTML tr:nth-child(even) {
+/* .dangerouslyHTML tr:nth-child(even) {
   background-color: #f9f9f9;
-}
+  color: var(--color-secondary);
+} */
 
-.dangerouslyHTML tr:hover {
+/* .dangerouslyHTML tr:hover {
   background-color: #e2e2e2;
-}
+  color: var(--color-secondary);
+} */
 
 .dangerouslyHTML img {
   width: 100%;
