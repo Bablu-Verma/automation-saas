@@ -88,3 +88,11 @@ export const get_admin_dashboard_api = api_url + 'v1/admin/get-admin-dashboard'
 
 export const get_invoice_download_api = api_url + 'v1/get-invoice-download'
 
+
+export const admin_add_docs_api = api_url + 'v1/admin/docs-add'
+export const admin_list_docs_api = api_url + 'v1/admin/docs-list'
+export const admin_get_docs_by_id_api = api_url + 'v1/admin/docs-viewid'
+export const admin_update_docs_api = api_url + 'v1/admin/docs-update'
+
+export const get_docs_by_service_api = api_url + 'v1/docs-service-service_id'
+

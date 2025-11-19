@@ -18,7 +18,7 @@ const links = [
   { href: "/dashboard/help", label: "Help & Support", icon: <FaLifeRing size={18} /> },
 ]
 
-export default function Sidebar() {
+export default function DashboardMenu() {
   const pathname = usePathname()
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.user) as IUser | null;

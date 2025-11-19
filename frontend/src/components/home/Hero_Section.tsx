@@ -106,21 +106,21 @@ export default function HomeHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="mt-14 flex justify-center gap-6 relative z-10 flex-wrap"
+          className="mt-14 flex justify-center gap-3 sm:gap-6 relative z-10"
         >
           <Link
             href="/services"
-            className="group bg-gradient-to-r from-primary to-secondary px-8 py-3 rounded-full font-semibold shadow-2xl hover:shadow-primary/25 hover:scale-105 transition-all duration-300 flex items-center gap-2"
+            className="group bg-gradient-to-r from-primary to-secondary px-5 sm:px-8 py-3 rounded-full font-semibold shadow-2xl hover:shadow-primary/25 hover:scale-105 transition-all text-sm sm:text-base duration-300 flex items-center gap-1 sm:gap-2"
           >
             Get Started Free
             <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             href="/about"
-            className="group px-8 py-3 rounded-full font-semibold border-2 border-white/30 text-white hover:border-white/60 hover:bg-white/10 backdrop-blur-sm transition-all duration-300 flex items-center gap-2"
+            className="group text-sm sm:text-base px-5 sm:px-8 py-3 rounded-full font-semibold border-2 border-white/30 text-white hover:border-white/60 hover:bg-white/10 backdrop-blur-sm transition-all duration-300 flex items-center gap-1 sm:gap-2"
           >
             <FiPlay size={18} />
-            Watch Demo
+            About Us
           </Link>
         </motion.div>
       </div>
@@ -140,7 +140,7 @@ export default function HomeHero() {
         >
           Trusted by 100+ leading Clients
         </motion.p>
-        <div className="flex items-center justify-center gap-12 flex-wrap opacity-90">
+        <div className="flex items-center justify-center gap-6 sm:gap-12 flex-wrap opacity-90">
           {clients.map((logo, i) => (
             <motion.div
               key={i}

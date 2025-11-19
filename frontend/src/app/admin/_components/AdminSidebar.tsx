@@ -61,6 +61,12 @@ const links = [
     icon: <FaEnvelope size={18} />,
     description: "User Inquiries"
   },
+  { 
+    href: "/admin/docs", 
+    label: "Docs", 
+    icon: <FaEnvelope size={18} />,
+    description: "User Inquiries"
+  },
 ];
 
 export default function AdminSidebar() {

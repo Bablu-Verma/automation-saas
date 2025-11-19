@@ -8,11 +8,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { FiCheckCircle } from "react-icons/fi";
+import { FiCheckCircle, FiExternalLink } from "react-icons/fi";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { IWorkflowDetail } from "@/types";
+import { FaLink, FaRedditAlien } from "react-icons/fa";
 
 interface ServiceDetailsClientProps {
   initialWorkflow: IWorkflowDetail | null;
@@ -55,7 +56,7 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
           <h1 className="text-3xl md:text-4xl font-extrabold text-white">{workflow.name}</h1>
           <p className="text-2xl md:text-3xl font-bold text-white">
             ₹{workflow.pricePerMonth}
-            <span className="text-lg font-medium text-white/80"> /Month</span> 
+            <span className="text-lg font-medium text-white/80"> /Month</span>
             <span className="text-lg font-medium text-white/80"> | Trial: {workflow.trialDays} days</span>
           </p>
 
@@ -69,17 +70,17 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
       </motion.div>
 
       {/* Keywords */}
-     <div className="flex gap-3 items-center justify-start flex-wrap ">
-          <span className="flex gap-1.5 text-lg justify-center items-center text-white">
-            <FiCheckCircle className="text-green-400" size={20} />
-           <strong>Keywords:</strong>
+      <div className="flex gap-3 items-center justify-start flex-wrap ">
+        <span className="flex gap-1.5 text-lg justify-center items-center text-white">
+          <FiCheckCircle className="text-green-400" size={20} />
+          <strong>Keywords:</strong>
+        </span>
+        {workflow.keyword.map((item, i) => (
+          <span key={i} className="font-normal capitalize px-4 py-.5 rounded-full bg-amber-600">
+            {item}
           </span>
-          {workflow.keyword.map((item, i) => (
-            <span key={i} className="font-normal capitalize px-4 py-.5 rounded-full bg-amber-600">
-              {item}
-            </span>
-          ))}
-        </div>
+        ))}
+      </div>
 
       {/* Description */}
       {workflow.description && (
@@ -94,6 +95,11 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
           />
         </div>
       )}
+
+      <div className="mt-10 sm:pl-4 ">
+        <Link href={`/services/docs?id=${workflow._id}`} className="text-blue-500 hover:underline py-1 flex items-center gap-2 "><span>Read documentation</span> <FiExternalLink /></Link>
+
+      </div>
 
       <Features />
       <AppIntegrationSlider />

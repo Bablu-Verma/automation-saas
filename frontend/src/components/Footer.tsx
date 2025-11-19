@@ -75,6 +75,7 @@ export default function Footer() {
             <li><Link href="/faq" className="hover:text-primary">FAQs</Link></li>
             <li><Link href="/terms" className="hover:text-primary">Terms & Conditions</Link></li>
             <li><Link href="/privacy" className="hover:text-primary">Privacy Policy</Link></li>
+            <li><Link href="/sitemap.xml" className="hover:text-primary">Sitemap</Link></li>
 
           </ul>
         </div>

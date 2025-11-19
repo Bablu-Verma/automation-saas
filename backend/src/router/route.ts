@@ -49,6 +49,7 @@ import { getUserDashboard } from '../controllers/frontend/dashboard/dashboard';
 import { getAdminDashboard } from '../controllers/admin/adminDashboard';
 import { InvoiceDownload } from '../controllers/frontend/dashboard/payment/invoice-download';
 import { getServiceDetail } from '../controllers/frontend/public/service/getServiceDetail';
+import { addDocs, deleteDocs, getDocsById, getDocsByService, getDocsList, updateDocs } from '../controllers/admin/Docs/DocsController';
 
 
 
@@ -147,14 +148,17 @@ route.post(base +"/dashboard/get-user-dashboard",loginCheck, getUserDashboard);
 
 route.post(base +"/admin/get-admin-dashboard",loginCheck, getAdminDashboard);
 
-
 route.post(base +"/get-invoice-download",loginCheck, InvoiceDownload);   
 
+route.post(base + "/admin/docs-add", loginCheck, addDocs);
+route.post(base+"/admin/docs-update", loginCheck, updateDocs);
+route.post(base+"/admin/docs-list", loginCheck, getDocsList);
+route.post(base+"/admin/docs-delete", loginCheck, deleteDocs); 
+route.post(base + "/admin/docs-viewid",loginCheck, getDocsById);
 
 
 
-
-
+route.post(base+"/docs-service-service_id", getDocsByService);
 
 
 
