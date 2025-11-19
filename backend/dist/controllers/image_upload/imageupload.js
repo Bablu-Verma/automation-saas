@@ -8,23 +8,7 @@ const sharp_1 = __importDefault(require("sharp"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const fs_2 = require("fs");
-const axios_1 = __importDefault(require("axios"));
-const form_data_1 = __importDefault(require("form-data"));
-async function uploadToImgBB(filePath, apiKey) {
-    try {
-        const form = new form_data_1.default();
-        form.append("image", fs_1.default.createReadStream(filePath));
-        const response = await axios_1.default.post(`https://api.imgbb.com/1/upload?key=${apiKey}`, form, {
-            headers: form.getHeaders(),
-            timeout: 30000
-        });
-        return response.data.data.url;
-    }
-    catch (error) {
-        console.error("Upload failed:", error.response?.data || error.message);
-        throw error;
-    }
-}
+const cloudinary_1 = require("../../config/cloudinary");
 const uploadImageByAdmin = async (req, res) => {
     let inputPath = null;
     let tempOutputPath = null;
@@ -45,13 +29,6 @@ const uploadImageByAdmin = async (req, res) => {
         // 📌 Multer saved temporary file
         inputPath = req.file.path;
         console.log("Temporary file saved at:", inputPath);
-        const imgBBApiKey = process.env.IMGBB_API_KEY;
-        if (!imgBBApiKey) {
-            return res.status(500).json({
-                success: false,
-                message: "ImgBB API key not configured.",
-            });
-        }
         // ✅ Temporary optimized file create karo
         const tempOptimizedDir = path_1.default.join(process.cwd(), "temp_optimized");
         if (!fs_1.default.existsSync(tempOptimizedDir)) {
@@ -66,25 +43,31 @@ const uploadImageByAdmin = async (req, res) => {
             .jpeg({ quality: 80 })
             .toFile(tempOutputPath);
         console.log("Image optimized successfully");
-        // ✅ Upload to ImgBB
-        let imgBBUrl;
+        // ✅ Upload to Cloudinary
+        const cloudinary = await (0, cloudinary_1.cloudinary_config)();
+        let uploadResult;
         try {
-            console.log("Uploading to ImgBB...");
-            imgBBUrl = await uploadToImgBB(tempOutputPath, imgBBApiKey);
-            console.log("ImgBB upload successful:", imgBBUrl);
+            console.log("Uploading to Cloudinary...");
+            const uniqueName = `${originalName}-${Date.now()}`;
+            uploadResult = await cloudinary.uploader.upload(tempOutputPath, {
+                folder: "service",
+                public_id: uniqueName,
+                use_filename: false,
+            });
+            console.log("Cloudinary upload successful:", uploadResult.secure_url);
         }
         catch (uploadError) {
-            console.error("ImgBB upload failed:", uploadError);
+            console.error("Cloudinary upload failed:", uploadError);
             return res.status(500).json({
                 success: false,
-                message: "Failed to upload image to ImgBB.",
+                message: "Failed to upload image to Cloudinary.",
             });
         }
         // ✅ Success response
         return res.status(200).json({
             success: true,
             message: "Image uploaded & optimized successfully.",
-            imageUrl: imgBBUrl,
+            imageUrl: uploadResult.secure_url,
         });
     }
     catch (error) {
@@ -97,12 +80,10 @@ const uploadImageByAdmin = async (req, res) => {
     finally {
         // ✅ Cleanup - dono temporary files delete karo
         const cleanupFiles = [inputPath, tempOutputPath].filter(Boolean);
-        // console.log("Cleaning up files:", cleanupFiles);
         for (const filePath of cleanupFiles) {
             if (filePath && fs_1.default.existsSync(filePath)) {
                 try {
                     await fs_2.promises.unlink(filePath);
-                    // console.log("Successfully deleted:", filePath);
                 }
                 catch (err) {
                     if (err.code !== "ENOENT") {
