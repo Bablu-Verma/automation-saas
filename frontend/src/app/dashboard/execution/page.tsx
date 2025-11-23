@@ -1,8 +1,8 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+// Removed: import { motion } from "framer-motion"
 import { FiCheckCircle, FiClock, FiXCircle, FiPlayCircle } from "react-icons/fi"
-import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux-store/redux_store"
 import axios from "axios"
@@ -10,6 +10,28 @@ import Pagination from "@/components/Pagination"
 import LoadingSpiner from "@/app/admin/_components/LoadingSpiner"
 import { get_user_executions_api } from "@/api"
 import { useSearchParams } from "next/navigation"
+
+export type AutomationInstance__ = {
+  _id: string;
+  instanceName: string;
+  isActive: "RUNNING" | "PAUSE";
+  executionCount: number;
+  systemStatus: string;
+  masterWorkflow: string;
+  slug: string;
+  n8nWorkflowId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type ApiResponse = {
+  automations: AutomationInstance__[];
+  pagination: {
+    total: number;
+    page: number;
+    totalPages: number;
+  };
+};
 
 export default function ExecutionRequests() {
   const token = useSelector((state: RootState) => state.user.token)
@@ -22,7 +44,7 @@ export default function ExecutionRequests() {
   const searchParams = useSearchParams()
   const serviceId = searchParams.get("id")
 
-  // Fetch executions from API
+  // Fetch executions from API (logic remains the same)
   useEffect(() => {
     if (!token) return
 
@@ -31,7 +53,7 @@ export default function ExecutionRequests() {
         setLoading(true)
         const { data } = await axios.post(
           get_user_executions_api, // Backend route
-          { page, limit, workflowId:serviceId },
+          { page, limit, workflowId: serviceId },
           {
             headers: {
               "Content-Type": "application/json",
@@ -62,26 +84,26 @@ export default function ExecutionRequests() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "success":
-        return <FiCheckCircle className="text-green-400" size={16} />
+        return <FiCheckCircle className="text-green-500" size={16} />
       case "failed":
-        return <FiXCircle className="text-red-400" size={16} />
+        return <FiXCircle className="text-red-500" size={16} />
       case "running":
-        return <FiClock className="text-yellow-400" size={16} />
+        return <FiClock className="text-yellow-500" size={16} />
       default:
-        return <FiPlayCircle size={16} />
+        return <FiPlayCircle className="text-primary" size={16} />
     }
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "success":
-        return "text-green-400 bg-green-400/10"
+        return "text-green-500 bg-green-500/10"
       case "failed":
-        return "text-red-400 bg-red-400/10"
+        return "text-red-500 bg-red-500/10"
       case "running":
-        return "text-yellow-400 bg-yellow-400/10"
+        return "text-yellow-500 bg-yellow-500/10"
       default:
-        return "text-gray-400 bg-gray-400/10"
+        return "text-primary/70 bg-primary/10" // Themed default color
     }
   }
 
@@ -95,28 +117,37 @@ export default function ExecutionRequests() {
     })
   }
 
+  // --- Theme Variables ---
+  const textPrimary = `text-textLight dark:text-textDark`;
+  const textSecondary = `text-textLight/80 dark:text-textDark/80`;
+  const textFaded = `text-textLight/50 dark:text-textDark/50`;
+
+  const cardClasses = `
+    bg-lightBg/80 backdrop-blur-lg border border-textLight/10
+    dark:bg-darkBg/80 dark:border-textDark/10
+    hover:shadow-[0_0_20px_rgba(230,82,31,0.2)] transition
+  `;
+
+
   if (loading && executions.length === 0) {
     return <LoadingSpiner />
   }
 
 
-
   return (
-    <div className="max-w-5xl mx-auto pb-28 text-white">
-      <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-3xl font-extrabold mb-8"
+    <div className={`max-w-5xl mx-auto pb-28 px-6`}>
+      <h1
+        // Removed motion.h1
+        className={`text-3xl font-extrabold mb-8 ${textPrimary}`}
       >
         Executions
-      </motion.h1>
+      </h1>
 
       {executions.length === 0 ? (
         <div className="text-center py-12">
-          <FiPlayCircle className="mx-auto text-gray-400 mb-4" size={48} />
-          <h3 className="text-xl font-semibold mb-2">No executions found</h3>
-          <p className="text-gray-400">No executions available yet.</p>
+          <FiPlayCircle className={`mx-auto mb-4 ${textFaded}`} size={48} />
+          <h3 className={`text-xl font-semibold mb-2 ${textPrimary}`}>No executions found</h3>
+          <p className={textFaded}>No executions available yet.</p>
         </div>
       ) : (
         <>
@@ -124,15 +155,17 @@ export default function ExecutionRequests() {
             {executions.map((exec, i) => (
               <div
                 key={exec.id || i}
-                className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl shadow-lg border border-white/10 hover:shadow-[0_0_20px_rgba(230,82,31,0.4)] transition"
+                className={`p-4 rounded-2xl shadow-lg border ${cardClasses}`}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="">
+                      {/* Icon color is handled by getStatusIcon */}
                       {getStatusIcon(exec.status)}
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold">{exec.instanceName || "Unnamed Service"}</h3>
+                      {/* H3 Theming */}
+                      <h3 className={`text-sm font-semibold ${textPrimary}`}>{exec.instanceName || "Unnamed Service"}</h3>
                     </div>
                   </div>
                   <span className={`px-3 py-1 text-xs rounded-full font-semibold ${getStatusColor(exec.status)}`}>
@@ -141,8 +174,8 @@ export default function ExecutionRequests() {
                 </div>
 
                 <div className="space-y-2">
-                 
-                  <p className="text-gray-400 text-xs">
+
+                  <p className={`text-xs ${textFaded}`}>
                     Started at: {exec.startedAt ? formatDate(exec.startedAt) : "-"}
                   </p>
                 </div>

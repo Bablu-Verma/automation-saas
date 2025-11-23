@@ -50,39 +50,86 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen text-white py-28 px-6">
+    <div className="min-h-screen py-28 px-6">
       <div className="max-w-4xl mx-auto">
+
+        {/* H1 (Primary color is universal) */}
         <h1 className="text-4xl md:text-6xl font-extrabold text-primary text-center mb-5">
           Terms & Conditions
         </h1>
 
-        <p className="text-center text-gray-300 mb-12">
+        {/* Last Updated Date (Themed) */}
+        <p className="text-center mb-12 text-textLight/70 dark:text-textDark/70">
           Last updated: January 1, 2025
         </p>
 
-        <div className="space-y-10 text-gray-200 leading-relaxed">
-          {/* Sections remain as in your original code */}
+        {/* Main Content Container (Themed Text) */}
+        <div className="space-y-10 leading-relaxed text-textLight/85 dark:text-textDark/85">
+
           <section>
-            <h2 className="text-2xl font-bold mb-3">1. Introduction</h2>
+            {/* H2 Theming */}
+            <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">1. Introduction</h2>
             <p>
               Welcome to Loop Axis! These Terms and Conditions outline the rules and regulations for using our website and services. By accessing or using Loop Axis, you agree to be bound by these terms. If you do not agree, please stop using our platform.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-3">2. Eligibility</h2>
+            {/* H2 Theming */}
+            <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">2. Eligibility</h2>
             <p>
               You must be at least 18 years old to use our services. By using Loop Axis, you represent that you meet this requirement.
             </p>
           </section>
 
-          {/* ... remaining sections ... */}
+          <section>
+            {/* H2 Theming */}
+            <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">3. Service Usage and Account</h2>
+            <p>
+              You agree to use the Service only for lawful purposes. You are responsible for maintaining the confidentiality of your account password and for all activities that occur under your account.
+            </p>
+          </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-3">8. Contact Us</h2>
+            {/* H2 Theming */}
+            <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">4. Payments and Subscriptions</h2>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Subscriptions are billed on a recurring basis (e.g., monthly or annually).</li>
+              <li>You can cancel your subscription renewal at any time.</li>
+              <li>Refunds are granted solely at our discretion, typically within 7 days of the initial subscription, subject to usage limits.</li>
+            </ul>
+          </section>
+
+          <section>
+            {/* H2 Theming */}
+            <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">5. Intellectual Property</h2>
             <p>
-              If you have any questions about these Terms, please contact us at 
-              <a href="mailto:support@loopaxis.com" className="text-secondary underline ml-1">
+              The Service and its original content, features, and functionality are and will remain the exclusive property of Loop Axis. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Loop Axis.
+            </p>
+          </section>
+
+          <section>
+            {/* H2 Theming */}
+            <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">6. Limitation of Liability</h2>
+            <p>
+              In no event shall Loop Axis, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
+            </p>
+          </section>
+
+          <section>
+            {/* H2 Theming */}
+            <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">7. Governing Law</h2>
+            <p>
+              These Terms shall be governed and construed in accordance with the laws of India, without regard to its conflict of law provisions.
+            </p>
+          </section>
+
+          <section>
+            {/* H2 Theming */}
+            <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">8. Contact Us</h2>
+            <p>
+              If you have any questions about these Terms, please contact us at
+              <a href="mailto:support@loopaxis.com" className="text-primary underline ml-1 hover:text-secondary">
                 support@loopaxis.com
               </a>.
             </p>

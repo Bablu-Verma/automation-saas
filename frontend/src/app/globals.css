@@ -1,322 +1,81 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* === 🎨 Global Style ==== */
 :root {
-  --dark: #06202B;
-  --light: #ffffff;
-  --secondary: #131D4F;
+  /* Main brand colors */
   --primary: #E6521F;
-  --main-color: #E6521F;
+  --secondary: #131D4F;
+
+  /* Theme colors */
+  --light-bg: #ffffff;
+  --dark-bg: #0A1220;
+  --text-light: #0D1B2A;
+  --text-dark: #E5E5E5;
+
+  /* Universal selection color */
+  --selection-bg: rgba(230, 82, 31, 0.25);
+  --selection-text: #E6521F;
 }
 
-@theme inline {
-  --color-primary: #E6521F;
-  --color-secondary: #131D4F;
-  --color-dark: #06202B;
-  --color-gradient-brand: linear-gradient(90deg, #131D4F, #E6521F);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-/* 🌓 Light Mode */
 body {
-  @apply min-h-screen text-[var(--color-foreground)];
-background: linear-gradient(135deg, #1A237E 0%, #0D1B2A 40%, #E6521F 100%);
-  background-attachment: fixed;
-  background-size: cover;
-  color: var(--secondary);
+  @apply min-h-screen;
+}
+
+html body {
+  background: var(--light-bg);
+  color: var(--text-light);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* 🌑 Dark Mode */
-.dark body {
-  background: linear-gradient(135deg, #000000 0%, #06202B 50%, #131D4F 100%);
-  color: var(--light);
-}
-/* 🖱️ Custom cursor — visible only on md (768px) and above */
-@media (min-width: 768px) {
-  body {
-    cursor: none;
-  }
-
-  .cursor {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #E6521F; 
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease;
-    z-index: 9999;
-  }
-
-  .cursor-dot {
-    width: 6px;
-    height: 6px;
-    background: #E6521F;
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-  }
-}
-
-/* 📱 Mobile (<768px): show normal cursor / touch behavior */
-@media (max-width: 767px) {
-  body {
-    cursor: auto;
-  }
-  .cursor,
-  .cursor-dot {
-    display: none;
-  }
-}
-
-
-
-::-moz-selection { /* Code for Firefox */
-  color: #E6521F;
-  background: #fff;
+html.dark body {
+  background: var(--dark-bg);
+  color: var(--text-dark);
 }
 
 ::selection {
-  color: #E6521F;
-  background: #fff;
+  background: var(--selection-bg);
+  color: var(--selection-text);
 }
 
-/* For Chrome, Edge, Safari */
+::-moz-selection {
+  background: var(--selection-bg);
+  color: var(--selection-text);
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #06202B; /* dark bg */
+  background: var(--dark-bg);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #131D4F, #E6521F);
+  background: var(--primary);
   border-radius: 9999px;
-  border: 2px solid #06202B; /* gap effect */
+  border: 2px solid var(--dark-bg);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #E6521F, #131D4F);
+  background: var(--secondary);
 }
 
-/* For Firefox */
+/* Firefox Scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #131D4F #06202B;
+  scrollbar-color: var(--primary) var(--dark-bg);
 }
 
+/* Hidden Scrollbar for Sidebar */
 .sidebar_ {
-  scrollbar-width: none;      /* Firefox */
-  -ms-overflow-style: none;   /* IE & Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .sidebar_::-webkit-scrollbar {
-  display: none;              /* Chrome, Safari */
-}
-
-
-
-
-/* tip tap editor style  */
-
-.editor-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
-
-.tiptap {
-  min-height: 400px;
-  background-color: #f4f4f4c4;
-  padding: 8px;
-  font-size: 15px;
-  line-height: 1.6;
-  color: #212121;
-}
-
-
-.tiptap.ProseMirror-focused {
-  outline: none;
-  border: none;
-}
-
-.editor_tool_bar button, .editor_tool_bar select, .editor_tool_bar label{
-  font-size: 13px ;
-}
-
-/* Tables */
-.tiptap table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 10px 0;
-}
-.tiptap th, .tiptap td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-.tiptap th {
-  background-color: #f4f4f4;
-  font-weight: bold;
-}
-.tiptap tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-.tiptap tr:hover {
-  background-color: #e2e2e2;
-}
-
-/* Paragraph */
-.tiptap p {
-  font-weight: 400;
-  margin-bottom: 10px;
-}
-
-.tiptap blockquote{
-  border-left: 4px solid #8a2222af;
-  background: rgba(236, 166, 166, 0.658);
-  margin: 10px 0;
-  padding: 10px 0px 10px 16px;
- 
-}
-/* Blockquote */
-.tiptap blockquote {
-  border-left: 4px solid #8a2222af;
-  background: rgba(236, 166, 166, 0.658);
-  margin: 10px 0;
-  padding: 10px 16px;
-}
-.tiptap blockquote p {
-  margin: 0;
-  font-style: italic;
-}
-/* Headings */
-.tiptap h1 {
-  font-size: 24px;
-  font-weight: 600;
-  margin: 16px 0;
-}
-.tiptap h2 {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 14px 0;
-}
-.tiptap h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 12px 0;
-}
-.tiptap h4 {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 10px 0;
-}
-.tiptap h5 {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 8px 0;
-}
-.tiptap h6 {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 6px 0;
-}
-
-/* Paragraph */
-.tiptap p {
-  font-weight: 400;
-  margin-bottom: 10px;
-}
-
-/* Lists */
-.tiptap ul, .tiptap ol {
-  padding-left: 30px;
-  margin: 10px 0;
-}
-.tiptap ul {
-  list-style-type: disc;
-}
-.tiptap ol {
-  list-style-type: decimal;
-}
-.tiptap li {
-  font-size: 15px;
-  margin-bottom: 6px;
-}
-/* Inline Styles */
-.tiptap strong {
-  font-weight: 600;
-}
-.tiptap em {
-  font-style: italic;
-}
-.tiptap u {
-  text-decoration: underline;
-}
-.tiptap del {
-  text-decoration: line-through;
-  color: #888;
-}
-.tiptap code {
-  background: #eee;
-  padding: 2px 4px;
-  border-radius: 4px;
-  font-family: monospace;
-  font-size: 14px;
-}
-.tiptap pre {
-  background-color: #f5f5f5;
-  padding: 12px;
-  border-radius: 6px;
-  overflow-x: auto;
-  font-family: monospace;
-  margin: 12px 0;
-}
-
-/* Horizontal Rule */
-.tiptap hr {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin: 20px 0;
-}
-
-/* Superscript & Subscript */
-.tiptap sup,
-.tiptap sub {
-  font-size: 0.75em;
-  vertical-align: baseline;
-  position: relative;
-}
-.tiptap sup {
-  top: -0.5em;
-}
-.tiptap sub {
-  bottom: -0.25em;
-}
-
-/* Links */
-.tiptap a {
-  color: #007bff;
-  text-decoration: none;
-}
-.tiptap a:hover {
-  text-decoration: underline;
-}
-
-/* Images */
-.tiptap img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 10px 0;
-  border-radius: 6px;
+  display: none;
 }

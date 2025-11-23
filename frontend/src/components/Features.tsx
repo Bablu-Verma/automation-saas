@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { ReactNode } from "react"
 import {
   FiZap,
@@ -17,24 +16,36 @@ type FeatureCardProps = {
   desc: string
 }
 
-// 🔹 Named export
+// 🔹 FeatureCard Component (Without motion)
 export function FeatureCard({ icon, title, desc }: FeatureCardProps) {
   return (
-    <motion.div
-      whileHover={{ y: -8, scale: 1.03 }}
-      transition={{ duration: 0.3 }}
-      className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl group"
+
+    <div
+      className="
+        rounded-2xl p-6 shadow-md group transition-all duration-300 transform 
+        hover:-translate-y-1 hover:scale-[1.01] 
+        
+        bg-lightBg/50 border-textLight/10 
+      
+        dark:bg-darkBg/50 dark:border-textDark/10
+        border backdrop-blur-md
+      "
     >
       <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-tr from-primary to-secondary text-white mb-4 group-hover:scale-110 transition">
         {icon}
       </div>
-      <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
-      <p className="text-white/70">{desc}</p>
-    </motion.div>
+      
+      <h3 className="text-xl font-semibold mb-2 text-textLight dark:text-textDark">
+        {title}
+      </h3>
+      
+      <p className="text-textLight/70 dark:text-textDark/70">
+        {desc}
+      </p>
+    </div>
   )
 }
 
-// 🔹 Default export
 export default function Features() {
   const features: FeatureCardProps[] = [
     { icon: <FiZap size={26} />, title: "Lightning Fast", desc: "Automations built with blazing speed." },
@@ -47,36 +58,23 @@ export default function Features() {
 
   return (
     <section className="pt-28 px-4 sm:px-6 max-w-7xl mx-auto">
-      <motion.h2
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-2xl sm:text-3xl md:text-4xl font-bold text-left text-white"
+      {/* Heading (Text color updated) */}
+      <h2
+        className="text-2xl sm:text-3xl md:text-4xl font-bold text-left 
+          text-textLight dark:text-textDark"
       >
-        Why Choose Loop Axis ?
-      </motion.h2>
+        Why Choose Loop Axis?
+      </h2>
 
-      <motion.div
+      <div
         className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={{
-          hidden: {},
-          visible: { transition: { staggerChildren: 0.2 } },
-        }}
       >
         {features.map((feature, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <div key={i}>
             <FeatureCard {...feature} />
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </section>
   )
 }

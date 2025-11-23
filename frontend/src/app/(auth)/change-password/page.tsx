@@ -1,15 +1,13 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { useState } from "react"
+// Framer Motion removed from imports
 import Link from "next/link"
 import toast from "react-hot-toast"
 import { change_password_api } from "@/api"
 import axios from "axios"
 import validator from "validator"
 import { useRouter, useSearchParams } from "next/navigation"
-
-
 
 
 export default function ResetPasswordPage() {
@@ -19,7 +17,7 @@ export default function ResetPasswordPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-   const token = searchParams.get("userid")
+  const token = searchParams.get("userid")
 
   const validateInputs = () => {
 
@@ -49,7 +47,6 @@ export default function ResetPasswordPage() {
   }
 
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validateInputs()) return
@@ -66,7 +63,7 @@ export default function ResetPasswordPage() {
           },
         }
       )
-      toast.success(data.msg || "Password reset link sent")
+      toast.success(data.msg || "Password reset successful!")
       setTimeout(()=>{
         router.push('/login')
       },4000)
@@ -77,70 +74,93 @@ export default function ResetPasswordPage() {
     }
   }
 
+  // --- Reusable Input Class ---
+  const inputClasses = `
+    w-full px-4 py-2 rounded-xl transition border-2 focus:outline-none focus:ring-2 focus:ring-primary
+    
+    /* Light Mode Input */
+    bg-lightBg/50 text-textLight border-textLight/20 placeholder-textLight/60
+    
+    /* Dark Mode Input */
+    dark:bg-darkBg/50  dark:border-textDark/20 dark:placeholder-textDark/60
+  `;
+  
+  // --- Reusable Card Container Class ---
+  const cardClasses = `
+    w-full max-w-md rounded-3xl p-8 shadow-xl transition-colors duration-500
+    
+    /* Light Mode Glassmorphism */
+    bg-lightBg/80 backdrop-blur-lg border border-textLight/10
+    
+    /* Dark Mode Glassmorphism */
+    dark:bg-darkBg/80 dark:border-textDark/10
+  `;
+
 
   return (
-    <section className="flex items-center justify-center min-h-screen bg-gradient-to-b from-primary/10 to-secondary/10 py-32 px-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-xl"
+    /* ✨ सुधार: Main Section Theming */
+    <section className="flex items-center justify-center min-h-screen py-32 px-6
+      bg-lightBg dark:bg-darkBg transition-colors duration-500">
+      
+      {/* Framer Motion removed, using standard div with themed classes */}
+      <div
+        className={cardClasses}
       >
-        {/* Title */}
-        <h1 className="text-3xl md:text-4xl font-extrabold text-center text-white">
+        {/* Title Theming */}
+        <h1 className="text-3xl md:text-4xl font-extrabold text-center text-textLight dark:text-textDark">
           Reset Password
         </h1>
-        <p className="text-center text-white/70 mt-2">
+        {/* Subtitle Theming */}
+        <p className="text-center mt-2 text-textLight/70 dark:text-textDark/70">
           Enter your new password below.
         </p>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div>
-            <label className="block text-white/80 mb-2">New Password</label>
+            {/* Label Theming */}
+            <label className="block mb-2 text-textLight/80 dark:text-textDark/80">New Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter new password"
               required
-              className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputClasses}
             />
           </div>
 
           <div>
-            <label className="block text-white/80 mb-2">Confirm Password</label>
+            {/* Label Theming */}
+            <label className="block mb-2 text-textLight/80 dark:text-textDark/80">Confirm Password</label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Re-enter new password"
               required
-              className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputClasses}
             />
           </div>
 
-          {/* Submit */}
+          {/* Submit Button (Gradient remains universal) */}
           <button
             type="submit"
-            className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition"
+            disabled={loading}
+            className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-
-            {
-              loading ? 'Loading..' : 'Change Password'
-            }
-
+            {loading ? 'Loading..' : 'Change Password'}
           </button>
         </form>
 
-        {/* Back to login */}
-        <p className="text-center text-white/70 mt-6">
+        {/* Back to login Theming */}
+        <p className="text-center mt-6 text-textLight/70 dark:text-textDark/70">
           Back to{" "}
           <Link href="/login" className="text-primary font-semibold hover:underline">
             Login
           </Link>
         </p>
-      </motion.div>
+      </div>
     </section>
   )
 }

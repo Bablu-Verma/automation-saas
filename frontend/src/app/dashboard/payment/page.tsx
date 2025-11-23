@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+// Removed: import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import axios from "axios";
@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import { IUser } from "@/types";
 import LoadingSpiner from "@/app/admin/_components/LoadingSpiner";
 
-// Subscription plan types
+// Subscription plan types (remain the same)
 type SubscriptionPlan = {
   id: string;
   name: string;
@@ -66,8 +66,9 @@ export default function PaymentPage() {
   const [amountDetails, setAmountDetails] = useState<AmountDetails | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>("upi");
 
-  // Calculate amounts when plan changes
+  // --- Component Logic (remains the same) ---
   useEffect(() => {
+    // ... useEffect logic
     if (!selectedPlan || !automation || subscriptionPlans.length === 0) return;
 
     const selectedPlanData = subscriptionPlans.find(p => p.id === selectedPlan);
@@ -77,7 +78,7 @@ export default function PaymentPage() {
     const baseAmount = monthlyPrice * selectedPlanData.duration;
     const discountAmount = selectedPlanData.savings || 0;
     const subtotal = baseAmount - discountAmount;
-    const taxPercentage = Number(process.env.NEXT_PUBLIC_TAX_PARCENTAGE) || 18; 
+    const taxPercentage = Number(process.env.NEXT_PUBLIC_TAX_PARCENTAGE) || 18;
     const taxAmount = Math.round((subtotal * taxPercentage) / 100);
     const totalAmount = subtotal + taxAmount;
 
@@ -93,7 +94,6 @@ export default function PaymentPage() {
 
   useEffect(() => {
     if (!instanceId || !token) return;
-
     async function fetchAutomation() {
       try {
         const { data } = await axios.post(
@@ -102,84 +102,30 @@ export default function PaymentPage() {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setAutomation(data.automation);
-
-        // Generate subscription plans based on masterWorkflow pricing
+        // Plan generation logic
         const monthlyPrice = data.automation.masterWorkflow.pricePerMonth;
-        // const currency = data.automation.masterWorkflow.currency;
-
-        // Common features for all plans
         const commonFeatures = [
-          "Automation access",
-          "Priority support",
-          "Standard execution limits",
-          "Email notifications",
-          "Cancel anytime",
-          "Instant activation"
+          "Automation access", "Priority support", "Standard execution limits",
+          "Email notifications", "Cancel anytime", "Instant activation"
         ];
-
         const plans: SubscriptionPlan[] = [
-          {
-            id: "1",
-            name: "1 Month",
-            duration: 1,
-            price: monthlyPrice,
-            totalPrice: monthlyPrice,
-            features: commonFeatures
-          },
-          {
-            id: "3",
-            name: "3 Months",
-            duration: 3,
-            price: monthlyPrice,
-            totalPrice: monthlyPrice * 3 * 0.95, // 5% discount
-            savings: monthlyPrice * 3 * 0.05,
-            savingsPercentage: 5,
-            features: commonFeatures
-          },
-          {
-            id: "6",
-            name: "6 Months",
-            duration: 6,
-            price: monthlyPrice,
-            totalPrice: monthlyPrice * 6 * 0.90, // 10% discount
-            savings: monthlyPrice * 6 * 0.10,
-            savingsPercentage: 10,
-            popular: true,
-            features: commonFeatures
-          },
-          {
-            id: "9",
-            name: "9 Months",
-            duration: 9,
-            price: monthlyPrice,
-            totalPrice: monthlyPrice * 9 * 0.85, // 15% discount
-            savings: monthlyPrice * 9 * 0.15,
-            savingsPercentage: 15,
-            features: commonFeatures
-          },
-          {
-            id: "12",
-            name: "12 Months",
-            duration: 12,
-            price: monthlyPrice,
-            totalPrice: monthlyPrice * 12 * 0.80, // 20% discount
-            savings: monthlyPrice * 12 * 0.20,
-            savingsPercentage: 20,
-            features: commonFeatures
-          }
+          { id: "1", name: "1 Month", duration: 1, price: monthlyPrice, totalPrice: monthlyPrice, features: commonFeatures },
+          { id: "3", name: "3 Months", duration: 3, price: monthlyPrice, totalPrice: monthlyPrice * 3 * 0.95, savings: monthlyPrice * 3 * 0.05, savingsPercentage: 5, features: commonFeatures },
+          { id: "6", name: "6 Months", duration: 6, price: monthlyPrice, totalPrice: monthlyPrice * 6 * 0.90, savings: monthlyPrice * 6 * 0.10, savingsPercentage: 10, popular: true, features: commonFeatures },
+          { id: "9", name: "9 Months", duration: 9, price: monthlyPrice, totalPrice: monthlyPrice * 9 * 0.85, savings: monthlyPrice * 9 * 0.15, savingsPercentage: 15, features: commonFeatures },
+          { id: "12", name: "12 Months", duration: 12, price: monthlyPrice, totalPrice: monthlyPrice * 12 * 0.80, savings: monthlyPrice * 12 * 0.20, savingsPercentage: 20, features: commonFeatures }
         ];
-
         setSubscriptionPlans(plans);
       } catch (error) {
         console.error("Failed to fetch automation details:", error);
         toast.error("Failed to load automation details");
       }
     }
-
     fetchAutomation();
   }, [instanceId, token]);
 
   const handlePayment = async () => {
+    // ... handlePayment logic (remains the same)
     if (!selectedPlan || !instanceId || !token || !automation || !amountDetails) return;
 
     if (!user?.profile?.phoneNumber) {
@@ -193,7 +139,7 @@ export default function PaymentPage() {
     setLoading(true);
     try {
       const selectedPlanData = subscriptionPlans.find(p => p.id === selectedPlan);
-      
+
       if (!selectedPlanData) {
         toast.error("Invalid plan selected");
         return;
@@ -206,8 +152,7 @@ export default function PaymentPage() {
         monthlyPrice: automation.masterWorkflow.pricePerMonth
       };
 
-      // Call payment API
-      const {data} = await axios.post(
+      const { data } = await axios.post(
         payment_create_request_api,
         {
           instanceId: instanceId,
@@ -217,26 +162,23 @@ export default function PaymentPage() {
           currency: automation.masterWorkflow.currency,
           paymentMethod: paymentMethod
         },
-        { 
-          headers: { 
+        {
+          headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
-          } 
+          }
         }
       );
-
-    
-
       if (data.success) {
         toast.success("Payment request created successfully!");
-        setTimeout(()=>{
+        setTimeout(() => {
           router.push(`/dashboard/billing/view?id=${data.data.paymentId}`);
-        },2000)
+        }, 2000)
       }
     } catch (error: any) {
       console.error("Payment creation error:", error);
-      const errorMessage = error.response?.data?.message 
-        || error.response?.data?.error 
+      const errorMessage = error.response?.data?.message
+        || error.response?.data?.error
         || "Payment request failed. Please try again.";
       toast.error(errorMessage);
     } finally {
@@ -255,39 +197,70 @@ export default function PaymentPage() {
 
   if (!automation) {
     return (
-     <LoadingSpiner />
+      <LoadingSpiner />
     );
   }
 
+  // --- Theme Variables ---
+  const textPrimary = `text-textLight dark:text-textDark`;
+  const textSecondary = `text-textLight/70 dark:text-textDark/70`;
+  const textFaded = `text-textLight/50 dark:text-textDark/50`;
+
+  const cardClasses = `
+    rounded-2xl p-6 shadow-lg transition-colors duration-500
+    bg-lightBg/80 backdrop-blur-lg border border-textLight/10
+    dark:bg-darkBg/80 dark:border-textDark/10
+  `;
+  const subCardClasses = `
+    p-4 rounded-lg transition-colors duration-300
+    /* Light Mode */
+    bg-lightBg/60 border border-textLight/10
+    /* Dark Mode */
+    dark:bg-darkBg/60 dark:border-textDark/10
+  `;
+
+  // --- Utility function for plan selection border color (Themed) ---
+  const getPlanBorderStyle = (planId: string) => {
+    const baseClasses = "relative rounded-xl p-4 border-2 transition-all cursor-pointer";
+    const commonBg = "bg-lightBg/50 dark:bg-darkBg/50";
+
+    // Active state uses primary/secondary brand colors for selection clarity
+    if (selectedPlan === planId) {
+      return `${baseClasses} border-primary ${commonBg} shadow-md`;
+    }
+
+    // Inactive state uses subtle theming
+    return `${baseClasses} border-textLight/10 dark:border-textDark/10 ${commonBg} hover:border-primary/50`;
+  };
+
+
   return (
-    <div className="max-w-7xl mx-auto pb-28 text-white px-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/10"
+    <div className="max-w-7xl mx-auto pb-28 px-6">
+      {/* Main Container (Motion removed) */}
+      <div
+        className={cardClasses}
       >
         {/* Header Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Complete Your Subscription</h1>
-          <p className="text-gray-400 mb-4">
-            Activate your automation: <strong>{automation.instanceName}</strong>
+          <h1 className={`text-3xl font-bold mb-2 ${textPrimary}`}>Complete Your Subscription</h1>
+          <p className={`mb-4 ${textSecondary}`}>
+            Activate your automation: <strong className={textPrimary}>{automation.instanceName}</strong>
           </p>
 
           {/* Automation Info Card */}
-          <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+          <div className={subCardClasses}>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-lg">
+                <h3 className={`font-semibold text-lg ${textPrimary}`}>
                   Base price: {formatCurrency(automation.masterWorkflow.pricePerMonth, automation.masterWorkflow.currency)}/month
                 </h3>
-                <p className="text-gray-400 text-sm mt-1">
+                <p className={`text-sm mt-1 ${textFaded}`}>
                   Select your preferred subscription duration
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-gray-400">Current Status</p>
-                <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-xs font-semibold">
+                <p className={`text-sm ${textFaded}`}>Current Status</p>
+                <span className="px-2 py-1 bg-yellow-500/20 text-yellow-500 rounded-full text-xs font-semibold">
                   Payment Pending
                 </span>
               </div>
@@ -295,28 +268,24 @@ export default function PaymentPage() {
           </div>
         </div>
 
-        {/* Subscription Plans - 5 columns for larger screens */}
+        {/* Subscription Plans - Motion removed */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           {subscriptionPlans.map((plan) => (
-            <motion.div
+            <div
               key={plan.id}
-              whileHover={{ y: -3 }}
-              className={`relative rounded-xl p-4 border-2 transition-all cursor-pointer ${
-                selectedPlan === plan.id
-                  ? "border-blue-500 bg-blue-500/10"
-                  : "border-white/10 bg-white/5"
-              }`}
+              // Applied themed class using the utility function (no motion)
+              className={getPlanBorderStyle(plan.id)}
               onClick={() => setSelectedPlan(plan.id)}
             >
               {plan.popular && (
                 <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                  <span className="bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
                     POPULAR
                   </span>
                 </div>
               )}
 
-              <div className="text-center mb-4">
+              <div className={`text-center mb-4 ${textPrimary}`}>
                 <h3 className="text-lg font-bold mb-2">{plan.name}</h3>
                 <div className="flex items-baseline justify-center gap-1 mb-1">
                   <span className="text-2xl font-bold">
@@ -326,11 +295,11 @@ export default function PaymentPage() {
 
                 {plan.duration > 1 && (
                   <div className="space-y-1">
-                    <p className="text-gray-400 text-xs">
+                    <p className={`${textFaded} text-xs`}>
                       {formatCurrency(plan.totalPrice / plan.duration, automation.masterWorkflow.currency)}/month
                     </p>
                     {plan.savings && (
-                      <p className="text-green-400 text-xs font-semibold">
+                      <p className="text-green-500 text-xs font-semibold">
                         Save {plan.savingsPercentage}%
                       </p>
                     )}
@@ -339,26 +308,22 @@ export default function PaymentPage() {
               </div>
 
               <button
-                className={`w-full py-2 rounded-lg font-semibold text-sm transition-colors ${
-                  selectedPlan === plan.id
-                    ? "bg-blue-500 hover:bg-blue-600"
-                    : "bg-white/10 hover:bg-white/20"
-                }`}
+                className={`w-full py-2 rounded-lg font-semibold text-sm transition-colors text-white ${selectedPlan === plan.id
+                    ? "bg-secondary hover:bg-primary"
+                    : "bg-textLight/10 dark:bg-textDark/10 hover:bg-textLight/20 dark:hover:bg-textDark/20"
+                  }`}
               >
                 {selectedPlan === plan.id ? "Selected" : "Select"}
               </button>
-            </motion.div>
+            </div>
           ))}
         </div>
 
-        {/* Payment Method Selection */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white/5 rounded-lg p-6 mb-6 border border-white/10"
+        {/* Payment Method Selection - Motion removed */}
+        <div
+          className={`${subCardClasses} mb-6`}
         >
-          <h3 className="text-xl font-bold mb-4">Select Payment Method</h3>
+          <h3 className={`text-xl font-bold mb-4 ${textPrimary}`}>Select Payment Method</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { id: "upi", name: "UPI", icon: "💸" },
@@ -368,11 +333,10 @@ export default function PaymentPage() {
             ].map((method) => (
               <div
                 key={method.id}
-                className={`p-4 border-2 rounded-lg cursor-pointer text-center transition-all ${
-                  paymentMethod === method.id 
-                    ? "border-blue-500 bg-blue-500/10" 
-                    : "border-white/10 bg-white/5 hover:bg-white/10"
-                }`}
+                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${textPrimary} ${paymentMethod === method.id
+                    ? "border-primary bg-primary/10"
+                    : "border-textLight/10 dark:border-textDark/10 bg-textLight/5 dark:bg-textDark/5 hover:border-primary/50"
+                  }`}
                 onClick={() => setPaymentMethod(method.id)}
               >
                 <div className="text-2xl mb-2">{method.icon}</div>
@@ -380,80 +344,76 @@ export default function PaymentPage() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
-        {/* Amount Breakdown */}
+        {/* Amount Breakdown - Motion removed */}
         {amountDetails && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            className="bg-white/5 rounded-lg p-6 mb-6 border border-white/10"
+          <div
+            className={`${subCardClasses} mb-6`}
           >
-            <h3 className="text-xl font-bold mb-4">Amount Breakdown</h3>
-            <div className="space-y-3">
+            <h3 className={`text-xl font-bold mb-4 ${textPrimary}`}>Amount Breakdown</h3>
+            <div className={`space-y-3 ${textSecondary}`}>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <FiDollarSign className="text-gray-400" />
+                  <FiDollarSign className={textFaded} />
                   <span>Base Amount</span>
                 </div>
                 <span>{formatCurrency(amountDetails.baseAmount, automation.masterWorkflow.currency)}</span>
               </div>
-              
+
               {amountDetails.discountAmount > 0 && (
-                <div className="flex justify-between items-center text-green-400">
+                <div className="flex justify-between items-center text-green-500">
                   <div className="flex items-center gap-2">
-                    <FiTag className="text-green-400" />
+                    <FiTag className="text-green-500" />
                     <span>Discount</span>
                   </div>
                   <span>-{formatCurrency(amountDetails.discountAmount, automation.masterWorkflow.currency)}</span>
                 </div>
               )}
-              
-              <div className="flex justify-between items-center border-t border-white/10 pt-3">
+
+              <div className="flex justify-between items-center border-t border-textLight/10 dark:border-textDark/10 pt-3">
                 <div className="flex items-center gap-2">
-                  <FiDollarSign className="text-gray-400" />
+                  <FiDollarSign className={textFaded} />
                   <span>Subtotal</span>
                 </div>
                 <span>{formatCurrency(amountDetails.subtotal, automation.masterWorkflow.currency)}</span>
               </div>
-              
+
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <FiInfo className="text-gray-400" />
+                  <FiInfo className={textFaded} />
                   <span>GST ({amountDetails.taxPercentage}%)</span>
                 </div>
                 <span>+{formatCurrency(amountDetails.taxAmount, automation.masterWorkflow.currency)}</span>
               </div>
-              
-              <div className="flex justify-between items-center border-t border-white/10 pt-3 text-lg font-bold">
+
+              <div className={`flex justify-between items-center border-t border-textLight/10 dark:border-textDark/10 pt-3 text-lg font-bold ${textPrimary}`}>
                 <div className="flex items-center gap-2">
-                  <FiDollarSign className="text-blue-400" />
+                  <FiDollarSign className="text-secondary" />
                   <span>Total Amount</span>
                 </div>
-                <span className="text-blue-400">
+                <span className="text-secondary">
                   {formatCurrency(amountDetails.totalAmount, automation.masterWorkflow.currency)}
                 </span>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
 
-        {/* Selected Plan Summary */}
+        {/* Selected Plan Summary - Motion removed */}
         {selectedPlan && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            className="bg-white/5 rounded-lg p-4 mb-6 border border-white/10"
+          <div
+            className={`${subCardClasses} p-4 mb-6`}
           >
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
-                <h3 className="font-semibold text-lg">Order Summary</h3>
-                <p className="text-gray-400 text-sm">
-                  {subscriptionPlans.find(p => p.id === selectedPlan)?.name} Plan • 
+                <h3 className={`font-semibold text-lg ${textPrimary}`}>Order Summary</h3>
+                <p className={`text-sm ${textFaded}`}>
+                  {subscriptionPlans.find((p) => p.id === selectedPlan)?.name} Plan •
                   Payment via {paymentMethod.toUpperCase()}
                 </p>
                 {subscriptionPlans.find(p => p.id === selectedPlan)?.savings && (
-                  <p className="text-green-400 text-sm mt-1">
+                  <p className="text-green-500 text-sm mt-1">
                     You save {formatCurrency(
                       subscriptionPlans.find(p => p.id === selectedPlan)?.savings || 0,
                       automation.masterWorkflow.currency
@@ -462,67 +422,66 @@ export default function PaymentPage() {
                 )}
               </div>
               <div className="text-center sm:text-right">
-                <p className="text-2xl font-bold">
+                <p className={`text-2xl font-bold ${textPrimary}`}>
                   {formatCurrency(
                     amountDetails?.totalAmount || 0,
                     automation.masterWorkflow.currency
                   )}
                 </p>
-                <p className="text-gray-400 text-sm">
+                <p className={`text-sm ${textFaded}`}>
                   {subscriptionPlans.find(p => p.id === selectedPlan)?.duration} month{
                     subscriptionPlans.find(p => p.id === selectedPlan)?.duration === 1 ? '' : 's'
                   } access
                 </p>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
 
-        {/* Features Section - Same for all plans */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white/5 rounded-lg p-6 mb-6 border border-white/10"
+        {/* Features Section - Motion removed */}
+        <div
+          className={`${subCardClasses} p-6 mb-6`}
         >
-          <h3 className="text-xl font-bold mb-4 text-center">All plans include:</h3>
+          <h3 className={`text-xl font-bold mb-4 text-center ${textPrimary}`}>All plans include:</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {subscriptionPlans[0]?.features.map((feature, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <FiCheck className="text-green-400 flex-shrink-0" />
+              <div key={index} className={`flex items-center gap-3 ${textSecondary}`}>
+                <FiCheck className="text-green-500 flex-shrink-0" />
                 <span className="text-sm">{feature}</span>
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Payment Security & Features */}
-        <div className="grid md:grid-cols-3 gap-4 mb-8">
-          <div className="flex items-center gap-3 text-sm text-gray-300">
-            <FiShield className="text-green-400" size={20} />
+        <div className={`grid md:grid-cols-3 gap-4 mb-8 ${textSecondary}`}>
+          <div className="flex items-center gap-3 text-sm">
+            <FiShield className="text-green-500" size={20} />
             <span>Secure SSL Encryption</span>
           </div>
-          <div className="flex items-center gap-3 text-sm text-gray-300">
-            <FiCreditCard className="text-blue-400" size={20} />
+          <div className="flex items-center gap-3 text-sm">
+            <FiCreditCard className="text-secondary" size={20} />
             <span>Multiple Payment Methods</span>
           </div>
-          <div className="flex items-center gap-3 text-sm text-gray-300">
-            <FiCalendar className="text-purple-400" size={20} />
+          <div className="flex items-center gap-3 text-sm">
+            <FiCalendar className="text-primary" size={20} />
             <span>Instant Activation</span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center pt-6 border-t border-white/10">
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center pt-6 border-t border-textLight/10 dark:border-textDark/10">
           <Link
             href={`/dashboard/automation-view?id=${instanceId}`}
-            className="px-6 py-3 rounded-full border border-white/30 text-white font-semibold hover:bg-white hover:text-primary transition"
+            // Themed Button
+            className={`px-6 py-3 rounded-full border ${textPrimary} font-semibold transition hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary 
+            border-textLight/30 dark:border-textDark/30`}
           >
             Back to Automation
           </Link>
 
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <span className="text-gray-400 text-sm text-center">
+            <span className={`text-sm text-center ${textFaded}`}>
               {selectedPlan
                 ? `Selected: ${subscriptionPlans.find((p) => p.id === selectedPlan)?.name} Plan`
                 : "Please select a duration"}
@@ -531,7 +490,8 @@ export default function PaymentPage() {
             <button
               onClick={handlePayment}
               disabled={!selectedPlan || loading}
-              className="px-8 py-3 rounded-full font-semibold flex items-center gap-2 transition-colors duration-300 bg-green-500 hover:bg-green-600 text-white disabled:bg-gray-600 disabled:cursor-not-allowed"
+              // Final Pay Button Theming
+              className="px-8 py-3 rounded-full font-semibold flex items-center gap-2 transition-colors duration-300 bg-primary hover:bg-secondary text-white disabled:bg-gray-600 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
@@ -547,7 +507,7 @@ export default function PaymentPage() {
             </button>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

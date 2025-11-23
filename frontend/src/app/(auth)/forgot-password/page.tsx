@@ -1,7 +1,7 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { useState } from "react"
+// Framer Motion removed from imports
 import Link from "next/link"
 import toast from "react-hot-toast"
 import axios from "axios"
@@ -36,7 +36,7 @@ export default function ForgotPasswordPage() {
         }
       )
       toast.success(data.msg || "Password reset link sent ✅")
-      setEmail("") 
+      setEmail("")
     } catch (err: any) {
       toast.error(err.response?.data?.msg || "Something went wrong ❌")
     } finally {
@@ -44,54 +44,79 @@ export default function ForgotPasswordPage() {
     }
   }
 
+  // --- Reusable Input Class ---
+  const inputClasses = `
+    w-full px-4 py-2 rounded-xl transition border-2 focus:outline-none focus:ring-2 focus:ring-primary
+    
+    /* Light Mode Input */
+    bg-lightBg/50 text-textLight border-textLight/20 placeholder-textLight/60
+    
+    /* Dark Mode Input */
+    dark:bg-darkBg/50  dark:border-textDark/20 dark:placeholder-textDark/60
+  `;
+  
+  // --- Reusable Card Container Class ---
+  const cardClasses = `
+    w-full max-w-md rounded-3xl p-8 shadow-xl transition-colors duration-500
+    
+    /* Light Mode Glassmorphism */
+    bg-lightBg/80 backdrop-blur-lg border border-textLight/10
+    
+    /* Dark Mode Glassmorphism */
+    dark:bg-darkBg/80 dark:border-textDark/10
+  `;
+
   return (
-    <section className="flex items-center justify-center min-h-screen bg-gradient-to-b from-primary/10 to-secondary/10 px-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-xl"
+    /* ✨ सुधार: Main Section Theming */
+    <section className="flex items-center justify-center min-h-screen px-6
+      bg-lightBg dark:bg-darkBg transition-colors duration-500">
+      
+      {/* Framer Motion removed, using standard div with themed classes */}
+      <div
+        className={cardClasses}
       >
-        {/* Title */}
-        <h1 className="text-3xl md:text-4xl font-extrabold text-center text-white">
+        {/* Title Theming */}
+        <h1 className="text-3xl md:text-4xl font-extrabold text-center text-textLight dark:text-textDark">
           Forgot Password
         </h1>
-        <p className="text-center text-white/70 mt-2">
+        {/* Subtitle Theming */}
+        <p className="text-center mt-2 text-textLight/70 dark:text-textDark/70">
           Enter your email to reset your password.
         </p>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div>
-            <label className="block text-white/80 mb-2">Email</label>
+            {/* Label Theming */}
+            <label className="block mb-2 text-textLight/80 dark:text-textDark/80">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
               required
-              className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputClasses}
             />
           </div>
 
-          {/* Submit */}
+          {/* Submit Button (Gradient remains universal) */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition disabled:opacity-50"
+            className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
 
-        {/* Back to login */}
-        <p className="text-center text-white/70 mt-6">
+        {/* Back to login Theming */}
+        <p className="text-center mt-6 text-textLight/70 dark:text-textDark/70">
           Remembered your password?{" "}
           <Link href="/login" className="text-primary font-semibold hover:underline">
             Back to Login
           </Link>
         </p>
-      </motion.div>
+      </div>
     </section>
   )
 }

@@ -1,218 +1,148 @@
+/* ============================================
+   Tailwind Friendly dangerouslyHTML Theme
+   ============================================ */
 
 .dangerouslyHTML * {
   box-sizing: border-box;
 }
 
+/* Base */
 .dangerouslyHTML {
-  color: #fff;
+  @apply text-[15px] leading-[1.7] text-gray-800 dark:text-gray-200;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 15px;
-  line-height: 1.7;
 }
 
-
+/* Headings */
 .dangerouslyHTML h1 {
-  font-size: 21px;
-  font-weight: 600;
-  line-height: 1.5;
-  margin: 16px 0;
+  @apply text-2xl font-semibold my-4;
 }
-
 .dangerouslyHTML h2 {
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 1.5;
-    margin: 14px 0px ;
+  @apply text-xl font-medium my-3;
 }
-
 .dangerouslyHTML h3 {
-    font-size: 17px;
-    font-weight: 500;
-    line-height: 1.5;
-    margin:14px 0;
+  @apply text-lg font-medium my-3;
 }
-.dangerouslyHTML h4{
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.5;
-  margin-bottom: 12px;
+.dangerouslyHTML h4 {
+  @apply text-base font-semibold mb-3;
 }
 .dangerouslyHTML h5 {
-  font-size: 15px;
-  font-weight: 500;
-  margin: 12px 0;
-  line-height: 1.5;
+  @apply text-[15px] font-medium my-3;
 }
-.dangerouslyHTML h6{
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.5;
-  margin-bottom: 8px;
+.dangerouslyHTML h6 {
+  @apply text-sm font-semibold mb-2;
 }
 
+/* Paragraph */
 .dangerouslyHTML p {
-    font-weight:400;
-    margin-bottom: 10px;
-    line-height: 1.7;
-    word-spacing: 3px;
-    font-size: 15px;
+  @apply mb-3 text-[15px];
+  word-spacing: 3px;
 }
 
+/* Links */
 .dangerouslyHTML a {
-  color: rgba(0, 0, 255, 0.526);
-  text-decoration: none;
-  line-height: 1.7;
+  @apply text-blue-500/70 underline-offset-2 hover:underline transition-colors;
   word-spacing: 3px;
-  transition: color 0.3s ease;
 }
 .dangerouslyHTML a:focus {
-  outline: 2px dashed var(--main-color);
+  outline: 2px dashed rgba(0, 0, 255, 0.52);
   outline-offset: 2px;
 }
 
-
-.dangerouslyHTML a:focus {
-  outline: 2px dashed rgba(0, 0, 255, 0.526);
-  outline-offset: 2px;
+/* Lists */
+.dangerouslyHTML ul,
+.dangerouslyHTML ol {
+  @apply pl-6 my-3;
 }
 
-.dangerouslyHTML a:hover {
-  text-decoration: underline;
-}
-.dangerouslyHTML ul, .dangerouslyHTML ol {
-  padding-left: 24px;
-  margin: 10px 0;
-}
-.dangerouslyHTML ul li{
-  list-style: disc;
-  line-height: 1.7;
-  word-spacing: 3px;
-  margin-bottom: 6px;
-}
-.dangerouslyHTML ol li{
-  list-style: decimal;
-  margin-bottom: 6px;
-  line-height: 1.7;
+.dangerouslyHTML ul li {
+  @apply list-disc mb-2;
   word-spacing: 3px;
 }
-.dangerouslyHTML strong{
-  font-weight: 500;
-  line-height: 1.7;
+.dangerouslyHTML ol li {
+  @apply list-decimal mb-2;
   word-spacing: 3px;
 }
 
-.dangerouslyHTML blockquote{
-  border-left: 4px solid #8a2222af;
-  background: rgba(236, 166, 166, 0.658);
-  margin: 10px 0;
-  padding: 10px 0px 10px 16px;
-}
-
-
-.dangerouslyHTML blockquote p{
-  margin-bottom: 0px;
-}
-
-.dangerouslyHTML table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 10px 0;
-}
-
-.tipdangerouslyHTMLtap th, .dangerouslyHTML td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-/* .dangerouslyHTML th {
-  background-color: rgba(133, 205, 24, 0.658);
-  color: var(--color-secondary);
-  font-weight: bold;
-} */
-
-/* .dangerouslyHTML tr:nth-child(even) {
-  background-color: #f9f9f9;
-  color: var(--color-secondary);
-} */
-
-/* .dangerouslyHTML tr:hover {
-  background-color: #e2e2e2;
-  color: var(--color-secondary);
-} */
-
-.dangerouslyHTML img {
-  width: 100%;
-  max-width: 700px;
-  height: auto;
-  margin: auto;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  margin: 12px 0;
-  border-radius: 6px;
-}
-
-
-.dangerouslyHTML hr {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin: 20px 0;
-}
-
-.dangerouslyHTML pre {
-  background-color: #f5f5f5;
-  padding: 12px;
-  border-radius: 4px;
-  overflow-x: auto;
-  font-family: monospace;
-  margin: 12px 0;
-}
-
-.dangerouslyHTML code {
-  background-color: #eee;
-  padding: 2px 4px;
-  color: var(--color-dark);
-  border-radius: 4px;
-  font-family: monospace;
+/* Inline styles */
+.dangerouslyHTML strong {
+  @apply font-medium;
+  word-spacing: 3px;
 }
 .dangerouslyHTML em {
-  font-style: italic;
+  @apply italic;
 }
 .dangerouslyHTML u {
-  text-decoration: underline;
+  @apply underline;
 }
-
 .dangerouslyHTML del {
-  text-decoration: line-through;
-  color: #999;
+  @apply line-through text-gray-500;
 }
 
-.dangerouslyHTML sup,
-.dangerouslyHTML sub {
-  font-size: 0.75em;
-  vertical-align: baseline;
-  position: relative;
+/* Blockquote */
+.dangerouslyHTML blockquote {
+  @apply border-l-4 border-red-600/70 
+         bg-red-300/40 dark:bg-red-600/10 
+         p-4 my-3 rounded;
+}
+.dangerouslyHTML blockquote p {
+  @apply m-0;
 }
 
+/* Tables */
+.dangerouslyHTML table {
+  @apply w-full border-collapse my-4;
+}
+.dangerouslyHTML th,
+.dangerouslyHTML td {
+  @apply border border-gray-300 dark:border-gray-700 px-3 py-2 text-left;
+}
+.dangerouslyHTML th {
+  @apply bg-gray-100 dark:bg-gray-700 font-semibold;
+}
+.dangerouslyHTML tr:nth-child(even) {
+  @apply bg-gray-50 dark:bg-gray-800/50;
+}
+.dangerouslyHTML tr:hover {
+  @apply bg-gray-200 dark:bg-gray-700/60;
+}
+
+/* Images */
+.dangerouslyHTML img {
+  @apply w-full max-w-[700px] mx-auto rounded-lg my-3 shadow;
+}
+
+/* Horizontal Line */
+.dangerouslyHTML hr {
+  @apply border-t border-gray-300 dark:border-gray-700 my-6;
+}
+
+/* Code */
+.dangerouslyHTML pre {
+  @apply bg-gray-100 dark:bg-gray-800 p-3 rounded my-4 overflow-x-auto font-mono;
+}
+
+.dangerouslyHTML code {
+  @apply bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-sm font-mono;
+}
+
+/* Superscript & Subscript */
 .dangerouslyHTML sup {
-  top: -0.5em;
+  @apply text-[0.75em] relative -top-1;
 }
 .dangerouslyHTML sub {
-  bottom: -0.25em;
+  @apply text-[0.75em] relative top-1;
 }
 
+/* Figures */
 .dangerouslyHTML figure {
-  margin: 16px 0;
-  text-align: center;
+  @apply my-4 text-center;
 }
-
 .dangerouslyHTML figcaption {
-  font-size: 0.9em;
-  color: #666;
-  margin-top: 4px;
+  @apply text-sm text-gray-600 dark:text-gray-400 mt-1;
 }
 
+/* Transitions */
 .dangerouslyHTML blockquote,
 .dangerouslyHTML code {
-  transition: all 0.3s ease;
+  @apply transition-all;
 }
-

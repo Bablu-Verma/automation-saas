@@ -3,49 +3,46 @@ import { useState, useEffect } from "react";
 type Theme = "light" | "dark";
 
 export default function useTheme(): [Theme, () => void] {
-  const [theme, setTheme] = useState<Theme>(() => {
+  const getInitialTheme = (): Theme => {
     if (typeof window === "undefined") return "light";
+
     const saved = localStorage.getItem("theme");
     if (saved === "light" || saved === "dark") return saved;
+
     return window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
       : "light";
-  });
+  };
 
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+
+  /* Apply theme to <html> */
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+    root.classList.toggle("dark", theme === "dark");
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Optional: auto-update if system theme changes
+  /* Auto-update on system theme change */
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = (e: MediaQueryListEvent) => {
+
+    const handleChange = (e: MediaQueryListEvent) => {
       const saved = localStorage.getItem("theme");
-      if (saved !== "light" && saved !== "dark") {
+
+      // Only auto-update if user has NOT set a manual theme
+      if (!saved) {
         setTheme(e.matches ? "dark" : "light");
       }
     };
-    
-    // Modern browsers
-    if (media.addEventListener) {
-      media.addEventListener("change", handler);
-      return () => media.removeEventListener("change", handler);
-    } 
-    // Legacy browsers (deprecated but for compatibility)
-    else if (media.addListener) {
-      media.addListener(handler);
-      return () => media.removeListener(handler);
-    }
+
+    media.addEventListener("change", handleChange);
+    return () => media.removeEventListener("change", handleChange);
   }, []);
 
-  const toggleTheme = (): void => {
-    setTheme((t) => (t === "dark" ? "light" : "dark"));
+  /* Toggle function */
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
   return [theme, toggleTheme];

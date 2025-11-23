@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { get_docs_by_service_api } from "@/api";
 import axios from "axios";
 import DocsDetailsClient from "./DocsDetailsClient";
+import { FaBook, FaSearch } from "react-icons/fa";
 
 interface ServiceDetailsPageProps {
   searchParams: { id: string };
@@ -19,7 +20,17 @@ export default async function ServiceDetailsPage({ searchParams }: ServiceDetail
     console.error("Failed to fetch docs server-side:", err);
   }
 
-  console.log(docs)
+  if(!docs){
+    return(
+       <div className="flex flex-col justify-center items-center text-textLight dark:text-textDark h-[65vh]">
+            <FaBook className="w-14 h-14 text-red-500 dark:text-red-400 mb-3 opacity-90" />
+            <p className="text-lg font-medium">Docs not found.</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Please check the link or try again.
+            </p>
+          </div>
+    )
+  }
 
   return <DocsDetailsClient initialDoc={docs} />;
 }

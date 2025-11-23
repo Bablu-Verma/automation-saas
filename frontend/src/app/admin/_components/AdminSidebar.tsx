@@ -73,11 +73,18 @@ export default function AdminSidebar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false) // Mobile toggle
 
+  // Helper function to check if the current path is a child route of the link
+  const isPathActive = (href: string) => {
+    // Check for exact match (e.g., /admin) or path start (e.g., /admin/user vs /admin/user/123)
+    return pathname === href || (pathname.startsWith(href) && href !== '/admin');
+  };
+
   return (
     <>
-      {/* Hamburger for mobile */}
+      {/* Hamburger for mobile (Themed) */}
       <button
-        className="md:hidden fixed top-16 left-4 z-10 p-2 bg-white/10 rounded-md text-white"
+        className="md:hidden fixed top-16 left-4 z-10 p-2 rounded-md 
+          bg-lightBg/80 dark:bg-darkBg/80 text-textLight dark:text-textDark shadow-md"
         onClick={() => setIsOpen(true)}
       >
         <FaBars size={24} />
@@ -89,55 +96,64 @@ export default function AdminSidebar() {
         onClick={() => setIsOpen(false)}
       />
 
-      {/* Sidebar */}
+      {/* Sidebar (Themed Glassmorphism Container) */}
       <aside className={`
-        fixed top-0 left-0 h-screen w-64 bg-white/5 backdrop-blur-lg p-6 pt-18 md:pt-6 flex flex-col
-        border-r border-white/20 z-30
-        transform transition-transform duration-300
+        fixed top-0 left-0 h-screen w-64 p-6 pt-18 md:pt-6 flex flex-col
+        z-30 transform transition-transform duration-300 overflow-y-auto
         ${isOpen ? "translate-x-0" : "-translate-x-full"} 
-        md:translate-x-0 md:sticky md:flex
+        md:translate-x-0 md:sticky md:flex md:top-0
+        
+        /* Light Mode Glassmorphism */
+        bg-lightBg/80 backdrop-blur-md border-r border-textLight/10 text-textLight
+        
+        /* Dark Mode Glassmorphism */
+        dark:bg-darkBg/80 dark:border-r dark:border-textDark/10 dark:text-textDark
       `}>
-        {/* Close button for mobile */}
+        {/* Close button and Title */}
         <div className="flex items-center justify-between mb-8">
         
-        <h2 className="text-2xl font-extrabold text-white ">
-          Admin
-        </h2>
-         <button
-          className="md:hidden text-white"
-          onClick={() => setIsOpen(false)}
-        >
-          <FaTimes size={20} />
-        </button>
+          <h2 className="text-2xl font-extrabold text-textLight dark:text-textDark">
+            Admin
+          </h2>
+          <button
+            className="md:hidden text-textLight dark:text-textDark"
+            onClick={() => setIsOpen(false)}
+          >
+            <FaTimes size={20} />
+          </button>
 
         </div>
         {/* Links */}
         <nav className="flex flex-col gap-2 flex-1 overflow-auto">
-          {links.map((link, i) => (
-            <Link
-              key={i}
-              href={link.href}
-              className={`flex items-center gap-3 px-4 py-2 rounded-xl font-medium transition
-                ${pathname === link.href
-                  ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg"
-                  : "text-white/70 hover:text-white hover:bg-white/10"
-                }`}
-              onClick={() => setIsOpen(false)}
-            >
-              {link.icon}
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link, i) => {
+            const isActive = isPathActive(link.href);
+            return (
+              <Link
+                key={i}
+                href={link.href}
+                className={`flex items-center gap-3 px-4 py-2 rounded-xl font-medium transition
+                  ${isActive
+                    ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg" // Active
+                    : "text-textLight/70 dark:text-textDark/70 hover:text-primary hover:bg-lightBg/50 dark:hover:bg-darkBg/50" // Inactive
+                  }`}
+                onClick={() => setIsOpen(false)}
+              >
+                {link.icon}
+                {link.label}
+              </Link>
+            )
+          })}
         </nav>
 
-        {/* Dashboard link */}
+        {/* Dashboard link (Themed) */}
         <Link
           href='/dashboard'
-          className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-white/70 hover:text-secondary hover:bg-white/10 transition mt-4"
+          className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition mt-4 
+            text-textLight/70 dark:text-textDark/70 hover:text-secondary hover:bg-lightBg/50 dark:hover:bg-darkBg/50"
           onClick={() => setIsOpen(false)}
         >
           <FaSignOutAlt size={18} />
-          Dashboard
+          User Dashboard
         </Link>
       </aside>
     </>

@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
+// Framer Motion removed from imports
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Autoplay } from "swiper/modules"
 import "swiper/css"
@@ -8,7 +8,7 @@ import "swiper/css"
 import Image from "next/image"
 
 const testimonials = [
-  { name: "Amit Kumar", text: "Loop Axis  saved us 20+ hrs/week. Insane ROI!", image: "/client.jpg" },
+  { name: "Amit Kumar", text: "Loop Axis saved us 20+ hrs/week. Insane ROI!", image: "/client.jpg" },
   { name: "Sarah Lee", text: "Email campaigns are now fully automated.", image: "/client.jpg" },
   { name: "Rajesh Singh", text: "Shopify orders sync without errors.", image: "/client.jpg" },
   { name: "Priya Sharma", text: "Seamless integration with all our tools.", image: "/client.jpg" },
@@ -17,19 +17,20 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="pt-28 px-4 sm:px-6 relative max-w-7xl  mx-auto">
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold  text-white">
+    <section className="pt-28 px-4 sm:px-6 relative max-w-7xl mx-auto">
+      {/* H2 Theming */}
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold 
+        text-textLight dark:text-textDark transition-colors duration-500">
         Hear From Our Happy Clients
       </h2>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.6 }}
-        className="mt-6 text-lg text-white/70 max-w-2xl"
+      {/* Paragraph Theming (Framer Motion removed) */}
+      <p
+        className="mt-6 text-lg max-w-2xl transition-colors duration-500
+        text-textLight/70 dark:text-textDark/70"
       >
-        Discover how businesses are saving time, boosting productivity, and scaling effortlessly with Loop Axis .
-      </motion.p>
+        Discover how businesses are saving time, boosting productivity, and scaling effortlessly with Loop Axis.
+      </p>
 
       <Swiper
         modules={[Autoplay]}
@@ -47,14 +48,20 @@ export default function Testimonials() {
       >
         {testimonials.map((t, i) => (
           <SwiperSlide key={i} className="p-2">
-            <motion.div
-              initial={{ opacity: 0, y: 0, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              className="relative bg-white/10 backdrop-blur-xl p-10 rounded-3xl  flex flex-col items-center text-center hover:scale-101 transition-transform duration-300"
+            {/* Card Theming (Framer Motion removed, using CSS for scale effect) */}
+            <div
+              className="relative p-10 rounded-3xl flex flex-col items-center text-center 
+                transition-all duration-300 shadow-md
+                
+                /* Light Mode Glassmorphism */
+                bg-lightBg/60 backdrop-blur-xl border border-textLight/10 
+                
+                /* Dark Mode Glassmorphism */
+                dark:bg-darkBg/60 dark:border-textDark/10
+              "
             >
-              {/* Client Image */}
-              <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-gradient-to-r from-primary to-secondary">
+              {/* Client Image Border (Note: Tailwind doesn't have native border-gradient, so we use a simple border) */}
+              <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-primary shadow-lg">
                 <Image
                   src={t.image}
                   alt={t.name}
@@ -64,14 +71,21 @@ export default function Testimonials() {
                 />
               </div>
 
-              <p className="italic font-normal text-white/80 text-lg md:text-xl max-w-xl">
+              {/* Text Theming */}
+              <p className="italic font-normal text-lg md:text-xl max-w-xl 
+                text-textLight/90 dark:text-textDark/90 line-clamp-3">
                 “{t.text}”
               </p>
-              <h4 className="mt-6 font-semibold text-white text-lg md:text-xl">
+              
+              {/* Name Theming */}
+              <h4 className="mt-6 font-semibold text-lg md:text-xl 
+                text-textLight dark:text-textDark">
                 {t.name}
               </h4>
+              
+              {/* Decorative Bar (Gradient remains) */}
               <div className="absolute top-4 w-12 h-1 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
-            </motion.div>
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>

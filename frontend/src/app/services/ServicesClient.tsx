@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+// Framer Motion removed from imports
 import axios from "axios";
 import { ServiceCard } from "@/components/ServiceCard";
 import Features from "@/components/Features";
@@ -43,33 +43,34 @@ export default function ServicesClientPage({ initialWorkflows }: ServicesClientP
   };
 
   return (
-    <section className="pt-28  mx-auto">
-      {/* Hero Section */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+    <section className="pt-28 mx-auto transition-colors duration-500">
+      
+      {/* Hero Section (Framer Motion removed) */}
+      <div
         className="text-center px-6 mb-16"
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white">
+        {/* H1 Theming */}
+        <h1 className="text-4xl md:text-5xl font-extrabold 
+          text-textLight dark:text-textDark transition-colors duration-500">
           Our Services
         </h1>
-        <p className="mt-4 text-white/80 text-lg md:text-xl max-w-3xl mx-auto">
+        {/* Paragraph Theming */}
+        <p className="mt-4 text-lg md:text-xl max-w-3xl mx-auto
+          text-textLight/80 dark:text-textDark/80 transition-colors duration-500">
           Explore the wide range of automation services we offer to help businesses save time, reduce costs, and scale effortlessly.
         </p>
-      </motion.div>
+      </div>
 
       {/* Services Grid */}
       <div className="grid grid-cols-1 px-6 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
         {workflows.map((service, i) => (
-          <motion.div
+          // Framer Motion removed, standard div used with CSS transition
+          <div
             key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.1 }}
+            className="transition-transform duration-300 hover:scale-[1.02]"
           >
             <ServiceCard workflows={service} />
-          </motion.div>
+          </div>
         ))}
       </div>
 
@@ -79,15 +80,16 @@ export default function ServicesClientPage({ initialWorkflows }: ServicesClientP
           <button
             onClick={loadMore}
             disabled={loading}
-            className="px-10 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl hover:from-secondary hover:to-primary transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            // Button Styling (Gradient remains universal, added hover scale)
+            className="px-10 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl hover:scale-105 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Loading..." : "Load More"}
           </button>
         </div>
       )}
 
-         <CustomAutomationCTA />
-
+      {/* Child Components (Assumed to be themed correctly) */}
+      <CustomAutomationCTA />
       <Features />
       <AppIntegrationSlider />
       <NewsletterSection />

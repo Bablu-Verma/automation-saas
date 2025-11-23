@@ -169,7 +169,7 @@ const Pagination: React.FC<PaginationProps> = ({
       </div>
 
       {/* Page Info */}
-      <div className="text-gray-300 font-medium text-sm">
+      <div className="text-textLight dark:text-textDark font-medium text-sm">
         Page {currentPage} of {totalPages}
       </div>
     </div>

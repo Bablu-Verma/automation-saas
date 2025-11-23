@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./editor.css";
 import "./dangerouslyHTML.css";
 import Navbar from "@/components/header/Navbar";
 import Footer from "@/components/Footer";
-import JSEVENT from "@/components/JSEVENT";
+
 import { Toaster } from 'react-hot-toast';
 import ReduxProvider from "@/redux-store/provider_";
 
@@ -80,9 +81,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-dark text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        <JSEVENT />
+ 
         <Toaster position="top-right" />
         <ReduxProvider>
           <Navbar />

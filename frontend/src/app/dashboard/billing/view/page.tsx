@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
-import { useSelector } from "react-redux"
-import { RootState } from "@/redux-store/redux_store"
-import axios from "axios"
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+// Removed: import { motion } from "framer-motion";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux-store/redux_store";
 import {
   FiCheckCircle,
   FiClock,
@@ -15,14 +15,18 @@ import {
   FiMail,
   FiPhone,
   FiMapPin,
-  FiBriefcase
-} from "react-icons/fi"
-import toast from "react-hot-toast"
-import { payment_details_api } from "@/api"
-import LoadingSpiner from "@/app/admin/_components/LoadingSpiner"
-import Link from "next/link"
-import DownloadInvoice from "@/components/DownloadInvoice"
+  FiBriefcase,
+  FiInfo,
+  FiTag,
+  FiDollarSign
+} from "react-icons/fi";
+import toast from "react-hot-toast";
+import { payment_details_api } from "@/api";
+import LoadingSpiner from "@/app/admin/_components/LoadingSpiner";
+import Link from "next/link";
+import DownloadInvoice from "@/components/DownloadInvoice"; // Assuming this component is themed internally
 
+// Type definitions remain the same
 export type PaymentLog = {
   status: "pending" | "success" | "failed" | "refunded" | "cancelled"
   note?: string
@@ -43,7 +47,7 @@ export type Payment = {
   }
   instanceId: {
     instanceName: string
-    _id:string
+    _id: string
   }
   subscriptionMonths: number
   planDetails: {
@@ -125,62 +129,83 @@ export default function PaymentDetailsPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "success":
-        return <FiCheckCircle className="text-green-400" size={22} />
+        return <FiCheckCircle className="text-green-500" size={22} />
       case "pending":
-        return <FiClock className="text-yellow-400" size={22} />
+        return <FiClock className="text-yellow-500" size={22} />
       case "failed":
-        return <FiXCircle className="text-red-400" size={22} />
+        return <FiXCircle className="text-red-500" size={22} />
       case "refunded":
-        return <FiCreditCard className="text-blue-400" size={22} />
+        return <FiCreditCard className="text-blue-500" size={22} />
       case "cancelled":
-        return <FiXCircle className="text-gray-400" size={22} />
+        return <FiXCircle className="text-gray-500" size={22} />
       default:
-        return <FiCreditCard className="text-gray-400" size={22} />
+        return <FiCreditCard className="text-gray-500" size={22} />
     }
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "success":
-        return "text-green-400 bg-green-400/10"
+        return "text-green-500 bg-green-500/10"
       case "pending":
-        return "text-yellow-400 bg-yellow-400/10"
+        return "text-yellow-500 bg-yellow-500/10"
       case "failed":
-        return "text-red-400 bg-red-400/10"
+        return "text-red-500 bg-red-500/10"
       case "refunded":
-        return "text-blue-400 bg-blue-400/10"
+        return "text-blue-500 bg-blue-500/10"
       case "cancelled":
-        return "text-gray-400 bg-gray-400/10"
+        return "text-gray-500 bg-gray-500/10"
       default:
-        return "text-gray-400 bg-gray-400/10"
+        return "text-gray-500 bg-gray-500/10"
     }
   }
 
-  
+  // --- Theme Variables ---
+  const textPrimary = `text-textLight dark:text-textDark`;
+  const textSecondary = `text-textLight/70 dark:text-textDark/70`;
+  const textFaded = `text-textLight/50 dark:text-textDark/50`;
+  const textInfoPrimary = `text-textLight dark:text-textDark`; // For bold values
+
+  const cardClasses = `
+    bg-lightBg/80 backdrop-blur-lg border border-textLight/10
+    dark:bg-darkBg/80 dark:border-textDark/10
+    shadow-lg space-y-6
+  `;
+  const subCardClasses = `
+    p-4 rounded-lg transition-colors duration-300
+    /* Light Mode */
+    bg-lightBg/60 border border-textLight/10
+    /* Dark Mode */
+    dark:bg-darkBg/60 dark:border-textDark/10
+  `;
+  const logBgClasses = `
+    bg-lightBg/50 border-textLight/10
+    dark:bg-darkBg/50 dark:border-textDark/10
+  `;
+
+
   if (loading) {
     return <LoadingSpiner />
   }
 
   if (!payment) {
     return (
-      <div className="flex items-center justify-center h-[70vh] text-gray-400">
+      <div className="flex items-center justify-center h-[70vh] text-textLight dark:text-textDark">
         <p>Payment not found</p>
       </div>
     )
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="max-w-4xl mx-auto py-10 px-4 text-white"
+    <div
+      className={`max-w-4xl mx-auto py-10 px-4 ${textPrimary}`}
     >
-      <h1 className="text-3xl font-bold mb-6">Payment Details</h1>
+      <h1 className={`text-3xl font-bold mb-6 ${textPrimary}`}>Payment Details</h1>
 
-      <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl border border-white/10 space-y-6">
+      <div className={`p-6 rounded-2xl border ${cardClasses}`}>
         {/* Status + Order */}
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Order ID: #{payment.orderId}</h2>
+          <h2 className={`text-xl font-semibold ${textPrimary}`}>Order ID: #{payment.orderId}</h2>
           <span
             className={`px-3 py-1 rounded-full text-sm w-[130px] flex justify-center items-center font-medium ${getStatusColor(
               payment.status
@@ -192,35 +217,35 @@ export default function PaymentDetailsPage() {
         </div>
 
         {/* Dates */}
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className={`grid md:grid-cols-2 gap-4 ${textPrimary}`}>
           <div>
-            <p className="text-gray-400 text-sm mb-1">Payment Date</p>
+            <p className={`text-sm mb-1 ${textFaded}`}>Payment Date</p>
             <p>{formatDate(payment.createdAt)}</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm mb-1">Payment Method</p>
+            <p className={`text-sm mb-1 ${textFaded}`}>Payment Method</p>
             <p className="capitalize">{payment.paymentMethod}</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm mb-1">Subscription Start</p>
+            <p className={`text-sm mb-1 ${textFaded}`}>Subscription Start</p>
             <p>{formatDate(payment.period?.startDate)}</p>
           </div>
           <div>
-            <p className="text-gray-400 text-sm mb-1">Subscription End</p>
+            <p className={`text-sm mb-1 ${textFaded}`}>Subscription End</p>
             <p>{formatDate(payment.period?.endDate)}</p>
           </div>
         </div>
 
         {/* Instance Info */}
         <div>
-          <h3 className="font-semibold text-lg mb-2">Automation Instance</h3>
-          <Link className="hover:underline" href={`/dashboard/automation-view?id=${payment.instanceId?._id}`}>{payment.instanceId?.instanceName || "-"} <span className="text-sm">({payment.instanceId?._id || "-"})</span></Link> 
+          <h3 className={`font-semibold text-lg mb-2 ${textPrimary}`}>Automation Instance</h3>
+          <Link className={`hover:underline ${textPrimary}`} href={`/dashboard/automation-view?id=${payment.instanceId?._id}`}>{payment.instanceId?.instanceName || "-"} <span className={`text-sm ${textFaded}`}>({payment.instanceId?._id || "-"})</span></Link>
         </div>
 
         {/* Plan Details */}
         <div>
-          <h3 className="font-semibold text-lg mb-2">Plan Details</h3>
-          <div className="grid md:grid-cols-2 gap-2 text-gray-300">
+          <h3 className={`font-semibold text-lg mb-2 ${textPrimary}`}>Plan Details</h3>
+          <div className={`grid md:grid-cols-2 gap-2 ${textSecondary}`}>
             <p>
               <strong>Plan:</strong> {payment.planDetails.name}
             </p>
@@ -232,7 +257,7 @@ export default function PaymentDetailsPage() {
               {formatCurrency(payment.planDetails.price, payment.currency)}
             </p>
             {payment.planDetails.discountPercentage > 0 && (
-              <p>
+              <p className="text-green-500">
                 <strong>Discount:</strong>{" "}
                 {payment.planDetails.discountPercentage}%
               </p>
@@ -242,8 +267,8 @@ export default function PaymentDetailsPage() {
 
         {/* Amount Breakdown */}
         <div>
-          <h3 className="font-semibold text-lg mb-2">Amount Breakdown</h3>
-          <div className="bg-white/5 rounded-lg p-4 space-y-2">
+          <h3 className={`font-semibold text-lg mb-2 ${textPrimary}`}>Amount Breakdown</h3>
+          <div className={`${subCardClasses} space-y-2 ${textSecondary}`}>
             <div className="flex justify-between">
               <span>Base:</span>
               <span>
@@ -251,7 +276,7 @@ export default function PaymentDetailsPage() {
               </span>
             </div>
             {payment.amountDetails.discountAmount > 0 && (
-              <div className="flex justify-between text-green-400">
+              <div className="flex justify-between text-green-500">
                 <span>Discount:</span>
                 <span>
                   -{formatCurrency(payment.amountDetails.discountAmount, payment.currency)}
@@ -264,7 +289,8 @@ export default function PaymentDetailsPage() {
                 +{formatCurrency(payment.amountDetails.taxAmount, payment.currency)}
               </span>
             </div>
-            <div className="border-t border-white/10 pt-2 flex justify-between font-semibold text-lg text-blue-400">
+            {/* Total Amount Highlight */}
+            <div className={`border-t border-textLight/10 dark:border-textDark/10 pt-2 flex justify-between font-semibold text-lg text-secondary`}>
               <span>Total:</span>
               <span>
                 {formatCurrency(payment.amountDetails.totalAmount, payment.currency)}
@@ -276,8 +302,8 @@ export default function PaymentDetailsPage() {
         {/* Note */}
         {payment.note && (
           <div>
-            <h3 className="font-semibold text-lg mb-2">Admin Note</h3>
-            <div className="bg-white/5 rounded-lg p-4 text-gray-300">
+            <h3 className={`font-semibold text-lg mb-2 ${textPrimary}`}>Admin Note</h3>
+            <div className={`${subCardClasses} p-4 text-textSecondary italic`}>
               {payment.note}
             </div>
           </div>
@@ -286,24 +312,24 @@ export default function PaymentDetailsPage() {
         {/* Log History */}
         {payment.Log && payment.Log.length > 0 && (
           <div>
-            <h3 className="font-semibold text-lg mb-2">Status History</h3>
-            <div className="bg-white/5 rounded-lg p-4 space-y-3">
+            <h3 className={`font-semibold text-lg mb-2 ${textPrimary}`}>Status History</h3>
+            <div className={`${logBgClasses} p-4 space-y-3`}>
               {payment.Log.slice().reverse().map((log, index) => (
                 <div
                   key={index}
-                  className="flex flex-col border-b border-white/10 pb-2 last:border-none"
+                  className={`flex flex-col border-b border-textLight/10 dark:border-textDark/10 pb-2 last:border-none ${textSecondary}`}
                 >
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                       {getStatusIcon(log.status)}
                       <span className="capitalize">{log.status}</span>
                     </div>
-                    <div className="text-gray-400 text-sm">
+                    <div className={`text-sm ${textFaded}`}>
                       {new Date(log.changedAt).toLocaleString("en-IN")}
                     </div>
                   </div>
                   {log.note && (
-                    <p className="text-gray-300 italic mt-1 ml-6">“{log.note}”</p>
+                    <p className={`${textSecondary} italic mt-1 ml-6`}>“{log.note}”</p>
                   )}
                 </div>
               ))}
@@ -313,27 +339,27 @@ export default function PaymentDetailsPage() {
 
         {/* User Info */}
         <div>
-          <h3 className="font-semibold text-lg mb-2">User Information</h3>
-          <div className="bg-white/5 rounded-lg p-4 space-y-2">
-            <p className="font-semibold flex items-center gap-2">
-              <FiUser /> {payment.user.name}
+          <h3 className={`font-semibold text-lg mb-2 ${textPrimary}`}>User Information</h3>
+          <div className={`${subCardClasses} p-4 space-y-2 ${textSecondary}`}>
+            <p className={`font-semibold flex items-center gap-2 ${textPrimary}`}>
+              <FiUser className={textFaded} /> {payment.user.name}
             </p>
-            <p className="flex items-center gap-2 text-gray-300">
-              <FiMail /> {payment.user.email}
+            <p className="flex items-center gap-2">
+              <FiMail className={textFaded} /> {payment.user.email}
             </p>
             {payment.user.profile?.phoneNumber && (
-              <p className="flex items-center gap-2 text-gray-300">
-                <FiPhone /> {payment.user.profile.phoneNumber}
+              <p className="flex items-center gap-2">
+                <FiPhone className={textFaded} /> {payment.user.profile.phoneNumber}
               </p>
             )}
             {payment.user.profile?.company && (
-              <p className="flex items-center gap-2 text-gray-300">
-                <FiBriefcase /> {payment.user.profile.company}
+              <p className="flex items-center gap-2">
+                <FiBriefcase className={textFaded} /> {payment.user.profile.company}
               </p>
             )}
             {payment.user.profile?.address && (
-              <p className="flex items-center gap-2 text-gray-300">
-                <FiMapPin /> {payment.user.profile.address}
+              <p className="flex items-center gap-2">
+                <FiMapPin className={textFaded} /> {payment.user.profile.address}
               </p>
             )}
           </div>
@@ -341,9 +367,9 @@ export default function PaymentDetailsPage() {
 
         {/* Download Button */}
         <div className="flex justify-end gap-4 pt-4">
-         <DownloadInvoice payments={payment._id} />
+          <DownloadInvoice payments={payment._id} />
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+// Framer Motion removed from imports
 import { FiUser, FiPhone, FiMapPin, FiBriefcase, FiSave } from "react-icons/fi";
 import axios from "axios";
 import { user_profile_update_api } from "@/api";
@@ -26,8 +26,6 @@ export default function EditProfile() {
   });
 
   const [loading, setLoading] = useState(false);
-
- 
 
 
   // 🔹 Prefill form with Redux user data
@@ -54,7 +52,6 @@ export default function EditProfile() {
     }
 
     setLoading(true);
-    
 
     try {
       const { data } = await axios.post(
@@ -68,10 +65,10 @@ export default function EditProfile() {
         }
       );
 
-     console.log(data)
-            dispatch(login({ user: data.user, token: data.token }))
-            setClientCookie("token", data.token, 60 * 24 * 5)
-            setClientCookie("user", JSON.stringify(data.user), 60 * 24 * 5)
+      console.log(data)
+      dispatch(login({ user: data.user, token: data.token }))
+      setClientCookie("token", data.token, 60 * 24 * 5)
+      setClientCookie("user", JSON.stringify(data.user), 60 * 24 * 5)
       toast.success("Profile updated successfully");
       
     } catch (err: any) {
@@ -82,72 +79,108 @@ export default function EditProfile() {
     }
   };
 
+
+  // --- Reusable Card Container Class (Glassmorphism) ---
+  const cardClasses = `
+    rounded-2xl p-8 shadow-lg transition-colors duration-500
+    
+    /* Light Mode Glassmorphism */
+    bg-lightBg/80 backdrop-blur-md border border-textLight/10
+    
+    /* Dark Mode Glassmorphism */
+    dark:bg-darkBg/80 dark:border-textDark/10
+  `;
+
+  // --- Reusable Input Container Class (Themed input look) ---
+  const inputContainerClasses = `
+    flex items-center rounded-xl px-4 py-2 transition border border-textLight/20 dark:border-textDark/20
+    
+    /* Light Mode */
+    bg-lightBg/50 
+    
+    /* Dark Mode */
+    dark:bg-darkBg/50
+    focus-within:ring-2 focus-within:ring-primary
+  `;
+
+  // --- Reusable Input Field Class ---
+  const inputFieldClasses = `
+    bg-transparent outline-none flex-1 text-textLight dark:text-textDark placeholder-textLight/60 dark:placeholder-textDark/60
+  `;
+
+  const textPrimary = `text-textLight dark:text-textDark`;
+  const textSecondary = `text-textLight/80 dark:text-textDark/80`;
+
+
   return (
-    <div className="max-w-3xl mx-auto text-white">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-lg border border-white/10"
+    <div className="max-w-3xl pt-16 mx-auto">
+      {/* Profile Card (Framer Motion removed) */}
+      <div
+        className={cardClasses}
       >
-        <h1 className="text-3xl font-extrabold mb-6">Edit Profile</h1>
+        <h1 className={`text-3xl font-extrabold mb-6 ${textPrimary}`}>Edit Profile</h1>
         <form onSubmit={handleSubmit} className="space-y-5">
+          
           {/* Name */}
           <div>
-            <label className="block mb-2 font-semibold">Name</label>
-            <div className="flex items-center bg-white/10 rounded-xl px-4 py-2">
+            <label className={`block mb-2 font-semibold ${textSecondary}`}>Name</label>
+            <div className={inputContainerClasses}>
               <FiUser className="text-secondary mr-2" />
               <input
                 type="text"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                className="bg-transparent outline-none flex-1"
+                placeholder="Your full name"
+                className={inputFieldClasses}
               />
             </div>
           </div>
 
           {/* Company */}
           <div>
-            <label className="block mb-2 font-semibold">Company</label>
-            <div className="flex items-center bg-white/10 rounded-xl px-4 py-2">
+            <label className={`block mb-2 font-semibold ${textSecondary}`}>Company</label>
+            <div className={inputContainerClasses}>
               <FiBriefcase className="text-secondary mr-2" />
               <input
                 type="text"
                 name="company"
                 value={form.company}
                 onChange={handleChange}
-                className="bg-transparent outline-none flex-1"
+                placeholder="Company name"
+                className={inputFieldClasses}
               />
             </div>
           </div>
 
           {/* Phone */}
           <div>
-            <label className="block mb-2 font-semibold">Phone Number</label>
-            <div className="flex items-center bg-white/10 rounded-xl px-4 py-2">
+            <label className={`block mb-2 font-semibold ${textSecondary}`}>Phone Number</label>
+            <div className={inputContainerClasses}>
               <FiPhone className="text-secondary mr-2" />
               <input
                 type="text"
                 name="phoneNumber"
                 value={form.phoneNumber}
                 onChange={handleChange}
-                className="bg-transparent outline-none flex-1"
+                placeholder="Your phone number"
+                className={inputFieldClasses}
               />
             </div>
           </div>
 
           {/* Address */}
           <div>
-            <label className="block mb-2 font-semibold">Address</label>
-            <div className="flex items-center bg-white/10 rounded-xl px-4 py-2">
+            <label className={`block mb-2 font-semibold ${textSecondary}`}>Address</label>
+            <div className={inputContainerClasses}>
               <FiMapPin className="text-secondary mr-2" />
               <input
                 type="text"
                 name="address"
                 value={form.address}
                 onChange={handleChange}
-                className="bg-transparent outline-none flex-1"
+                placeholder="Your address"
+                className={inputFieldClasses}
               />
             </div>
           </div>
@@ -156,16 +189,16 @@ export default function EditProfile() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition ${
+            className={`w-full py-3 max-w-[350px] rounded-full mx-auto font-semibold flex items-center justify-center gap-2 transition hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-white shadow-lg ${
               loading
-                ? "bg-gray-600 cursor-not-allowed"
-                : "bg-gradient-to-r from-primary to-secondary hover:shadow-[0_0_20px_#E6521F]"
+                ? "bg-gray-600"
+                : "bg-gradient-to-r from-primary to-secondary hover:shadow-2xl"
             }`}
           >
             <FiSave /> {loading ? "Saving..." : "Save Changes"}
           </button>
         </form>
-      </motion.div>
+      </div>
     </div>
   );
 }

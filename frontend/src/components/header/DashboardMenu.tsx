@@ -33,76 +33,74 @@ export default function DashboardMenu() {
 
   return (
     <>
-      {/* Hamburger button for mobile */}
-      {/* <button 
-        className="md:hidden fixed top-16 left-4 z-10 p-2 bg-white/10 rounded-md text-white"
-        onClick={() => setIsOpen(true)}
-      >
-        <FaBars size={24} />
-      </button> */}
-
-      {/* Overlay */}
-      {/* <div 
-        className={`fixed inset-0 bg-black/50 z-20 transition-opacity ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
-        onClick={() => setIsOpen(false)}
-      /> */}
-
-      {/* Sidebar */}
+      {/* ✨ मुख्य सुधार: 
+        1. bg-lightBg/80 dark:bg-darkBg/80 का उपयोग, ताकि यह थीम-अवेयर हो।
+        2. बॉर्डर और टेक्स्ट कलर भी थीम-अवेयर हैं।
+      */}
       <aside className={`
-     hidden md:flex
-  bg-white/5 backdrop-blur-lg p-6 pt-18 md:pt-6 flex-col
-  border-r border-white/20 h-screen
-  transform transition-transform duration-300
-  md:translate-x-0 md:sticky top-0
+        fixed top-0 left-0 h-screen w-64 p-6 pt-18 md:pt-6 flex flex-col
+        z-30 transform transition-transform duration-300 overflow-y-auto
+        md:translate-x-0 md:sticky md:flex md:top-0
+        
+        /* Light Mode Glassmorphism */
+        bg-lightBg/80 backdrop-blur-md border-r border-textLight/10 text-textLight
+        
+        /* Dark Mode Glassmorphism */
+        dark:bg-darkBg/80 dark:border-r dark:border-textDark/10 dark:text-textDark
       `}>
-        {/* Close button for mobile */}
-        <div className="mb-8 flex justify-between items-center">
-      
-        {/* Logo / Title */}
-        <h2 className="text-2xl font-extrabold text-white ">
-          Dashboard
-        </h2>
+        {/* Scrollbar hide (Optional, depends on your custom CSS) */}
+        <div className="sidebar_">
 
-        
+          <div className="mb-8 flex justify-between items-center">
+
+            {/* Text color now uses text-textLight dark:text-textDark */}
+            <h2 className="text-2xl font-extrabold text-textLight dark:text-textDark">
+              Dashboard
+            </h2>
+
+          </div>
+
+          <nav className="flex flex-col gap-2 flex-1">
+            {links.map((link, i) => (
+              <Link
+                key={i}
+                href={link.href}
+                className={`flex items-center gap-3 px-4 py-2 rounded-xl font-medium transition 
+  ${pathname === link.href
+                    ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/20"
+                    : "text-textLight/70 dark:text-textDark/70 hover:text-primary dark:hover:text-primary hover:bg-lightBg/50 dark:hover:bg-darkBg/50"
+                  }`}
+              >
+                {link.icon}
+                {link.label}
+              </Link>
+            ))}
+
+            {user?.role === 'admin' && (
+              <Link
+                href='/admin'
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition 
+                    ${pathname === '/admin'
+                    ? "bg-gradient-to-r from-secondary to-primary text-white shadow-lg shadow-secondary/20"
+                    : "text-textLight/70 dark:text-textDark/70 hover:text-secondary dark:hover:text-secondary hover:bg-lightBg/50 dark:hover:bg-darkBg/50"
+                  }`}
+              >
+                <FaUikit size={18} />
+                Admin
+              </Link>
+            )}
+          </nav>
+
+          {/* Logout */}
+          <button
+            onClick={logOut_user}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition mt-4 
+                text-textLight/70 dark:text-textDark/70 hover:text-red-600 dark:hover:text-red-400 hover:bg-lightBg/50 dark:hover:bg-darkBg/50"
+          >
+            <FaSignOutAlt size={18} />
+            Logout
+          </button>
         </div>
-
-        <nav className="flex flex-col gap-2 flex-1 overflow-auto">
-          {links.map((link, i) => (
-            <Link
-              key={i}
-              href={link.href}
-              className={`flex items-center gap-3 px-4 py-2 rounded-xl font-medium transition 
-                ${pathname === link.href
-                  ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg"
-                  : "text-white/70 hover:text-white hover:bg-white/10"
-                }`}
-            
-            >
-              {link.icon}
-              {link.label}
-            </Link>
-          ))}
-
-          {user?.role === 'admin' && (
-            <Link
-              href='/admin'
-              className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-white/70 hover:text-white hover:bg-white/10"
-        
-            >
-              <FaUikit size={18} />
-              Admin
-            </Link>
-          )}
-        </nav>
-
-        {/* Logout */}
-        <button
-          onClick={logOut_user}
-          className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-white/70 hover:text-red-400 hover:bg-white/10 transition mt-4"
-        >
-          <FaSignOutAlt size={18} />
-          Logout
-        </button>
       </aside>
     </>
   )

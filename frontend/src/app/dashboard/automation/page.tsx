@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+// Framer Motion removed from imports
 import { FiCheckCircle, FiClock, FiActivity, FiCpu } from "react-icons/fi";
 import axios from "axios";
 import { instance_list_api } from "@/api";
@@ -12,6 +12,7 @@ import Pagination from "@/components/Pagination";
 import LoadingSpiner from "@/app/admin/_components/LoadingSpiner";
 import { FaPager } from "react-icons/fa";
 
+// Type definitions remain the same...
 export type AutomationInstance__ = {
   _id: string;
   instanceName: string;
@@ -20,7 +21,7 @@ export type AutomationInstance__ = {
   systemStatus: string;
   masterWorkflow: string;
   slug: string;
-  n8nWorkflowId:string;
+  n8nWorkflowId: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -39,7 +40,7 @@ export default function AutomationInstances() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(false);
 
   const token = useSelector((state: RootState) => state.user.token);
 
@@ -60,9 +61,9 @@ export default function AutomationInstances() {
         );
         setInstances(data.automations);
         setTotalPages(data.pagination.totalPages);
-        setError(false)
+        setError(false);
       } catch (err) {
-        setError(true)
+        setError(true);
         console.error("Failed to fetch automations:", err);
       } finally {
         setLoading(false);
@@ -75,64 +76,75 @@ export default function AutomationInstances() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "RUNNING":
-        return <FiCheckCircle className="text-green-400" size={20} />;
+        return <FiCheckCircle className="text-green-500" size={20} />;
       case "PAUSE":
-        return <FiClock className="text-yellow-400" size={20} />;
+        return <FiClock className="text-yellow-500" size={20} />;
       default:
-        return <FiActivity className="text-gray-400" size={20} />;
+        return <FiActivity className="text-gray-500" size={20} />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "RUNNING":
-        return "text-green-400 bg-green-400/10";
+        return "text-green-500 bg-green-500/10";
       case "PAUSE":
-        return "text-yellow-400 bg-yellow-400/10";
+        return "text-yellow-500 bg-yellow-500/10";
       default:
-        return "text-gray-400 bg-gray-400/10";
+        return "text-gray-500 bg-gray-500/10";
     }
   };
 
+  // --- Reusable Card Container Class (Glassmorphism) ---
+  const cardClasses = `
+    p-5 rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-[1.02]
+    
+    /* Light Mode Glassmorphism */
+    bg-lightBg/80 backdrop-blur-lg border border-textLight/10
+    
+    /* Dark Mode Glassmorphism */
+    dark:bg-darkBg/80 dark:border-textDark/10
+    hover:shadow-[0_0_15px_rgba(230,82,31,0.2)] dark:hover:shadow-[0_0_15px_rgba(230,82,31,0.2)]
+  `;
+  
+  const textPrimary = `text-textLight dark:text-textDark`;
+  const textSecondary = `text-textLight/70 dark:text-textDark/70`;
+  const textFaded = `text-textLight/50 dark:text-textDark/50`;
+
+
   if (loading)
     return (
-     <LoadingSpiner />
+      <LoadingSpiner />
     );
 
-    if(error) return  <div className="text-center py-12">
-          <FaPager className="mx-auto text-gray-400 mb-4" size={48} />
-          <h3 className="text-xl font-semibold mb-2">No Automation found</h3>
-          <p className="text-gray-400">Create Some error plese Refrash Again.</p>
-        </div>
+    // Error state Theming
+    if(error) return (
+      <div className="text-center py-12">
+        <FaPager className="mx-auto text-textLight/40 dark:text-textDark/40 mb-4" size={48} />
+        <h3 className={`text-xl font-semibold mb-2 ${textPrimary}`}>No Automation found</h3>
+        <p className={textSecondary}>Failed to load automations. Please refresh again.</p>
+      </div>
+    );
 
   return (
-    <div className="max-w-7xl mx-auto pb-28 text-white px-6">
-      <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-3xl font-extrabold mb-8"
+    <div className="max-w-7xl mx-auto pb-28 px-6">
+      <h1
+        className={`text-3xl font-extrabold mb-8 ${textPrimary}`}
       >
         Your Automations
-      </motion.h1>
+      </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {instances.map((inst, i) => (
-          <motion.div
+          // Framer Motion removed, standard div used with CSS hover effects
+          <div
             key={inst._id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.03 }}
-            transition={{
-              duration: 0.5,
-              delay: i * 0.1,
-              type: "spring",
-              stiffness: 300,
-            }}
-            className="bg-white/10 backdrop-blur-lg p-5 rounded-2xl shadow-lg border border-white/10 hover:shadow-[0_0_20px_rgba(230,82,31,0.4)] transition"
+            className={cardClasses}
           >
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-bold">{inst.instanceName}</h3>
+              {/* Instance Name Theming */}
+              <h3 className={`text-lg font-bold ${textPrimary}`}>{inst.instanceName}</h3>
+              {/* Status Tag (Colors remain consistent) */}
               <span
                 className={`px-3 py-1 text-xs rounded-full font-semibold ${getStatusColor(
                   inst.isActive
@@ -142,14 +154,14 @@ export default function AutomationInstances() {
               </span>
             </div>
 
-            <div className="flex items-center gap-2 text-gray-300 mb-2">
+            <div className={`flex items-center gap-2 ${textSecondary} mb-2`}>
               <FiCpu className="text-secondary" />{" "}
               <span className="text-sm">
                 Workflow ID: {inst.n8nWorkflowId}
               </span>
             </div>
 
-            <div className="flex items-center gap-2 text-gray-300 mb-2">
+            <div className={`flex items-center gap-2 ${textSecondary} mb-2`}>
               {getStatusIcon(inst.isActive)}
               <span className="text-sm">
                 {inst.isActive === "RUNNING"
@@ -158,9 +170,7 @@ export default function AutomationInstances() {
               </span>
             </div>
 
-           
-
-            <p className="text-gray-400 text-xs mb-4">
+            <p className={`text-xs mb-4 ${textFaded}`}>
               Created: {new Date(inst.createdAt).toLocaleString()}
             </p>
 
@@ -168,20 +178,22 @@ export default function AutomationInstances() {
             
               <Link
                 href={`/dashboard/automation-view?id=${inst._id}`}
-                className="px-4 py-2 rounded-full border border-white/30 text-white font-semibold hover:bg-white hover:text-primary transition"
+                // Link Button Theming
+                className={`px-4 py-2 rounded-full border text-textLight dark:text-textDark font-semibold transition hover:bg-primary hover:text-white 
+                  border-textLight/30 dark:border-textDark/30`}
               >
                 Logs Detail
               </Link>
 
- <div className="flex items-center gap-2 text-gray-300 mb-2">
-              <FiActivity className="text-blue-400" />{" "}
-              <span className="text-sm">
-                Executions: {inst.executionCount}
-              </span>
-            </div>
+              <div className={`flex items-center gap-2 ${textSecondary} mb-2`}>
+                <FiActivity className="text-primary" />{" "}
+                <span className="text-sm">
+                  Executions: {inst.executionCount}
+                </span>
+              </div>
 
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
 
@@ -191,6 +203,7 @@ export default function AutomationInstances() {
         onPageChange={setPage}
         showPageNumbers={true}
         compact={false}
+        // Pagination component should handle its own theming
       />
     </div>
   );

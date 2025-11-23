@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
+// Framer Motion removed from imports
 import { useState } from "react"
 import Link from "next/link"
 import WithGoogle from "@/components/ContinueWithGoogle"
@@ -19,8 +19,8 @@ export default function SignupPage() {
     confirmPassword: "",
     agree: false,
   })
-   const [loading, setLoading] = useState(false)
-   const router = useRouter()
+    const [loading, setLoading] = useState(false)
+    const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -32,7 +32,7 @@ export default function SignupPage() {
 
 
   const validateInputs = () => {
-     if (!validator.trim(form.name)) {
+      if (!validator.trim(form.name)) {
       toast.error("Please enter a valid Name")
       return false
     }
@@ -57,7 +57,7 @@ export default function SignupPage() {
       return false
     }
 
-     if (!form.agree) {
+      if (!form.agree) {
       toast.error("You must agree to the Privacy Policy & Terms.")
       return false
     }
@@ -71,7 +71,7 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-   
+    
     if (!validateInputs()) return
     setLoading(true)
 
@@ -87,7 +87,7 @@ export default function SignupPage() {
       )
 
       toast.success(data.msg)
-     
+      
 
       setTimeout(()=>{
         router.push(`/otp-verification?userid=${data.token}`)
@@ -102,86 +102,113 @@ export default function SignupPage() {
   }
 
 
+  // --- Reusable Input Class ---
+  const inputClasses = `
+    w-full px-4 py-2 rounded-xl transition border-2 focus:outline-none focus:ring-2 focus:ring-primary
+    
+    /* Light Mode Input */
+    bg-lightBg/50 text-textLight border-textLight/20 placeholder-textLight/60
+    
+    /* Dark Mode Input */
+    dark:bg-darkBg/50  dark:border-textDark/20 dark:placeholder-textDark/60
+  `;
+  
+  // --- Reusable Card Container Class ---
+  const cardClasses = `
+    w-full max-w-lg rounded-3xl p-8 shadow-xl transition-colors duration-500
+    
+    /* Light Mode Glassmorphism */
+    bg-lightBg/80 backdrop-blur-lg border border-textLight/10
+    
+    /* Dark Mode Glassmorphism */
+    dark:bg-darkBg/80 dark:border-textDark/10
+  `;
+
+
   return (
-    <section className="flex items-center justify-center min-h-screen bg-gradient-to-b from-primary/10 to-secondary/10 px-6 py-32">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="w-full max-w-lg bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-xl"
+    /* ✨ सुधार: Main Section Theming */
+    <section className="flex items-center justify-center min-h-screen px-6 py-32
+      bg-lightBg dark:bg-darkBg transition-colors duration-500">
+      
+      {/* Framer Motion removed, using standard div with themed classes */}
+      <div
+        className={cardClasses}
       >
-        {/* Title */}
-        <h1 className="text-3xl md:text-4xl font-extrabold text-center text-white">
+        {/* Title Theming */}
+        <h1 className="text-3xl md:text-4xl font-extrabold text-center text-textLight dark:text-textDark">
           Sign Up
         </h1>
-        <p className="text-center text-white/70 mt-2">
+        {/* Subtitle Theming */}
+        <p className="text-center mt-2 text-textLight/70 dark:text-textDark/70">
           Create your account to get started.
         </p>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div>
-            <label className="block text-white/80 mb-2">Full Name</label>
+            {/* Label Theming */}
+            <label className="block mb-2 text-textLight/80 dark:text-textDark/80">Full Name</label>
             <input
               type="text"
               name="name"
               value={form.name}
               onChange={handleChange}
               placeholder="John Doe"
-             
-              className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputClasses}
             />
           </div>
 
           <div>
-            <label className="block text-white/80 mb-2">Email</label>
+            {/* Label Theming */}
+            <label className="block mb-2 text-textLight/80 dark:text-textDark/80">Email</label>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               placeholder="you@example.com"
-            
-              className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputClasses}
             />
           </div>
 
           <div>
-            <label className="block text-white/80 mb-2">Password</label>
+            {/* Label Theming */}
+            <label className="block mb-2 text-textLight/80 dark:text-textDark/80">Password</label>
             <input
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
               placeholder="••••••••"
-             
-              className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputClasses}
             />
           </div>
 
           <div>
-            <label className="block text-white/80 mb-2">Re-enter Password</label>
+            {/* Label Theming */}
+            <label className="block mb-2 text-textLight/80 dark:text-textDark/80">Re-enter Password</label>
             <input
               type="password"
               name="confirmPassword"
               value={form.confirmPassword}
               onChange={handleChange}
               placeholder="••••••••"
-             
-              className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputClasses}
             />
           </div>
 
-          {/* Agree checkbox */}
+          {/* Agree checkbox Theming */}
           <div className="flex items-start gap-3">
             <input
               type="checkbox"
               name="agree"
               checked={form.agree}
               onChange={handleChange}
-              className="mt-1 h-5 w-5 rounded border border-white/30 bg-white/10 text-primary focus:ring-primary"
+              // Checkbox color fixed to primary and themed border
+              className="mt-1 h-5 w-5 rounded border border-textLight/30 dark:border-textDark/30 bg-lightBg/50 dark:bg-darkBg/50 text-primary focus:ring-primary"
             />
-            <label className="text-sm text-white/70">
+            {/* Label Theming */}
+            <label className="text-sm text-textLight/70 dark:text-textDark/70">
               I have read and agree to the{" "}
               <Link href="/privacy" className="text-primary hover:underline">
                 Privacy Policy
@@ -194,35 +221,33 @@ export default function SignupPage() {
             </label>
           </div>
 
-          {/* Submit */}
+          {/* Submit Button (Gradient remains universal) */}
           <button
             type="submit"
-            className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition"
+            disabled={loading}
+            className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {
-              loading ? "Working..": 'Sign Up'
-            }
-            
+            {loading ? "Working..": 'Sign Up'}
           </button>
         </form>
 
-        {/* Or divider */}
+        {/* Separator Line Theming */}
         <div className="flex items-center my-6">
-          <div className="flex-1 h-px bg-white/20"></div>
-          <span className="px-4 text-white/50 text-sm">OR</span>
-          <div className="flex-1 h-px bg-white/20"></div>
+          <div className="flex-1 h-px bg-textLight/20 dark:bg-textDark/20"></div>
+          <span className="px-4 text-textLight/50 dark:text-textDark/50 text-sm">OR</span>
+          <div className="flex-1 h-px bg-textLight/20 dark:bg-textDark/20"></div>
         </div>
 
         <WithGoogle title="Sign Up" />
 
-        {/* Login link */}
-        <p className="text-center text-white/70 mt-6">
+        {/* Login link Theming */}
+        <p className="text-center text-textLight/70 dark:text-textDark/70 mt-6">
           Already have an account?{" "}
           <Link href="/login" className="text-primary font-semibold hover:underline">
             Login
           </Link>
         </p>
-      </motion.div>
+      </div>
     </section>
   )
 }

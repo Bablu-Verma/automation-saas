@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
+// Removed: import { motion } from "framer-motion"
 import { FiMail, FiPhone, FiMessageSquare, FiHelpCircle } from "react-icons/fi"
 import Link from "next/link"
 
@@ -32,34 +32,45 @@ export default function HelpSupport() {
     },
   ]
 
+  // --- Theme Variables ---
+  const textPrimary = `text-textLight dark:text-textDark`;
+  const textSecondary = `text-textLight/70 dark:text-textDark/70`
+
+  const cardClasses = `
+    bg-lightBg/80 backdrop-blur-md border border-textLight/10
+    dark:bg-darkBg/80 dark:border-textDark/10
+    shadow-md transition-all duration-300
+    hover:shadow-xl hover:scale-[1.01]
+  `;
+
+
   return (
-    <div className="max-w-6xl mx-auto pt-16  text-white">
-      <motion.h1
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-4xl md:text-5xl font-extrabold text-center mb-12"
+    <div className={`max-w-6xl mx-auto pt-16 ${textPrimary}`}>
+      <h1
+        // Removed motion.h1
+        className={`text-4xl md:text-5xl font-extrabold text-center mb-12 ${textPrimary}`}
       >
         Help & Support
-      </motion.h1>
+      </h1>
 
       <div className="grid md:grid-cols-2 gap-8">
         {supportOptions.map((item, i) => (
-          <motion.div
+          <div
             key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: i * 0.1 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-md hover:shadow-2xl border border-white/10  transition"
+            // Applied Themed Card Class (retaining border, shadow, hover effects)
+            className={`${cardClasses} p-8 rounded-2xl`}
           >
             <Link href={item.href} className="flex flex-col gap-4 h-full">
               <div className="flex items-center gap-4">
+                {/* Icon Color */}
                 <span className="text-secondary">{item.icon}</span>
-                <h3 className="text-2xl font-bold">{item.title}</h3>
+                {/* Title Theming */}
+                <h3 className={`text-2xl font-bold ${textPrimary}`}>{item.title}</h3>
               </div>
-              <p className="text-gray-300">{item.desc}</p>
+              {/* Description Theming */}
+              <p className={textSecondary}>{item.desc}</p>
             </Link>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>
