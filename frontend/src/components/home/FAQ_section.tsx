@@ -16,14 +16,14 @@ import {
 import Link from "next/link"
 
 const faqs = [
-  { icon: <FiZap size={28} />, question: "What is Loop Axis?", answer: "Loop Axis is an automation platform that helps businesses streamline workflows and save time." },
-  { icon: <FiShield size={28} />, question: "Is it secure?", answer: "Yes! Loop Axis uses enterprise-grade security to protect your data." },
-  { icon: <FiUsers size={28} />, question: "Who can use Loop Axis?", answer: "Small to large businesses and freelancers can automate their workflows easily." },
-  { icon: <FiSettings size={28} />, question: "Does it require coding?", answer: "No coding required. Loop Axis is user-friendly and intuitive for all users." },
+  { icon: <FiZap size={28} />, question: "What is Go Automat Work?", answer: "Go Automat Work is an automation platform that helps businesses streamline workflows and save time." },
+  { icon: <FiShield size={28} />, question: "Is it secure?", answer: "Yes! Go Automat Work uses enterprise-grade security to protect your data." },
+  { icon: <FiUsers size={28} />, question: "Who can use Go Automat Work?", answer: "Small to large businesses and freelancers can automate their workflows easily." },
+  { icon: <FiSettings size={28} />, question: "Does it require coding?", answer: "No coding required. Go Automat Work is user-friendly and intuitive for all users." },
   { icon: <FiCloud size={28} />, question: "Which apps can I integrate?", answer: "Integrate with 100+ apps including CRMs, email, e-commerce, and project tools." },
   { icon: <FiBarChart2 size={28} />, question: "Can I track analytics?", answer: "Yes! Real-time dashboards help you monitor performance with ease." },
   { icon: <FiMail size={28} />, question: "Can I automate emails?", answer: "Yes! Automate marketing campaigns, reminders, and transactional messages." },
-  { icon: <FiTrendingUp size={28} />, question: "Is it scalable?", answer: "Absolutely! Loop Axis grows with your business and workflow complexity." },
+  { icon: <FiTrendingUp size={28} />, question: "Is it scalable?", answer: "Absolutely! Go Automat Work grows with your business and workflow complexity." },
 ]
 
 export default function FAQSection() {
@@ -46,7 +46,7 @@ export default function FAQSection() {
           {/* Paragraph Theming */}
           <p className="text-lg leading-relaxed max-w-md
             text-textLight/70 dark:text-textDark/70 transition-colors duration-500">
-            Everything you need to know about <span className="text-primary font-semibold">Loop Axis</span>.  
+            Everything you need to know about <span className="text-primary font-semibold">Go Automat Work</span>.  
             Learn how it helps automate workflows, integrate apps, and scale with your business. 
           </p>
 

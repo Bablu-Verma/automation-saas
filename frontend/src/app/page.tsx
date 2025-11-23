@@ -1,6 +1,6 @@
-'use client'
+
 import Link from "next/link"
-import { motion } from "framer-motion"
+
 
 import HomeHero from "@/components/home/Hero_Section"
 import Features from "@/components/Features"
@@ -8,19 +8,11 @@ import Services from "@/components/Services"
 import AppIntegrationSlider from "@/components/IntegratesWith"
 import Testimonials from "@/components/Testimonial_Section"
 import FAQSection from "@/components/home/FAQ_section"
-import { FiArrowDown, FiAward, FiClock, FiCloudLightning, FiSettings, FiStar, FiTrendingUp, FiUserPlus, FiUsers } from "react-icons/fi"
 import NewsletterSection from "@/components/Newsletter"
 import CustomAutomationCTA from "@/components/CustomAutomationCTA"
 import HowItWorks from "@/components/HowItWorks"
 import AwardsRecognition from "@/components/AwardsRecognition"
 
-const stats = [
-  { icon: <FiUsers size={36} />, value: "100+", label: "Businesses Onboarded" },
-  { icon: <FiClock size={36} />, value: "99%", label: "Uptime" },
-  { icon: <FiStar size={36} />, value: "5/4", label: "Client Ratings" },
-  { icon: <FiAward size={36} />, value: "2", label: "Industry Awards" },
-  { icon: <FiTrendingUp size={36} />, value: "200%", label: "Avg Productivity Boost" },
-]
 
 export default function HomePage() {
   return (
@@ -63,7 +55,7 @@ export default function HomePage() {
         className="mt-4 text-lg md:text-xl max-w-2xl mx-auto 
           text-textLight/70 dark:text-textDark/70"
       >
-        Join 100+ businesses saving time, reducing errors, and growing faster with Loop Axis.
+        Join 100+ businesses saving time, reducing errors, and growing faster with Go Automat Work.
       </p>
 
       {/* Button Container (Framer Motion removed) */}

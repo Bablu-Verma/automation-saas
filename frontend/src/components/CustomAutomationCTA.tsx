@@ -35,7 +35,7 @@ export default function CustomAutomationCTA() {
         {/* Description (Text color updated) */}
         <p className="text-lg mb-8 max-w-2xl mx-auto 
           text-textLight/80 dark:text-textDark/80">
-          Can't find the exact workflow you're looking for? Our team can build a
+          Cant find the exact workflow youre looking for? Our team can build a
           bespoke automation tailored specifically to your business needs.
         </p>
 

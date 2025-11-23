@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Loop Axis – Intelligent Automation Solutions",
+  title: "Privacy Policy | Go Automat Work – Intelligent Automation Solutions",
   description:
-    "Read the Loop Axis Privacy Policy to understand how we collect, use, and protect your personal information while providing AI-driven automation solutions.",
+    "Read the Go Automat Work Privacy Policy to understand how we collect, use, and protect your personal information while providing AI-driven automation solutions.",
   keywords:
-    "Loop Axis privacy policy, personal data protection, AI automation privacy, data security, business automation, workflow automation privacy",
+    "Go Automat Work privacy policy, personal data protection, AI automation privacy, data security, business automation, workflow automation privacy",
   openGraph: {
-    title: "Privacy Policy | Loop Axis – Intelligent Automation Solutions",
+    title: "Privacy Policy | Go Automat Work – Intelligent Automation Solutions",
     description:
-      "Learn how Loop Axis handles personal data and safeguards your privacy while delivering intelligent automation solutions.",
+      "Learn how Go Automat Work handles personal data and safeguards your privacy while delivering intelligent automation solutions.",
     url: "https://loopaxis.babluverma.site/privacy-policy",
-    siteName: "Loop Axis",
+    siteName: "Go Automat Work",
     images: [
       {
         url: "https://loopaxis.babluverma.site/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Loop Axis – Intelligent Automation Solutions",
+        alt: "Go Automat Work – Intelligent Automation Solutions",
       },
     ],
     locale: "en_US",
@@ -25,9 +25,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Privacy Policy | Loop Axis – Intelligent Automation Solutions",
+    title: "Privacy Policy | Go Automat Work – Intelligent Automation Solutions",
     description:
-      "Discover how Loop Axis protects your personal information and ensures data security across its AI automation platform.",
+      "Discover how Go Automat Work protects your personal information and ensures data security across its AI automation platform.",
     images: ["https://loopaxis.babluverma.site/twitter-image.png"],
     creator: "@loopaxis",
     site: "@loopaxis",
@@ -69,7 +69,7 @@ export default function PrivacyPolicyPage() {
             {/* H2 Theming */}
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">1. Introduction</h2>
             <p>
-              At Loop Axis, we respect your privacy and are committed to protecting your personal data.
+              At Go Automat Work, we respect your privacy and are committed to protecting your personal data.
               This Privacy Policy explains how we collect, use, and safeguard your information.
             </p>
           </section>
@@ -107,13 +107,13 @@ export default function PrivacyPolicyPage() {
             {/* H2 Theming */}
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">5. Links to Other Websites</h2>
             <p>
-              Our Service may contain links to other websites that are not operated by Us. If You click on a third-party link, You will be directed to that third party's site. We strongly advise You to review the Privacy Policy of every site You visit.
+              Our Service may contain links to other websites that are not operated by Us. If You click on a third-party link, You will be directed to that third partys site. We strongly advise You to review the Privacy Policy of every site You visit.
             </p>
           </section>
 
           <section>
             {/* H2 Theming */}
-            <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">6. Children's Privacy</h2>
+            <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">6. Childrens Privacy</h2>
             <p>
               Our Service does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from anyone under the age of 13. If You are a parent or guardian and You are aware that your child has provided Us with Personal Data, please contact Us.
             </p>

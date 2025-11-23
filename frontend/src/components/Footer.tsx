@@ -4,12 +4,12 @@ import { RootState } from "@/redux-store/redux_store";
 import { IUser } from "@/types";
 import Image from "next/image";
 import Link from "next/link"
+
 import { FiFacebook, FiTwitter, FiLinkedin, FiMail } from "react-icons/fi"
 import { useSelector } from "react-redux";
 
 export default function Footer() {
-
-
+  
   const user = useSelector(
     (state: RootState) => state.user.user
   ) as IUser | null;
@@ -18,6 +18,11 @@ export default function Footer() {
     (state: RootState) => state.servicetofooter.services
   )
   const loggedIn = Boolean(user)
+
+  
+
+
+
 
   return (
     /* ✨ मुख्य सुधार: Footer अब थीम के साथ स्विच करेगा */
@@ -34,7 +39,24 @@ export default function Footer() {
         {/* Brand Section */}
         <div>
           {/* Logo link remains the same */}
-          <Link className="" href='/'><Image src='/loop_axis.png' className="w-auto h-auto" width={275} height={100} alt="logo" /> </Link>
+          <Link className="" href='/'>
+          <Image
+    src="/LIGHT.png"
+    width={275}
+    height={100}
+    alt="logo-light"
+    className="w-auto h-auto block dark:hidden"
+  />
+
+  {/* Dark Mode Logo */}
+  <Image
+    src="/DARK.png"
+    width={275}
+    height={100}
+    alt="logo-dark"
+    className="w-auto h-auto hidden dark:block"
+  />
+          </Link>
           
           {/* ✨ सुधार: टेक्स्ट कलर थीम-अवेयर */}
           <p className="mt-4 text-sm text-textLight/70 dark:text-textDark/70">
@@ -46,7 +68,7 @@ export default function Footer() {
             <a href="#" className="hover:text-primary"><FiFacebook size={20} /></a>
             <a href="#" className="hover:text-primary"><FiTwitter size={20} /></a>
             <a href="#" className="hover:text-primary"><FiLinkedin size={20} /></a>
-            <a href="mailto:info@Loop Axis .com" className="hover:text-primary"><FiMail size={20} /></a>
+            <a href="mailto:info@Go Automat Work .com" className="hover:text-primary"><FiMail size={20} /></a>
           </div>
         </div>
 
@@ -111,7 +133,7 @@ export default function Footer() {
       {/* Bottom Bar */}
       {/* ✨ सुधार: बॉर्डर और टेक्स्ट कलर थीम-अवेयर */}
       <div className=" mt-6 py-6 text-center text-sm text-textLight/50 dark:text-textDark/50">
-        © {new Date().getFullYear()} Loop Axis . All rights reserved.
+        © {new Date().getFullYear()} Go Automat Work . All rights reserved.
       </div>
     </footer>
   )

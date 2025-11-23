@@ -101,7 +101,7 @@ export const generateInvoicePDF = (payment: any): Promise<Buffer> => {
         .fontSize(10)
         .fillColor("#666")
         .font("Helvetica")
-        .text("Loop Axis", 400, 50, { align: "right" })
+        .text("Go Automat Work", 400, 50, { align: "right" })
         .text("Sector 121", 400, 65, { align: "right" })
         .text("Noida, India - 201309", 400, 80, { align: "right" })
         .text("Email: loopaxisautomation@gmail.com", 400, 95, { align: "right" });

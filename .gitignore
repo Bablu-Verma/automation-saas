@@ -12,6 +12,7 @@
 /out
 /backend/.next
 /backend/out
+/backend/dist
 /frontend/.next
 /frontend/out
 

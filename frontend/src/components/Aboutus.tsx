@@ -39,11 +39,11 @@ export default function AboutUs() {
         >
           <div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-              About Loop Axis 
+              About Go Automat Work 
             </h2>
 
             <p className="mt-6 text-white/80 text-lg md:text-xl leading-relaxed max-w-xl">
-              Loop Axis  empowers businesses to automate repetitive workflows, integrate seamlessly with hundreds of tools, and scale operations without extra hires.
+              Go Automat Work  empowers businesses to automate repetitive workflows, integrate seamlessly with hundreds of tools, and scale operations without extra hires.
             </p>
 
             <p className="mt-4 text-white/80 text-lg md:text-xl leading-relaxed max-w-xl">

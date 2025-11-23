@@ -24,15 +24,6 @@ export type AutomationInstance__ = {
   updatedAt: string;
 };
 
-type ApiResponse = {
-  automations: AutomationInstance__[];
-  pagination: {
-    total: number;
-    page: number;
-    totalPages: number;
-  };
-};
-
 export default function ExecutionRequests() {
   const token = useSelector((state: RootState) => state.user.token)
   const [executions, setExecutions] = useState<any[]>([])
@@ -119,7 +110,6 @@ export default function ExecutionRequests() {
 
   // --- Theme Variables ---
   const textPrimary = `text-textLight dark:text-textDark`;
-  const textSecondary = `text-textLight/80 dark:text-textDark/80`;
   const textFaded = `text-textLight/50 dark:text-textDark/50`;
 
   const cardClasses = `

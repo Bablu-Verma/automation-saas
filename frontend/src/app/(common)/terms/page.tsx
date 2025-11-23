@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Loop Axis – Intelligent Automation Solutions",
+  title: "Terms & Conditions | Go Automat Work – Intelligent Automation Solutions",
   description:
-    "Read the Loop Axis Terms & Conditions to understand the rules and guidelines for using our AI-driven automation platform and services.",
+    "Read the Go Automat Work Terms & Conditions to understand the rules and guidelines for using our AI-driven automation platform and services.",
   keywords:
-    "Loop Axis terms and conditions, automation platform rules, AI automation terms, service agreement, business automation, workflow automation guidelines",
+    "Go Automat Work terms and conditions, automation platform rules, AI automation terms, service agreement, business automation, workflow automation guidelines",
   openGraph: {
-    title: "Terms & Conditions | Loop Axis – Intelligent Automation Solutions",
+    title: "Terms & Conditions | Go Automat Work – Intelligent Automation Solutions",
     description:
-      "Learn about Loop Axis Terms & Conditions including eligibility, service usage, payments, subscriptions, intellectual property, and liability.",
+      "Learn about Go Automat Work Terms & Conditions including eligibility, service usage, payments, subscriptions, intellectual property, and liability.",
     url: "https://loopaxis.babluverma.site/terms",
-    siteName: "Loop Axis",
+    siteName: "Go Automat Work",
     images: [
       {
         url: "https://loopaxis.babluverma.site/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Loop Axis – Intelligent Automation Solutions",
+        alt: "Go Automat Work – Intelligent Automation Solutions",
       },
     ],
     locale: "en_US",
@@ -25,9 +25,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Terms & Conditions | Loop Axis – Intelligent Automation Solutions",
+    title: "Terms & Conditions | Go Automat Work – Intelligent Automation Solutions",
     description:
-      "Understand the rules, guidelines, and obligations for using Loop Axis AI automation platform and services.",
+      "Understand the rules, guidelines, and obligations for using Go Automat Work AI automation platform and services.",
     images: ["https://loopaxis.babluverma.site/twitter-image.png"],
     creator: "@loopaxis",
     site: "@loopaxis",
@@ -70,7 +70,7 @@ export default function TermsPage() {
             {/* H2 Theming */}
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">1. Introduction</h2>
             <p>
-              Welcome to Loop Axis! These Terms and Conditions outline the rules and regulations for using our website and services. By accessing or using Loop Axis, you agree to be bound by these terms. If you do not agree, please stop using our platform.
+              Welcome to Go Automat Work! These Terms and Conditions outline the rules and regulations for using our website and services. By accessing or using Go Automat Work, you agree to be bound by these terms. If you do not agree, please stop using our platform.
             </p>
           </section>
 
@@ -78,7 +78,7 @@ export default function TermsPage() {
             {/* H2 Theming */}
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">2. Eligibility</h2>
             <p>
-              You must be at least 18 years old to use our services. By using Loop Axis, you represent that you meet this requirement.
+              You must be at least 18 years old to use our services. By using Go Automat Work, you represent that you meet this requirement.
             </p>
           </section>
 
@@ -104,7 +104,7 @@ export default function TermsPage() {
             {/* H2 Theming */}
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">5. Intellectual Property</h2>
             <p>
-              The Service and its original content, features, and functionality are and will remain the exclusive property of Loop Axis. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Loop Axis.
+              The Service and its original content, features, and functionality are and will remain the exclusive property of Go Automat Work. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Go Automat Work.
             </p>
           </section>
 
@@ -112,7 +112,7 @@ export default function TermsPage() {
             {/* H2 Theming */}
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">6. Limitation of Liability</h2>
             <p>
-              In no event shall Loop Axis, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
+              In no event shall Go Automat Work, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
             </p>
           </section>
 

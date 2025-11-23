@@ -46,7 +46,8 @@ export default function EditDocs() {
         toast.error("Failed to fetch doc.");
       }
     } catch (err) {
-      toast.error("Error fetching doc details!");
+      toast.error("Error fetching doc details!",);
+      console.log(err)
     } finally {
       setLoadingFetch(false);
     }

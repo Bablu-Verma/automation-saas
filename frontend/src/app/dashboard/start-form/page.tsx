@@ -5,7 +5,6 @@ import Loading_ from "@/components/Loading";
 import { RootState } from "@/redux-store/redux_store";
 import { ICredentialField, IRequiredCredential, IWorkflowDetail } from "@/types";
 import axios from "axios";
-import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";

@@ -135,7 +135,7 @@ export default function AutomationInstances() {
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {instances.map((inst, i) => (
+        {instances.map((inst) => (
           // Framer Motion removed, standard div used with CSS hover effects
           <div
             key={inst._id}

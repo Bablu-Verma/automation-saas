@@ -63,7 +63,7 @@ export default function Features() {
         className="text-2xl sm:text-3xl md:text-4xl font-bold text-left 
           text-textLight dark:text-textDark"
       >
-        Why Choose Loop Axis?
+        Why Choose Go Automat Work?
       </h2>
 
       <div

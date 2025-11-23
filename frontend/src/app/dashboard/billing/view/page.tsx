@@ -16,9 +16,6 @@ import {
   FiPhone,
   FiMapPin,
   FiBriefcase,
-  FiInfo,
-  FiTag,
-  FiDollarSign
 } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { payment_details_api } from "@/api";
@@ -164,7 +161,6 @@ export default function PaymentDetailsPage() {
   const textPrimary = `text-textLight dark:text-textDark`;
   const textSecondary = `text-textLight/70 dark:text-textDark/70`;
   const textFaded = `text-textLight/50 dark:text-textDark/50`;
-  const textInfoPrimary = `text-textLight dark:text-textDark`; // For bold values
 
   const cardClasses = `
     bg-lightBg/80 backdrop-blur-lg border border-textLight/10

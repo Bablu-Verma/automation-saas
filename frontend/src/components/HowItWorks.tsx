@@ -1,7 +1,5 @@
 "use client"
 
-// Framer Motion removed from imports
-import Link from "next/link" 
 import {
   FiUserPlus,
   FiSettings,

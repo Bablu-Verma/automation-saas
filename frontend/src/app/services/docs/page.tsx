@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { get_docs_by_service_api } from "@/api";
 import axios from "axios";
 import DocsDetailsClient from "./DocsDetailsClient";
-import { FaBook, FaSearch } from "react-icons/fa";
+import { FaBook } from "react-icons/fa";
 
 interface ServiceDetailsPageProps {
   searchParams: { id: string };
@@ -47,10 +47,10 @@ export async function generateMetadata({ searchParams }: ServiceDetailsPageProps
     console.error("Failed to fetch docs for metadata:", err);
   }
 
-  const title = docs ? `${docs.name} – Loop Axis` : "Docs Details – Loop Axis";
+  const title = docs ? `${docs.name} – Go Automat Work` : "Docs Details – Go Automat Work";
   const description = docs
-    ? docs.shortDescription || docs.description?.slice(0, 150) || "Loop Axis automation docs."
-    : "Loop Axis docs details.";
+    ? docs.shortDescription || docs.description?.slice(0, 150) || "Go Automat Work automation docs."
+    : "Go Automat Work docs details.";
 
   return {
     title,
@@ -59,13 +59,13 @@ export async function generateMetadata({ searchParams }: ServiceDetailsPageProps
       title,
       description,
       url: `https://loopaxis.babluverma.site/service?id=${docsId}`,
-      siteName: "Loop Axis",
+      siteName: "Go Automat Work",
       images: [
         {
           url: docs?.serviceImage || "https://loopaxis.babluverma.site/og-image.png",
           width: 1200,
           height: 630,
-          alt: docs?.name || "Loop Axis Docs",
+          alt: docs?.name || "Go Automat Work Docs",
         },
       ],
       locale: "en_US",

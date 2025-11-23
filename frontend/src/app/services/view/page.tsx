@@ -34,10 +34,10 @@ export async function generateMetadata({ searchParams }: ServiceDetailsPageProps
     console.error("Failed to fetch workflow for metadata:", err);
   }
 
-  const title = workflow ? `${workflow.name} – Loop Axis` : "Service Details – Loop Axis";
+  const title = workflow ? `${workflow.name} – Go Automat Work` : "Service Details – Go Automat Work";
   const description = workflow
-    ? workflow.shortDescription || workflow.description?.slice(0, 150) || "Loop Axis automation service."
-    : "Loop Axis automation service details.";
+    ? workflow.shortDescription || workflow.description?.slice(0, 150) || "Go Automat Work automation service."
+    : "Go Automat Work automation service details.";
 
   return {
     title,
@@ -46,13 +46,13 @@ export async function generateMetadata({ searchParams }: ServiceDetailsPageProps
       title,
       description,
       url: `https://loopaxis.babluverma.site/service?id=${workflowId}`,
-      siteName: "Loop Axis",
+      siteName: "Go Automat Work",
       images: [
         {
           url: workflow?.serviceImage || "https://loopaxis.babluverma.site/og-image.png",
           width: 1200,
           height: 630,
-          alt: workflow?.name || "Loop Axis Service",
+          alt: workflow?.name || "Go Automat Work Service",
         },
       ],
       locale: "en_US",

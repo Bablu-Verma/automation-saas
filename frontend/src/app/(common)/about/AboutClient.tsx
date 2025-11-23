@@ -20,13 +20,13 @@ export default function AboutUsClinet() {
                 <h1 className="text-4xl md:text-5xl font-extrabold 
                     text-textLight dark:text-textDark transition-colors duration-500"
                 >
-                    About Loop Axis 
+                    About Go Automat Work 
                 </h1>
                 {/* Paragraph Theming */}
                 <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto
                     text-textLight/80 dark:text-textDark/80 transition-colors duration-500"
                 >
-                    Loop Axis helps businesses automate repetitive workflows, integrate with hundreds of tools, and scale operations without extra hires.
+                    Go Automat Work helps businesses automate repetitive workflows, integrate with hundreds of tools, and scale operations without extra hires.
                 </p>
             </div>
 
@@ -46,7 +46,7 @@ export default function AboutUsClinet() {
                     >
                         <Image
                             src="/about.png"
-                            alt="About Loop Axis "
+                            alt="About Go Automat Work "
                             fill
                             className="object-cover object-center"
                         />
@@ -92,7 +92,7 @@ export default function AboutUsClinet() {
                     {/* Paragraph Theming (Lower opacity) */}
                     <p className="text-lg md:text-xl mb-6 leading-relaxed text-textLight/60 dark:text-textDark/60">
                         By leveraging cutting-edge technology and seamless integrations,
-                        Loop Axis helps organizations optimize processes, increase
+                        Go Automat Work helps organizations optimize processes, increase
                         efficiency, and achieve measurable results.
                     </p>
 
@@ -122,13 +122,13 @@ export default function AboutUsClinet() {
                     {/* Paragraph Theming (Default opacity) */}
                     <p className="text-lg md:text-xl leading-relaxed mb-6 text-textLight/70 dark:text-textDark/70">
                         From automating repetitive tasks to integrating multiple software
-                        tools, Loop Axis streamlines operations across departments. Our
+                        tools, Go Automat Work streamlines operations across departments. Our
                         clients report faster turnaround times, fewer errors, and more time
                         to focus on core business goals.
                     </p>
 
                     {/* Footer Links Theming */}
-                    <p className="text-lg md:text-xl mb-6 text-textLight/60 dark:text-textDark/60"> Explore our <Link href="/services" className="underline text-primary">services</Link> or <Link href="/contact" className="underline text-primary">contact us</Link> to see how Loop Axis can transform your workflows and boost productivity. </p>
+                    <p className="text-lg md:text-xl mb-6 text-textLight/60 dark:text-textDark/60"> Explore our <Link href="/services" className="underline text-primary">services</Link> or <Link href="/contact" className="underline text-primary">contact us</Link> to see how Go Automat Work can transform your workflows and boost productivity. </p>
                 </div>
             </div>
             {/* Child Components (assuming they are already themed) */}

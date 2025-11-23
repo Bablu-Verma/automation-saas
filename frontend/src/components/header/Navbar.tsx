@@ -45,6 +45,7 @@ export default function Navbar() {
     }, 1000);
   };
 
+
   const publicLinks = [
     { href: "/", label: "Home", icon: <FaHome size={18} /> },
     { href: "/about", label: "About Us", icon: <FaUser size={18} /> },
@@ -103,13 +104,23 @@ export default function Navbar() {
             {/* Logo */}
             <div className="flex-shrink-0 py-2">
               <Link href="/" className="">
-                <Image
-                  src="/loop_axis_2.png"
-                  className="w-[110px] sm:w-auto h-auto"
+              {
+                theme === "dark"  ?  <Image
+                  src="/DARK.png"
+                  className="w-[110px] sm:w-auto h-auto "
+                  width={275}
+                  height={100}
+                  alt="logo"
+                /> :  <Image
+                  src="/LIGHT.png"
+                  className="w-[110px] sm:w-auto  h-auto "
                   width={275}
                   height={100}
                   alt="logo"
                 />
+              }
+               
+               
               </Link>
             </div>
 

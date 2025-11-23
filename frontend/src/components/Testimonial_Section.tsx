@@ -8,7 +8,7 @@ import "swiper/css"
 import Image from "next/image"
 
 const testimonials = [
-  { name: "Amit Kumar", text: "Loop Axis saved us 20+ hrs/week. Insane ROI!", image: "/client.jpg" },
+  { name: "Amit Kumar", text: "Go Automat Work saved us 20+ hrs/week. Insane ROI!", image: "/client.jpg" },
   { name: "Sarah Lee", text: "Email campaigns are now fully automated.", image: "/client.jpg" },
   { name: "Rajesh Singh", text: "Shopify orders sync without errors.", image: "/client.jpg" },
   { name: "Priya Sharma", text: "Seamless integration with all our tools.", image: "/client.jpg" },
@@ -29,7 +29,7 @@ export default function Testimonials() {
         className="mt-6 text-lg max-w-2xl transition-colors duration-500
         text-textLight/70 dark:text-textDark/70"
       >
-        Discover how businesses are saving time, boosting productivity, and scaling effortlessly with Loop Axis.
+        Discover how businesses are saving time, boosting productivity, and scaling effortlessly with Go Automat Work.
       </p>
 
       <Swiper

@@ -33,12 +33,12 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   const title = workflows.length
-    ? `Services – Loop Axis | ${workflows[0].name}${workflows.length > 1 ? " & more" : ""}`
-    : "Services – Loop Axis – Intelligent Automation Solutions";
+    ? `Services – Go Automat Work | ${workflows[0].name}${workflows.length > 1 ? " & more" : ""}`
+    : "Services – Go Automat Work – Intelligent Automation Solutions";
 
   const description = workflows.length
-    ? `Explore Loop Axis services such as ${workflows.slice(0, 3).map(w => w.name).join(", ")} and more to optimize your business.`
-    : "Explore Loop Axis automation services to streamline workflows, enhance productivity, and scale your business.";
+    ? `Explore Go Automat Work services such as ${workflows.slice(0, 3).map(w => w.name).join(", ")} and more to optimize your business.`
+    : "Explore Go Automat Work automation services to streamline workflows, enhance productivity, and scale your business.";
 
   return {
     title,
@@ -47,13 +47,13 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url: "https://loopaxis.babluverma.site/services",
-      siteName: "Loop Axis",
+      siteName: "Go Automat Work",
       images: [
         {
           url: "https://loopaxis.babluverma.site/og-image.png",
           width: 1200,
           height: 630,
-          alt: "Loop Axis Services",
+          alt: "Go Automat Work Services",
         },
       ],
       locale: "en_US",
