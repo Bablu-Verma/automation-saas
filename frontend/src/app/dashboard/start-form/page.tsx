@@ -5,7 +5,7 @@ import Loading_ from "@/components/Loading";
 import { googleOAuthHandlers } from "@/Handlers/googleOAuthHandlers";
 
 import { RootState } from "@/redux-store/redux_store";
-import { ICredentialField, IRequiredCredential, IWorkflowDetail } from "@/types";
+import { ICredentialField, IWorkflowDetail } from "@/types";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -13,7 +13,6 @@ import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { useSelector } from "react-redux";
 
-const allowedOrigins = [process.env.NEXT_PUBLIC_ALLOW_ORIGIN1];
 
 
 export default function StartFormPage() {
@@ -32,7 +31,7 @@ export default function StartFormPage() {
   const router = useRouter()
 
 
-  // console.log(credentialsData)
+
 
   useEffect(() => {
     if (!workflowId) return;
@@ -62,7 +61,7 @@ export default function StartFormPage() {
         setCredentialsData(creds);
 
       } catch (err) {
-        // console.error("Failed to fetch workflow:", err);
+        console.error("Failed to fetch workflow:", err);
         toast.error("Failed to load workflow details.");
       } finally {
         setLoading(false);
@@ -164,7 +163,7 @@ export default function StartFormPage() {
       >
         {/* H1 Theming */}
         <h1 className="text-2xl md:text-3xl font-extrabold text-textLight dark:text-textDark">
-          Start "{workflow?.name}"
+          Start - {workflow?.name}
         </h1>
         {/* Paragraph Theming */}
         <p className="mt-4 text-lg md:text-xl text-textLight/80 dark:text-textDark/80">
