@@ -162,7 +162,7 @@ export function extractTriggersFromNodes(nodes: any[]): string[] {
 
   const triggers: string[] = [];
 
-  console.log("triggerNodes",triggerNodes)
+  // console.log("triggerNodes",triggerNodes)
   
   for (const triggerNode of triggerNodes) {
     let webhookId = triggerNode.webhookId ||

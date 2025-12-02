@@ -68,13 +68,6 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
       for (const [key, value] of Object.entries(creds as Record<string, any>)) {
         let resolvedValue = value;
 
-        // 🔹 1️⃣ Replace env vars (e.g., GOOGLE_CLIENT_ID → actual value)
-        if (typeof value === "string" && /^[A-Z0-9_]+$/.test(value)) {
-          if (process.env[value] !== undefined) {
-            resolvedValue = process.env[value];
-          }
-        }
-
         // 🔹 2️⃣ Convert common string types → native types
         if (typeof resolvedValue === "string") {
           const trimmed = resolvedValue.trim().toLowerCase();
@@ -85,14 +78,13 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
           } else if (trimmed === "false") {
             resolvedValue = false;
           } else {
-            // ✅ Try parsing JSON (for JSON objects or arrays)
             try {
               const parsed = JSON.parse(resolvedValue);
               if (typeof parsed === "object" && parsed !== null) {
                 resolvedValue = parsed;
               }
             } catch {
-              // ignore parsing errors, keep as string
+             
             }
           }
         }
@@ -198,8 +190,6 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
       automation: automationInstance,
       success: true
     });
-
-
 
   } catch (err) {
     console.error("Error creating automation instance. Starting cleanup process...");

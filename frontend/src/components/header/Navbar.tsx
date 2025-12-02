@@ -107,13 +107,13 @@ export default function Navbar() {
               {
                 theme === "dark"  ?  <Image
                   src="/DARK.png"
-                  className="w-[110px] sm:w-auto h-auto "
+                  className="max-w-[170px]  h-auto "
                   width={275}
                   height={100}
                   alt="logo"
                 /> :  <Image
                   src="/LIGHT.png"
-                  className="w-[110px] sm:w-auto  h-auto "
+                  className="max-w-[170px]  h-auto "
                   width={275}
                   height={100}
                   alt="logo"

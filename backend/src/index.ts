@@ -5,12 +5,12 @@ import express from 'express'
 import connectDB from './config/db';
 import cors from 'cors';
 import route from './router/route';
-import OAuthRouter from './lib/OAuth2';
-import "./cron/cron";
+import popularauth from './popularauth/route'
+// import "./cron/cron";
 
 connectDB();
 
-export const app_ = express();
+const app_ = express();
 
 app_.use("/images", express.static("images"));
 
@@ -24,17 +24,13 @@ app_.use(cors({
 
 app_.use(express.json());
 
-
-
 app_.get('/', (req, res) => {
     res.send('Hello server');
 });
 
 // Routes
-app_.use('/api', route)
-app_.use(OAuthRouter)
-
-// import './lib/OAuth2';
+app_.use('/api',route)
+app_.use(popularauth)
 
 
 const PORT = process.env.PORT || 5000;

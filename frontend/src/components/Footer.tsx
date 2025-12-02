@@ -19,10 +19,6 @@ export default function Footer() {
   )
   const loggedIn = Boolean(user)
 
-  
-
-
-
 
   return (
     /* ✨ मुख्य सुधार: Footer अब थीम के साथ स्विच करेगा */
@@ -45,7 +41,7 @@ export default function Footer() {
     width={275}
     height={100}
     alt="logo-light"
-    className="w-auto h-auto block dark:hidden"
+    className="max-w-[180x] h-auto block dark:hidden"
   />
 
   {/* Dark Mode Logo */}
@@ -54,7 +50,7 @@ export default function Footer() {
     width={275}
     height={100}
     alt="logo-dark"
-    className="w-auto h-auto hidden dark:block"
+    className="ma-w-[180px] h-auto hidden dark:block"
   />
           </Link>
           

@@ -31,10 +31,10 @@ export async function autoSaveN8nWorkflow(workflowId: string) {
    
     await page.goto(n8nUrl, { waitUntil: 'networkidle2' });
 
-    await delay(2000);
+    await delay(4000);
 
     await page.waitForSelector('input[name="emailOrLdapLoginId"]', { visible: true });
-    await delay(500);
+    await delay(1000);
 
    
     await page.type('input[name="emailOrLdapLoginId"]', process.env.N8N_USER_EMAIL!);
@@ -45,30 +45,30 @@ export async function autoSaveN8nWorkflow(workflowId: string) {
   
     await page.waitForSelector('[data-test-id="canvas-wrapper"]', { visible: true });
 
-    await delay(500);
+    await delay(800);
 
    
     const addStickyBtn = await page.$('button[data-test-id="add-sticky-button"]');
     await addStickyBtn?.click();
 
-    await delay(1000);
+    await delay(1500);
 
 
-    await page.waitForSelector('span[data-test-id="workflow-save-button"] button', { visible: true, timeout: 15000 });
+    await page.waitForSelector('span[data-test-id="workflow-save-button"] button', { visible: true, timeout: 25000 });
 
  
     await page.waitForFunction(() => {
       const btn = document.querySelector('span[data-test-id="workflow-save-button"] button') as HTMLButtonElement;
       return !!btn && !btn.disabled;
-    }, { timeout: 15000 });
+    }, { timeout: 25000 });
     await page.click('span[data-test-id="workflow-save-button"] button');
 
-    await delay(2000);
+    await delay(2500);
 
     await page.waitForFunction(() => {
       const saved = document.querySelector('span[data-test-id="workflow-save-button"] span');
       return saved && saved.textContent?.trim().includes('Saved');
-    }, { timeout: 60000 });
+    }, { timeout: 80000 });
 
     console.log(`🎉 Workflow ${workflowId} auto-saved successfully!`);
 

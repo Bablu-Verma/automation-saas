@@ -29,7 +29,7 @@ export const automationDetail = async (req: AuthenticatedRequest, res: Response)
       });
     }
 
-    console.log(instance)
+    // console.log(instance)
 
     const executionsResponse = await axios.get(
       `${process.env.N8N_API_URL}/api/v1/executions`,
