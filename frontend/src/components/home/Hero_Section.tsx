@@ -8,11 +8,10 @@ import {
   FiCpu,
   FiTrendingUp,
   FiCloudLightning,
-  FiPlay,
   FiArrowRight
 } from "react-icons/fi"
 import "swiper/css"
-import Image from "next/image"
+import { FaAmazon, FaApple, FaFacebookF, FaGoogle, FaInstagram, FaLinkedinIn, FaMicrosoft, FaTwitter } from "react-icons/fa"
 
 export default function HomeHero() {
   const slides = [
@@ -22,12 +21,16 @@ export default function HomeHero() {
     { icon: <FiCloudLightning size={28} />, text: "Your business, on autopilot ⚡" },
   ]
 
-  const clients = [
-    "/company-logo-4.svg",
-    "/company-logo-3.svg",
-    "/company-logo-2.svg",
-    "/company-logo-1.svg",
-  ]
+const clients = [
+  FaApple,
+  FaGoogle,
+  FaAmazon,
+  FaMicrosoft,
+  FaFacebookF,
+  FaTwitter,
+  FaLinkedinIn,
+  FaInstagram,
+];
 
   return (
     <section className="relative min-h-[100vh] w-full flex flex-col justify-center items-center pt-24 overflow-hidden
@@ -118,14 +121,12 @@ export default function HomeHero() {
               backdrop-blur-sm transition-all duration-300 
               flex items-center gap-2"
           >
-            <FiPlay size={18} />
             About Us
           </Link>
         </div>
       </div>
 
-      {/* Client Logos */}
-     <div className="mt-6 w-full px-8">
+   <div className="mt-6 w-full px-8">
   <p className="text-center 
      text-[color:var(--text-light)]/60 
      dark:text-[color:var(--text-dark)]/60 
@@ -134,16 +135,14 @@ export default function HomeHero() {
   </p>
 
   <div className="flex items-center justify-center gap-6 sm:gap-12 flex-wrap opacity-90">
-    {clients.map((logo, i) => (
-      <Image
+    {clients.map((Icon, i) => (
+      <div
         key={i}
-        width={140}
-        height={60}
-        src={logo}
-        alt="Client Logo"
-        className="object-contain grayscale hover:grayscale-0 hover:scale-110 
-          transition-all duration-300"
-      />
+        className="text-gray-400 dark:text-gray-500 text-4xl 
+                   hover:text-primary hover:scale-110 transition-all duration-300"
+      >
+        <Icon />
+      </div>
     ))}
   </div>
 </div>

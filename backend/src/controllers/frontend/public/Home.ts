@@ -17,7 +17,7 @@ export const listHomeService = async (req: AuthenticatedRequest, res: Response) 
     filter.isPublished = 'ACTIVE'
     
     const workflows = await MasterWorkflow.find(filter)
-      .sort({ name: 1 }).select('-workflowJsonTemplate -description')
+      .sort({ name: 1 }).select('-workflowJsonTemplate -description -requiredCredentials -requiredInputs -version')
       .skip(skip)
       .limit(limit);
 

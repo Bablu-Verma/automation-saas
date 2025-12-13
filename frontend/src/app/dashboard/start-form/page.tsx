@@ -14,6 +14,8 @@ import { FcGoogle } from "react-icons/fc";
 import { useSelector } from "react-redux";
 
 import { motion } from "framer-motion"
+import Link from "next/link";
+import { FaExternalLinkAlt  } from "react-icons/fa";
 
 
 
@@ -158,7 +160,7 @@ export default function StartFormPage() {
   `;
 
   return (
-    <section className="relative py-28">
+    <section className="relative pt-10 pb-20">
       {/* Header (Framer Motion removed) */}
       <div
         className="text-center max-w-2xl mx-auto mb-16"
@@ -168,8 +170,8 @@ export default function StartFormPage() {
           Start - {workflow?.name}
         </h1>
         {/* Paragraph Theming */}
-        <p className="mt-4 text-lg md:text-xl text-textLight/80 dark:text-textDark/80">
-          Provide the required inputs and credentials to start this service.
+        <p className="mt-4 text-lg md:text-xl  text-textLight/80 dark:text-textDark/80 ">
+          <span>Provide the required inputs and credentials to start this service.</span> <Link className="text-primary inline-flex gap-1 items-center text-base hover:underline" href={`/services/docs?id=${workflow?._id}`} target="_blank">Docs <FaExternalLinkAlt className="text-sm" /></Link>
         </p>
       </div>
 

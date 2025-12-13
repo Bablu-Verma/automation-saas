@@ -1,5 +1,6 @@
 "use client";
 
+import { useHomeServices } from "@/hooks/useHomeServices";
 import { RootState } from "@/redux-store/redux_store";
 import { IUser } from "@/types";
 import Image from "next/image";
@@ -14,11 +15,9 @@ export default function Footer() {
     (state: RootState) => state.user.user
   ) as IUser | null;
 
-  const service = useSelector(
-    (state: RootState) => state.servicetofooter.services
-  )
   const loggedIn = Boolean(user)
 
+  const { services, loading } = useHomeServices();
 
   return (
     /* ✨ मुख्य सुधार: Footer अब थीम के साथ स्विच करेगा */
@@ -41,7 +40,7 @@ export default function Footer() {
     width={275}
     height={100}
     alt="logo-light"
-    className="max-w-[180x] h-auto block dark:hidden"
+    className="max-w-[180px] h-auto block dark:hidden"
   />
 
   {/* Dark Mode Logo */}
@@ -50,7 +49,7 @@ export default function Footer() {
     width={275}
     height={100}
     alt="logo-dark"
-    className="ma-w-[180px] h-auto hidden dark:block"
+    className="max-w-[180px] h-auto hidden dark:block"
   />
           </Link>
           
@@ -90,8 +89,8 @@ export default function Footer() {
           {/* ✨ सुधार: हेडिंग टेक्स्ट कलर थीम-अवेयर */}
           <h2 className="text-lg font-semibold text-textLight dark:text-textDark mb-4">Services</h2>
           <ul className="space-y-2 capitalize text-textLight/80 dark:text-textDark/80">
-            {
-              service.slice(0, 5).map((item, i) => {
+            { !loading &&
+              services.slice(0, 5).map((item, i) => {
                 return (
                   <li key={i}><Link href={`/services/view?id=${item.slug}`} className="hover:text-primary line-clamp-1">{item.name}</Link></li>
                 )

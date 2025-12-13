@@ -1,7 +1,6 @@
 "use client";
 
 import userSlice from './slice/userSlice'
-import ServiceToFooter from './slice/serviceToFooterSlice'
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 
@@ -9,7 +8,6 @@ import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 const store_ = configureStore({
   reducer: {
     user: userSlice,
-    servicetofooter: ServiceToFooter,
   },
 });
 
