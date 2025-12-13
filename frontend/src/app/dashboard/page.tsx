@@ -13,36 +13,37 @@ import { FaFlipboard, FaRobot } from "react-icons/fa";
 
 // Interface definitions remain the same...
 interface PlanDetails {
-  name?: string;
-  duration?: number;
+  name?: string;
+  duration?: number;
 }
 interface AmountDetails {
-  totalAmount: number;
+  totalAmount: number;
 }
 interface Automation {
-  instanceName: string;
-  systemStatus: string;
-  isActive: boolean;
-  executionCount: number;
-  createdAt: string;
-  periods?: {
-    endTime?: string;
-  };
+  instanceName: string;
+  systemStatus: string;
+  isActive: boolean;
+  usageCount: number;
+  createdAt: string;
+  periods?: {
+    endTime?: string;
+    startTime?: string;
+  };
 }
 interface Payment {
-  orderId: string;
-  status: string;
-  planDetails?: PlanDetails;
-  amountDetails?: AmountDetails;
-  currency: string;
-  paymentMethod: string;
-  instanceId?: {
-    instanceName: string;
-  };
+  orderId: string;
+  status: string;
+  planDetails?: PlanDetails;
+  amountDetails?: AmountDetails;
+  currency: string;
+  paymentMethod: string;
+  instanceId?: {
+    instanceName: string;
+  };
 }
 interface DashboardData {
-  latestPayments?: Payment[];
-  latestAutomations?: Automation[];
+  latestPayments?: Payment[];
+  latestAutomations?: Automation[];
 }
 // End of interfaces
 
@@ -82,7 +83,7 @@ export default function DashboardPage() {
   }, [user, token]);
 
   if (loading) return <Loading_ />
-  
+
   // Error state Theming
   if (error) return (
     <div className="text-center py-12">
@@ -131,7 +132,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Automations (Framer Motion removed) */}
       <div
         className={cardClasses}
@@ -156,10 +157,10 @@ export default function DashboardPage() {
                 {/* Status Tag (Colors remain consistent across themes) */}
                 <span
                   className={`text-xs px-3 py-1 rounded-full ${auto.systemStatus === "EXPIRE_SOON"
-                      ? "bg-yellow-500/20 text-yellow-400"
-                      : auto.systemStatus === "EXPIRED"
-                        ? "bg-red-500/20 text-red-400"
-                        : "bg-green-500/20 text-green-400"
+                    ? "bg-yellow-500/20 text-yellow-400"
+                    : auto.systemStatus === "EXPIRED"
+                      ? "bg-red-500/20 text-red-400"
+                      : "bg-green-500/20 text-green-400"
                     }`}
                 >
                   {auto.systemStatus}
@@ -174,12 +175,18 @@ export default function DashboardPage() {
                 </p>
                 <p>
                   <FiTrendingUp className="inline mr-1 text-textLight/60 dark:text-textDark/60" />
-                  <strong>Executions:</strong> {auto.executionCount}
+                  <strong>Executions:</strong> {auto.usageCount}
                 </p>
                 <p>
                   <strong>Created:</strong>{" "}
                   {new Date(auto.createdAt).toLocaleString()}
                 </p>
+                {auto.periods?.startTime && (
+                  <p>
+                    <strong>Start:</strong>{" "}
+                    {new Date(auto.periods.startTime).toLocaleDateString()}
+                  </p>
+                )}
                 {auto.periods?.endTime && (
                   <p>
                     <strong>Expiry:</strong>{" "}
@@ -216,8 +223,8 @@ export default function DashboardPage() {
                 {/* Status Tag (Colors remain consistent across themes) */}
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-medium ${bill.status === "success"
-                      ? "bg-green-500/20 text-green-400"
-                      : "bg-red-500/20 text-red-400"
+                    ? "bg-green-500/20 text-green-400"
+                    : "bg-red-500/20 text-red-400"
                     }`}
                 >
                   {bill.status.toUpperCase()}
@@ -227,8 +234,7 @@ export default function DashboardPage() {
               {/* Details Theming */}
               <div className="text-sm space-y-1 text-textLight/70 dark:text-textDark/70">
                 <p>
-                  <strong>Plan:</strong> {bill.planDetails?.name || "N/A"} (
-                  {bill.planDetails?.duration} months)
+                  <strong>Plan:</strong> {bill.planDetails?.name || "N/A"}
                 </p>
                 <p>
                   <strong>Total:</strong>{" "}

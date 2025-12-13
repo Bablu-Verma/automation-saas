@@ -44,12 +44,10 @@ export const automationDetail = async (req: AuthenticatedRequest, res: Response)
     const totalExecutions = executions.length;
     const lastExecution = executions[0]?.startedAt || null;
 
-    instance.executionCount = totalExecutions,
-      instance.lastExecutedAt = lastExecution,
+    instance.usageCount = totalExecutions,
+    instance.lastExecutedAt = lastExecution,
 
-      await instance.save()
-
-
+    await instance.save()
 
     return res.status(200).json({
       message: "Automation instance detail fetched successfully",

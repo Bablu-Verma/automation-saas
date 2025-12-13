@@ -38,7 +38,7 @@ export default function DashboardMenu() {
         2. बॉर्डर और टेक्स्ट कलर भी थीम-अवेयर हैं।
       */}
       <aside className={`
-        fixed top-0 left-0 h-screen w-64 p-6 pt-18 md:pt-6 flex flex-col
+        hidden  h-screen w-64 p-6 pt-18 md:pt-6  flex-col
         z-30 transform transition-transform duration-300 overflow-y-auto
         md:translate-x-0 md:sticky md:flex md:top-0
         

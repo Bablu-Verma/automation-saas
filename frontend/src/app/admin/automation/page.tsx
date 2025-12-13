@@ -13,7 +13,7 @@ import LoadingSpiner from "../_components/LoadingSpiner";
 export type Automation = {
   _id: string;
   instanceName: string;
-  executionCount: number;
+usageCount: number;
   lastExecutedAt: string;
   createdAt: string;
   updatedAt: string;
@@ -285,7 +285,7 @@ export default function AdminAutomations() {
                   <p className="text-gray-500 text-sm">
                     Email: {automation.user?.email}
                   </p>
-                  <p className="text-gray-400 mt-2">Executions: {automation.executionCount}</p>
+                  <p className="text-gray-400 mt-2">usageCount: {automation.usageCount}</p>
                   <p className="text-gray-400">System Status: {automation.systemStatus}</p>
                   <p className="text-gray-400">Active State: {automation.isActive}</p>
                   <div className="text-sm text-gray-500 mt-2">

@@ -50,7 +50,6 @@ export function useFormArrayHelpers<T extends Record<string, any>>(initialData: 
     handleArrayChange,
     addField,
     removeField,
-    
     description,
     setDescription,
     handleReset

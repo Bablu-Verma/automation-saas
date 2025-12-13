@@ -174,10 +174,6 @@ export function extractTriggersFromNodes(nodes: any[]): string[] {
     triggers.push(`${triggerType}:${webhookId}`);
   }
   
-
-  
-
   return triggers;
 
- 
 }

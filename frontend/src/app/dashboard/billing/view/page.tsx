@@ -49,9 +49,9 @@ export type Payment = {
   subscriptionMonths: number
   planDetails: {
     name: string
-    duration: number
-    price: number
-    discountPercentage: number
+  monthlyPrice: number
+  months: number
+  discountPercentage: number
   }
   amountDetails: {
     baseAmount: number
@@ -67,7 +67,7 @@ export type Payment = {
   }
   status: "pending" | "success" | "failed" | "refunded" | "cancelled"
   note?: string
-  Log?: PaymentLog[]
+  logs?: PaymentLog[]
   createdAt: string
   updatedAt: string
 }
@@ -220,7 +220,9 @@ export default function PaymentDetailsPage() {
           </div>
           <div>
             <p className={`text-sm mb-1 ${textFaded}`}>Payment Method</p>
-            <p className="capitalize">{payment.paymentMethod}</p>
+          <p className="capitalize">
+  {payment.paymentMethod || "Pending confirmation"}
+</p>
           </div>
           <div>
             <p className={`text-sm mb-1 ${textFaded}`}>Subscription Start</p>
@@ -250,7 +252,7 @@ export default function PaymentDetailsPage() {
             </p>
             <p>
               <strong>Price/Month:</strong>{" "}
-              {formatCurrency(payment.planDetails.price, payment.currency)}
+              {formatCurrency(payment.planDetails.monthlyPrice, payment.currency)}
             </p>
             {payment.planDetails.discountPercentage > 0 && (
               <p className="text-green-500">
@@ -306,11 +308,11 @@ export default function PaymentDetailsPage() {
         )}
 
         {/* Log History */}
-        {payment.Log && payment.Log.length > 0 && (
+        {payment.logs && payment.logs.length > 0 && (
           <div>
             <h3 className={`font-semibold text-lg mb-2 ${textPrimary}`}>Status History</h3>
             <div className={`${logBgClasses} p-4 space-y-3`}>
-              {payment.Log.slice().reverse().map((log, index) => (
+              {payment.logs.slice().reverse().map((log, index) => (
                 <div
                   key={index}
                   className={`flex flex-col border-b border-textLight/10 dark:border-textDark/10 pb-2 last:border-none ${textSecondary}`}

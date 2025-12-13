@@ -92,13 +92,51 @@ export default function WorkflowDetailPage() {
             ))}
           </div>
         )}
+       
+{workflow.pricingPlans && workflow.pricingPlans.length > 0 && (
+  <div className="mb-6">
+    <h3 className="font-normal mb-3">Pricing Plans</h3>
 
-        {/* Price & Trial */}
-        <p className="text-gray-600 font-semibold mb-4">
-          Price: ₹{workflow.pricePerMonth}/{workflow.currency} | Trial: {workflow.trialDays} days
-        </p>
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {workflow.pricingPlans.map((plan, index) => (
+        <div
+          key={index}
+          className="border p-4 rounded-lg shadow-sm transition hover:shadow-md"
+        >
+          <h4 className="font-bold text-lg mb-1">{plan.planName}</h4>
 
-        {/* Required Inputs */}
+          <p className="text-gray-700 font-semibold">
+            ₹{plan.monthlyPrice} / month
+          </p>
+
+          <p className="text-gray-600 text-sm mb-2">
+            Usage Limit: {plan.usageLimit === -1 ? "Unlimited" : plan.usageLimit}
+          </p>
+
+          <p className="text-gray-600 text-sm mb-2">
+            Validity: {plan.validityDays} {plan.validityDays > 1 ? "days" : "day"}
+          </p>
+<p className="text-gray-600 text-sm mb-2">
+            Discount: {plan.discountPercent.toString()}
+          </p>
+
+          {/* Features */}
+          {plan.features.length > 0 && (
+            <ul className="list-disc ml-5 text-gray-700 text-sm space-y-1">
+              {plan.features.map((f, i) => (
+                <li key={i}>{f}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
+
+ {/* Required Inputs */}
         {workflow.requiredInputs.length > 0 && (
           <div className="mb-4">
             <h3 className="font-bold mb-2">Required Inputs</h3>
@@ -124,12 +162,14 @@ export default function WorkflowDetailPage() {
           </div>
         )}
 
+
         {/* Description */}
         {workflow.description && (
           <div className="mb-4">
             <h3 className="font-bold mb-2">Description</h3>
             <div
-              className="text-gray-500"
+              className=" sm:mx-4 dangerouslyHTML  max-w-none"
+              style={{color:'black'}}
               dangerouslySetInnerHTML={{ __html: workflow.description }}
             />
           </div>

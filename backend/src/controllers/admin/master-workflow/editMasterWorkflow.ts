@@ -19,10 +19,9 @@ export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Respons
       id,
       name,
       description,
-      pricePerMonth,
+      pricingPlans,
       currency,
       workflowJsonTemplate,
-      trialDays,
       serviceImage,
       isPublished,
       requiredInputs,
@@ -84,9 +83,8 @@ export const editMasterWorkflow = async (req: AuthenticatedRequest, res: Respons
     if (workflowJsonTemplate !== undefined) updateFields.workflowJsonTemplate = workflowJsonTemplate;
     if (serviceImage !== undefined) updateFields.serviceImage = serviceImage;
     if (isPublished !== undefined) updateFields.isPublished = isPublished;
-    if (pricePerMonth !== undefined) updateFields.pricePerMonth = pricePerMonth;
+    if (pricingPlans !== undefined) updateFields.pricingPlans = pricingPlans;
     if (currency !== undefined) updateFields.currency = currency;
-    if (trialDays !== undefined) updateFields.trialDays = trialDays;
     if (requiredInputs !== undefined) updateFields.requiredInputs = requiredInputs;
     if (requiredCredentials !== undefined) updateFields.requiredCredentials = requiredCredentials;
     if (keyword !== undefined) updateFields.category = keyword;

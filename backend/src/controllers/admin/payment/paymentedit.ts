@@ -7,111 +7,86 @@ import { toggleN8nWorkflow } from "../../../lib/_n8n_helper";
 import { sendPaymentStatusEmail } from "../../../email/sendPaymentStatusEmail";
 import { IAutomationInstance, IUser } from "../../../types/types";
 
-// ✅ Update payment controller (POST)
-export const updatePaymentForAdmin = async (req: AuthenticatedRequest, res: Response) => {
+export const updatePaymentForAdmin = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
   try {
-    const requestUser = req.user;
+    const admin = req.user;
     const { id, status, note, paymentMethod } = req.body;
 
-    // Access control: only admin
-    if (!requestUser || requestUser.role !== "admin") {
+    /* ===== ACCESS CONTROL ===== */
+    if (!admin || admin.role !== "admin") {
       return res.status(403).json({
         success: false,
-        message: "Access denied. Only administrators can update payments.",
+        message: "Admin access required",
       });
     }
 
-    // Validate payment ID
+    /* ===== VALIDATION ===== */
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         success: false,
-        message: "Valid payment ID is required.",
+        message: "Valid payment ID required",
       });
     }
 
-    // Validate status
-    const validStatuses = ["pending", "success", "failed", "refunded", "cancelled"];
-    if (status && !validStatuses.includes(status)) {
+    const allowedStatuses = ["success", "failed", "refunded", "cancelled"];
+    if (status && !allowedStatuses.includes(status)) {
       return res.status(400).json({
         success: false,
-        message: `Invalid status. Allowed values: ${validStatuses.join(", ")}`,
+        message: `Status must be one of: ${allowedStatuses.join(", ")}`,
       });
     }
 
-    // Validate paymentMethod
-    const validMethods = ["card", "upi", "netbanking", "wallet", "manual", "internal"];
-    if (paymentMethod && !validMethods.includes(paymentMethod)) {
+    const allowedMethods = ["card", "upi", "netbanking", "wallet", "manual", "internal"];
+    if (paymentMethod && !allowedMethods.includes(paymentMethod)) {
       return res.status(400).json({
         success: false,
-        message: `Invalid payment method. Allowed values: ${validMethods.join(", ")}`,
+        message: `Invalid payment method`,
       });
     }
 
-    if (status === "pending") {
-      return res.status(400).json({
-        success: false,
-        message: "Please change status to a valid value.",
-      });
-    }
+    /* ===== FETCH PAYMENT ===== */
+    const payment = await Payment.findById(id)
+      .populate<{ instanceId: IAutomationInstance }>(
+        "instanceId",
+        "instanceName user n8nWorkflowId periods systemStatus isActive"
+      );
 
-    // Fetch payment
-    const payment = await Payment.findById(id).populate<{instanceId:IAutomationInstance}>('instanceId', 'instanceName');
     if (!payment) {
-      return res.status(404).json({ success: false, message: "Payment not found." });
+      return res.status(404).json({
+        success: false,
+        message: "Payment not found",
+      });
     }
 
-    if (!payment.period) {
-  payment.period = { startDate: undefined, endDate: undefined };
-}
+    /* ===== FETCH AUTOMATION ===== */
+    const automation = await AutomationInstance.findById(
+      payment.instanceId
+    ).populate<{ user: IUser }>("user", "name email");
 
-    // Fetch automation instance
-    const automation = await AutomationInstance.findById(payment.instanceId).populate<{user:IUser}>('user', 'name email');
     if (!automation) {
-      return res.status(404).json({ success: false, message: "Automation instance not found." });
+      return res.status(404).json({
+        success: false,
+        message: "Automation instance not found",
+      });
     }
 
-    // Define behavior based on payment status
-    const pauseStatuses = ["failed", "refunded", "cancelled"];
-    const activeStatuses = ["success"];
-    let isPaused = false;
-    let newSystemStatus = automation.systemStatus;
+    /* ===== INIT ===== */
+    if (!payment.logs) payment.logs = [];
+    if (!payment.period) payment.period = {};
 
-    // ❌ If payment failed / refunded / cancelled → close automation
-    if (pauseStatuses.includes(status)) {
-      isPaused = true;
-      newSystemStatus = "EXPIRED";
+    let pauseWorkflow = false;
+    const now = new Date();
 
-      // Stop automation immediately
-      automation.isActive = "PAUSE";
-      automation.systemStatus = "EXPIRED";
-
-      // End the subscription immediately
-      const now = new Date();
-      payment.period.endDate = now;
-
-      // If automation.periods exists, mark it ended too
-      if (!automation.periods) {
-        automation.periods = { startTime: null, endTime: now };
-      } else {
-        automation.periods.endTime = now;
-      }
-
-      payment.note = "Subscription ended due to refund/cancel.";
-    }  else if (activeStatuses.includes(status)) {
-      // ✅ If payment successful → activate automation and update subscription
-      isPaused = false;
-      newSystemStatus = "ACTIVE";
-
-      const now = new Date();
-      let startDate: Date;
-
-      if (payment.period.startDate && new Date(payment.period.startDate) > now) {
-        // Start date is in the future — keep it
-        startDate = new Date(payment.period.startDate);
-      } else {
-        // Start date is past or null — start from now
-        startDate = now;
-      }
+    /* ===== STATUS HANDLING ===== */
+    if (status === "success") {
+      // 🔓 ACTIVATE SUBSCRIPTION
+      const startDate =
+        payment.period.startDate && payment.period.startDate > now
+          ? payment.period.startDate
+          : now;
 
       const endDate = new Date(startDate);
       endDate.setMonth(endDate.getMonth() + payment.subscriptionMonths);
@@ -119,55 +94,82 @@ export const updatePaymentForAdmin = async (req: AuthenticatedRequest, res: Resp
       payment.period.startDate = startDate;
       payment.period.endDate = endDate;
 
-      if (!automation.periods) {
-        automation.periods = { startTime: startDate, endTime: endDate };
-      } else {
-        automation.periods.startTime = startDate; 
-        automation.periods.endTime = endDate;
-      }
-
-      // automation.isActive = "RUNNING";
       automation.systemStatus = "ACTIVE";
+      automation.isActive = "RUNNING";
+
+      automation.periods = {
+        startTime: startDate,
+        endTime: endDate,
+      };
+
+      pauseWorkflow = false;
+
+      if (paymentMethod) {
+        payment.paymentMethod = paymentMethod;
+      }
     }
 
-    // Toggle n8n workflow according to pause/resume
-    try {
-      await toggleN8nWorkflow(automation.n8nWorkflowId, !isPaused);
-    } catch (n8nError) {
-      console.error("Failed to toggle n8n workflow:", n8nError);
+    if (["failed", "refunded", "cancelled"].includes(status)) {
+      // 🔒 EXPIRE SUBSCRIPTION
+      payment.period.endDate = now;
+
+      automation.systemStatus = "EXPIRED";
+      automation.isActive = "PAUSE";
+
+      automation.periods = {
+        startTime: automation.periods?.startTime || now,
+        endTime: now,
+      };
+
+      pauseWorkflow = true;
     }
 
-    await automation.save();
-
-    // Update payment details
-    if (status) payment.status = status;
-    if (paymentMethod) payment.paymentMethod = paymentMethod;
+    /* ===== SAVE PAYMENT ===== */
+    payment.status = status;
     if (note) payment.note = note;
 
-    payment.Log!.push({
-  status: status || payment.status,
-  note: note || `Changed status to ${status}`,
-  changedAt: new Date(),
-});
+    payment.logs.push({
+      status,
+      note: note || `Admin updated status to ${status}`,
+      changedAt: now,
+    });
 
     await payment.save();
 
-     await sendPaymentStatusEmail(
-    automation.user.email,
-    automation.user.name,
-    payment
-  );
+    /* ===== SAVE AUTOMATION ===== */
+    await automation.save();
+
+    /* ===== TOGGLE WORKFLOW ===== */
+    try {
+      await toggleN8nWorkflow(
+        automation.n8nWorkflowId,
+        !pauseWorkflow
+      );
+    } catch (err) {
+      console.error("n8n toggle failed", err);
+    }
+
+    /* ===== EMAIL USER ===== */
+    await sendPaymentStatusEmail(
+      automation.user.email,
+      automation.user.name,
+      payment
+    );
 
     return res.status(200).json({
       success: true,
-      message: "Payment updated successfully.",
-      payment,
+      message: "Payment updated successfully",
+      data: {
+        paymentId: payment._id,
+        status: payment.status,
+        period: payment.period,
+      },
     });
   } catch (error) {
-    console.error("Error updating payment:", error);
+    console.error("Admin payment update error:", error);
     return res.status(500).json({
       success: false,
-      message: "Server error while updating payment.",
+      message: "Server error while updating payment",
     });
   }
 };

@@ -17,7 +17,7 @@ export type AutomationInstance__ = {
   _id: string;
   instanceName: string;
   isActive: "RUNNING" | "PAUSE";
-  executionCount: number;
+  usageCount: number;
   systemStatus: string;
   masterWorkflow: string;
   slug: string;
@@ -157,7 +157,7 @@ export default function AutomationInstances() {
             <div className={`flex items-center gap-2 ${textSecondary} mb-2`}>
               <FiCpu className="text-secondary" />{" "}
               <span className="text-sm">
-                Workflow ID: {inst.n8nWorkflowId}
+                Automation ID: {inst.n8nWorkflowId}
               </span>
             </div>
 
@@ -188,7 +188,7 @@ export default function AutomationInstances() {
               <div className={`flex items-center gap-2 ${textSecondary} mb-2`}>
                 <FiActivity className="text-primary" />{" "}
                 <span className="text-sm">
-                  Executions: {inst.executionCount}
+                  Executions: {inst.usageCount}
                 </span>
               </div>
 

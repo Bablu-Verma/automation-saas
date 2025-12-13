@@ -9,12 +9,22 @@ export type ServiceCardProps = {
 }
 
 export function ServiceCard({ workflows }: ServiceCardProps) {
+
+  const basePlan = workflows.pricingPlans.find(p => p.planName === "BASE");
+  const trialPlan = workflows.pricingPlans.find(p => p.planName === "TRIAL");
+
+  const price = basePlan?.monthlyPrice || 0;
+  const discount = basePlan?.discountPercent || 0;
+
+  const finalPrice = discount > 0 
+    ? Math.round(price - (price * discount) / 100)
+    : price;
+
   return (
-    // Framer Motion (motion.div) removed. Using standard div.
+
     <div
-      // ✨ सुधार: थीम-अवेयर बैकग्राउंड, बॉर्डर, शैडो, और ट्रांज़िशन
       className="
-        rounded-2xl overflow-hidden flex flex-col group 
+        rounded-2xl overflow-hidden relative flex flex-col group 
         transition-all duration-300 transform 
         shadow-lg hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.01] 
         
@@ -34,30 +44,51 @@ export function ServiceCard({ workflows }: ServiceCardProps) {
           className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
       </div>
-
-      {/* Content */}
       <div className="p-6 flex flex-col flex-1">
-        {/* Title (Text color updated) */}
-        <h3 className="text-xl capitalize font-bold mb-3 
+        <h3 className="text-xl text-left capitalize font-semibold mb-3 
           text-textLight dark:text-textDark"
         >
           {workflows.name}
         </h3>
-        
-        {/* Pricing Info (Text color updated) */}
-        <p className="flex-1 text-textLight/80 dark:text-textDark/80">
-          <span className="text-lg font-semibold text-primary">₹{workflows.pricePerMonth}</span>/Months |  Trial: {workflows.trialDays} days 
-        </p>
-
-        {/* CTA */}
+        <div className="flex justify-between items-center pb-6">
+          <div>
+            {discount > 0 ? (
+              <>
+               <div className="flex justify-start items-center gap-2">
+               
+                <p className="text-xl md:text-2xl line-through text-gray-500">
+                  ₹{price}
+                </p>
+                 <p className="text-xl md:text-2xl font-bold text-primary">
+                  ₹{finalPrice}
+                  <span className="text-base font-medium text-textLight/70 dark:text-textDark/70"> /Month</span>
+                </p>
+               </div>
+                <span className="text-xs absolute top-2 left-2 font-semibold bg-green-500 text-white px-2 py-1 rounded-full">
+                  {discount}% OFF
+                </span>
+              </>
+            ) : (
+              <p className="text-xl md:text-2xl text-primary">
+                ₹{price}
+                <span className="text-base font-medium text-textLight/70 dark:text-textDark/70"> /Month</span>
+              </p>
+            )}
+          </div>
+          <p className="text-base text-gray-500">
+            <span className="font-semibold">
+              {trialPlan?.validityDays || 7} days free trial
+            </span>
+          </p>
+        </div>
         <Link
           href={`/services/view?id=${workflows.slug}`}
-          className="mt-6 inline-block w-fit px-5 py-2 rounded-full text-sm font-semibold 
+          className="inline-block w-fit px-5 py-2 rounded-full text-sm font-semibold 
             bg-gradient-to-r from-primary to-secondary text-white 
-            shadow hover:shadow-lg transition transform hover:scale-[1.03]"
-        >
-          Learn More 
+            shadow hover:shadow-lg transition transform hover:scale-[1.03]">
+          Learn More
         </Link>
+
       </div>
     </div>
   )

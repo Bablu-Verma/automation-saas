@@ -95,7 +95,7 @@ export const adminUserAutomations = async (req: AuthenticatedRequest, res: Respo
           $group: {
             _id: "$systemStatus",
             count: { $sum: 1 },
-            totalExecutions: { $sum: "$executionCount" },
+            totalExecutions: { $sum: "$usageCount" },
           },
         },
       ]),

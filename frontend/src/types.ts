@@ -44,7 +44,7 @@ export interface IPaymentDetails {
     price: number;
     discountPercentage: number;
   };
-  Log: []
+  logs: []
 }
 
 export interface ILogItem {
@@ -100,11 +100,17 @@ export type IWorkflowDetail = {
   description: string;
   keyword: string[];
   slug:string;
-  pricePerMonth: number;
+  pricingPlans: {
+  planName: string;
+  monthlyPrice: number;
+  usageLimit: number;
+  discountPercent:Number,
+  validityDays:number;
+  features: string[];
+}[];
   currency: string;
   isPublished: "ACTIVE" | "PAUSE";
   serviceImage?: string;
-  trialDays: number;
   requiredInputs: RequiredInput[];
   requiredCredentials: IRequiredCredential[];
 };

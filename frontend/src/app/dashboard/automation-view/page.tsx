@@ -7,7 +7,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux-store/redux_store";
 import Image from "next/image";
-import { FiCheckCircle, FiClock, FiXCircle, FiActivity, FiUser, FiCalendar, FiCreditCard } from "react-icons/fi";
+import { FiCheckCircle, FiClock, FiXCircle, FiActivity, FiUser, FiCalendar, FiCreditCard, FiBookmark, FiZap } from "react-icons/fi";
 import { instance_details_api } from "@/api";
 import Link from "next/link";
 import StatusToggleButton from "./StatusToggleButton";
@@ -19,7 +19,7 @@ export type AutomationDetail = {
   _id: string;
   instanceName: string;
   isActive: "RUNNING" | "PAUSE";
-  executionCount: number;
+  usageCount: number;
   trigger: string[],
   systemStatus: string;
   createdAt: string;
@@ -27,6 +27,13 @@ export type AutomationDetail = {
   periods: {
     startTime: string;
     endTime: string;
+  };
+  selectedPlanDetails?: {
+    planName: string;
+    monthlyPrice: number;
+    payAmount: number;
+    validityDays: number;
+    usageLimit: number;
   };
   masterWorkflow: {
     _id: string;
@@ -205,11 +212,56 @@ export default function AutomationDetailPage() {
             <div className={`flex items-center gap-3 ${textSecondary}`}>
               <FiActivity className="text-primary text-lg" />
               <span className="font-medium">
-                Executions: <span className={`${textInfoPrimary} font-semibold pr-8`}>{automation.executionCount}</span>  Last Execution: <span className={`${textInfoPrimary} font-semibold`}>{new Date(automation.lastExecutedAt).toLocaleString()}</span>
+                Executions: <span className={`${textInfoPrimary} font-semibold pr-8`}>{automation.usageCount}</span>  Last Execution: <span className={`${textInfoPrimary} font-semibold`}>{new Date(automation.lastExecutedAt).toLocaleString()}</span>
               </span>
             </div>
           </div>
         </div>
+
+        {automation.selectedPlanDetails && (
+  <div className="mb-8">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-3">
+      <h2 className={`text-xl font-bold ${textPrimary}`}>Subscription Plan</h2>
+
+      <span className="px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded-full font-semibold">
+        {automation.selectedPlanDetails.planName}
+      </span>
+    </div>
+
+    <div className="space-y-2 text-sm">
+      <div className={`flex items-center gap-2 ${textSecondary}`}>
+        <FiBookmark className="text-primary text-lg" />
+        <span className="font-medium">
+          Pay Amount:{" "}
+          <span className={`${textInfoPrimary} font-semibold`}>
+            ₹{automation.selectedPlanDetails.payAmount}/month
+          </span>
+        </span>
+      </div>
+
+      <div className={`flex items-center gap-3 ${textSecondary}`}>
+        <FiClock className="text-primary text-lg" />
+        <span className="font-medium">
+          Validity:{" "}
+          <span className={`${textInfoPrimary} font-semibold`}>
+            {automation.selectedPlanDetails.validityDays} days
+          </span>
+        </span>
+      </div>
+
+      <div className={`flex items-center gap-3 ${textSecondary}`}>
+        <FiZap className="text-primary text-lg" />
+        <span className="font-medium">
+          Usage Limit:{" "}
+          <span className={`${textInfoPrimary} font-semibold`}>
+            {automation.selectedPlanDetails.usageLimit} executions
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+
 
 
         <div className="flex flex-wrap items-center gap-2 mb-8">

@@ -19,7 +19,7 @@ export const PaymentDetailsRequest = async (req: AuthenticatedRequest, res: Resp
     const instance = await AutomationInstance.findOne({ _id: id, user: userId })
       .select("-n8nCredential") 
       .populate("user", "name email") 
-      .populate("masterWorkflow", "name category serviceImage pricePerMonth currency"); 
+      .populate("masterWorkflow", "name serviceImage pricingPlans"); 
 
     if (!instance) {
       return res.status(404).json({

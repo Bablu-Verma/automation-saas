@@ -5,7 +5,7 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export async function autoSaveN8nWorkflow(workflowId: string) {
   const browser = await puppeteer.launch({
-    headless: true, // keep headless, set false if debugging
+    headless: true,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',

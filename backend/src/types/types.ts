@@ -43,15 +43,24 @@ export interface IAutomationInstance extends Document {
   n8nWorkflowId: string;
   instanceName: string;
 
+  selectedPlanDetails?: {
+    planName: string;
+    monthlyPrice: number;
+     payAmount: number;
+      discountPercent: number;
+    validityDays: number;
+    usageLimit: number;
+  };
+  usageCount:number;
+
   isActive: "RUNNING" | "PAUSE";
-  systemStatus: "TRIAL" | "ACTIVE" | "NEED_PAYMENT" | "EXPIRED" | "EXPIRE_SOON" | "CONTACT_SUPPORT";
+  systemStatus: "TRIAL" | "ACTIVE" | "NEED_PAYMENT" | "EXPIRED" | "EXPIRE_SOON" | 'USAGE_LIMIT_EXCEEDED' |"CONTACT_SUPPORT";
 
   periods?: {
     startTime?: Date | null;
     endTime?: Date;
   };
 
-  executionCount: number;
   lastExecutedAt?: Date;
 
   createdAt: Date;
@@ -105,11 +114,17 @@ export interface IMasterWorkflow extends Document {
   workflowJsonTemplate: Record<string, any>; 
   serviceImage?: string;
   version?: number;
+  pricingPlans: {
+    planName: string;
+    monthlyPrice: number;
+    usageLimit: number;
+    validityDays: number;
+    discountPercent: number;
+    features: string[];
+  }[];
   keyword?: string[];
   isPublished?: "ACTIVE" | "PAUSE";
-  pricePerMonth?: number;
   currency?: string;
-  trialDays?: number;
   requiredInputs?: IRequiredInput[];
   requiredCredentials?: IRequiredCredential[];
   createdAt: Date;
@@ -129,44 +144,66 @@ export interface INewsletter extends Document {
 export interface IPaymentLog {
   status: "pending" | "success" | "failed" | "refunded" | "cancelled";
   note?: string;
-  changedAt?: Date;
+  changedAt: Date;
 }
 
-interface IPlanDetails {
-  name?: string;
-  duration?: number;
-  price?: number;
-  discountPercentage?: number;
-}
-
-interface IAmountDetails {
-  baseAmount: number;
-  discountAmount?: number;
-  taxAmount?: number;
-  totalAmount: number;
-}
-
-interface IPeriod {
+/* PERIOD */
+export interface IPeriod {
   startDate?: Date;
   endDate?: Date;
 }
 
+/* PLAN SNAPSHOT */
+export interface IPlanDetails {
+  name?: string;
+  monthlyPrice?: number;
+  months?: number;
+  discountPercentage?: number;
+}
+
+/* AMOUNT DETAILS */
+export interface IAmountDetails {
+  baseAmount: number;
+  discountAmount: number;
+  subtotal: number;
+  taxPercentage: number;
+  taxAmount: number;
+  totalAmount: number;
+}
+
+
 export interface IPayment extends Document {
   user: Types.ObjectId;
-  orderId?: string;
+
+  orderId: string;
+
   instanceId: Types.ObjectId;
+
   subscriptionMonths: number;
 
   period?: IPeriod;
+
   planDetails?: IPlanDetails;
+
   amountDetails: IAmountDetails;
 
-  currency?: "INR" | "USD";
-  paymentMethod?: "card" | "upi" | "netbanking" | "wallet" | "manual" | "internal";
+  currency: "INR" | "USD";
+
+  paymentMethod?:
+    | "card"
+    | "upi"
+    | "netbanking"
+    | "wallet"
+    | "manual"
+    | "internal";
+
+  transactionId?: string;
 
   status: "pending" | "success" | "failed" | "refunded" | "cancelled";
+
   note?: string;
-  Log?: IPaymentLog[];
+
+  logs: IPaymentLog[];
 
   createdAt: Date;
   updatedAt: Date;

@@ -18,10 +18,21 @@ const AutomationInstanceSchema = new Schema(
 
     systemStatus: {
       type: String,
-      enum: ["TRIAL", "ACTIVE", 'NEED_PAYMENT', 'EXPIRED', 'EXPIRE_SOON', 'CONTACT_SUPPORT'],
+      enum: ["TRIAL", "ACTIVE", 'EXPIRE_SOON', 'NEED_PAYMENT', 'EXPIRED', 'USAGE_LIMIT_EXCEEDED', 'CONTACT_SUPPORT'],
       default: "TRIAL",
       index: true,
     },
+
+    selectedPlanDetails: {
+      planName: String,
+      monthlyPrice: Number,
+      payAmount: Number,
+      discountPercent: Number,
+      usageLimit: Number, 
+      validityDays: Number
+    },
+
+    usageCount: { type: Number, default: 0 },
 
     periods: {
       startTime: Date,
@@ -33,8 +44,7 @@ const AutomationInstanceSchema = new Schema(
     }],
 
     userCredentialsId: [String],
-
-    executionCount: { type: Number, default: 0 },
+   
     lastExecutedAt: { type: Date },
   },
   { timestamps: true }

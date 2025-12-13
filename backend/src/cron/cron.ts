@@ -11,7 +11,7 @@ import axios from "axios";
 
 
   cron.schedule(
-    "0 2 * * *", // every day at 2 AM
+     "0 2,14 * * *",
     async () => {
       console.log(`[CRON] Running daily automation job at 2 AM (${new Date().toLocaleString("en-IN")})`);
 

@@ -153,7 +153,7 @@ export default function UserDetailsPage() {
             {user.recentAutomations.map((auto) => (
               <div key={auto._id} className="border-b pb-3">
                 <p><strong>Name:</strong> {auto.instanceName}</p>
-                <p><strong>Executions:</strong> {auto.executionCount}</p>
+                <p><strong>Executions:</strong> {auto.usageCount}</p>
                 <p><strong>Status:</strong> {auto.isActive}</p>
                 <p><strong>Last Executed:</strong> {formatDate(auto.lastExecutedAt)}</p>
               </div>

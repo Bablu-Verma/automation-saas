@@ -13,13 +13,18 @@ import Image from "next/image";
 export type Workflow__ = {
   _id: string;
   name: string;
+   pricingPlans: {
+  planName: string;
+  monthlyPrice: number;
+  usageLimit: number;
+  validityDays:number;
+  discountPercent:number;
+  features: string[];
+}[];
   slug:string;
   description: string;
-  pricePerMonth: number;
-  currency: string;
   isPublished: "ACTIVE" | "PAUSE";
   serviceImage?: string;
-  trialDays: number;
   createdAt: string;
 };
 
@@ -162,15 +167,15 @@ export default function MasterWorkflows() {
                 <div className="w-full h-40 bg-gray-200 rounded mb-2 flex items-center justify-center text-gray-400">No Image</div>
               )}
               <h3 className="text-lg font-semibold">{wf.name}</h3>
-              <p className="text-sm text-gray-600 mb-2">
-                Price: ₹{wf.pricePerMonth}/{wf.currency} | Trial: {wf.trialDays} days
-              </p>
-              <p className={`text-sm font-semibold mb-2 ${wf.isPublished === "ACTIVE" ? "text-green-600" : "text-yellow-600"}`}>
+             
+             
+              <div className="flex gap-2 items-center mt-2">
+                 <p className={`text-sm font-light mr-8 ${wf.isPublished === "ACTIVE" ? "text-green-600" : "text-yellow-600"}`}>
                 {wf.isPublished === "ACTIVE" ? "Live" : "Paused"}
               </p>
-              <div className="flex gap-2 mt-2">
                 <Link href={`/admin/service/view?id=${wf._id}`} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">View</Link>
-                <Link href={`/admin/service/edit?id=${wf._id}`} className="px-3 py-1 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Edit</Link>
+                <Link href={`/admin/service/edit?id=${wf._id}`} className="px-3 py-1 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Edit</Link>  
+                
               </div>
             </div>
           ))

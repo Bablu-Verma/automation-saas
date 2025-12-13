@@ -19,10 +19,9 @@ export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response
     const {
       name,
       description,
-      pricePerMonth,
+      pricingPlans,
       currency,
       workflowJsonTemplate,
-      trialDays,
       serviceImage,
       isPublished, 
       keyword,
@@ -67,9 +66,8 @@ export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response
       workflowJsonTemplate,
       serviceImage,
       keyword,
-      pricePerMonth,
+      pricingPlans,
       currency,
-      trialDays,
       isPublished: isPublished ?? "PAUSE", // default string
       requiredInputs: requiredInputs ?? [],
       requiredCredentials: requiredCredentials ?? [],

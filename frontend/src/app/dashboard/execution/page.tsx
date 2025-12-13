@@ -15,7 +15,7 @@ export type AutomationInstance__ = {
   _id: string;
   instanceName: string;
   isActive: "RUNNING" | "PAUSE";
-  executionCount: number;
+  usageCount: number;
   systemStatus: string;
   masterWorkflow: string;
   slug: string;

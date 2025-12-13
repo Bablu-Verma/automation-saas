@@ -30,11 +30,6 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
   const createdN8nCredentialIds: string[] = [];
   let createdN8nWorkflowId: string | null = null;
 
-
-
-
-
-
   try {
     const { workflowId, instanceName, inputs, credentials } = req.body;
     const userId = req.user?.id;
@@ -45,11 +40,12 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
     const instance_name_slug = slug(instanceName, '_');
 
-    const masterWorkflow = await MasterWorkflow.findById(workflowId);
+    const masterWorkflow = await MasterWorkflow.findById(workflowId).select('-description');
     if (!masterWorkflow) return res.status(404).json({ message: "Master workflow not found.", success: false });
 
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found.", success: false });
+
 
     const existingInstance = await AutomationInstance.findOne({ user: userId, masterWorkflow: workflowId });
 
@@ -59,6 +55,7 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
     // Inject inputs
     let workflowWithInputs = injectWorkflowInputs(workflowJson, masterWorkflow.requiredInputs || [], inputs);
+
 
     // Handle credentials
     const credMap: Record<string, any> = {};
@@ -72,7 +69,6 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
         if (typeof resolvedValue === "string") {
           const trimmed = resolvedValue.trim().toLowerCase();
 
-          // ✅ Convert "true" / "false" to booleans
           if (trimmed === "true") {
             resolvedValue = true;
           } else if (trimmed === "false") {
@@ -84,7 +80,7 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
                 resolvedValue = parsed;
               }
             } catch {
-             
+
             }
           }
         }
@@ -116,7 +112,6 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
       } else {
         credMap[service] = { id: n8nCredentialId, name: getCredName(creds, service) || service };
-
       }
     }
 
@@ -140,23 +135,23 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
     if (!createdN8nWorkflowId) throw new Error("n8n API did not return a workflow ID.");
 
+    try {
+      await autoSaveN8nWorkflow(createdN8nWorkflowId);
+    } catch (err) {
+      throw new Error("AUTO_SAVE_FAILED");
+    }
 
-    await autoSaveN8nWorkflow(createdN8nWorkflowId)
+
+    await wait(1000);
 
     const n8nGetJson = await axios.get(
       `${process.env.N8N_API_URL}/api/v1/workflows/${createdN8nWorkflowId}`,
       { headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY } }
     );
 
-    // console.log(
-    //   "🧠 Full Workflow Data ==>",
-    //   util.inspect(n8nGetJson.data, { showHidden: false, depth: null, colors: true })
-    // );
-
     await wait(1500);
 
     const triggers = extractTriggersFromNodes(n8nGetJson.data.nodes);
-    // console.log("🚀 Extracted triggers:", triggers);
 
     // Save automation instance
     const automationInstance = new AutomationInstance({
@@ -165,18 +160,37 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
       n8nWorkflowId: createdN8nWorkflowId,
       instanceName: instance_name_slug,
       isActive: "PAUSE",
-      executionCount: 0,
+      usageCount: 0,
       userCredentialsId: createdN8nCredentialIds,
       trigger: triggers,
     });
 
     if (!existingInstance) {
+      const trialPlan = masterWorkflow.pricingPlans.find(
+        (p) => p.planName === "TRIAL"
+      );
+
       automationInstance.systemStatus = "TRIAL";
-      const trialDays = masterWorkflow.trialDays || 7;
+
+      automationInstance.selectedPlanDetails = {
+        planName: trialPlan?.planName || "TRIAL",
+        monthlyPrice: trialPlan?.monthlyPrice || 0,
+        payAmount: trialPlan
+          ? (trialPlan.monthlyPrice * (trialPlan.discountPercent || 0)) / 100
+          : 0,
+        discountPercent: trialPlan?.discountPercent || 0,
+        validityDays: trialPlan?.validityDays || 0,
+        usageLimit: trialPlan?.usageLimit || 50,
+      };
+
+
       automationInstance.periods = {
         startTime: new Date(),
-        endTime: new Date(Date.now() + trialDays * 24 * 60 * 60 * 1000),
+        endTime: new Date(
+          Date.now() + (trialPlan?.validityDays || 7) * 24 * 60 * 60 * 1000
+        ),
       };
+
     } else {
       automationInstance.systemStatus = "NEED_PAYMENT";
     }
@@ -192,37 +206,42 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
     });
 
   } catch (err) {
+
     console.error("Error creating automation instance. Starting cleanup process...");
 
+    // --- 1. Delete created credentials (if any) ---
     if (createdN8nCredentialIds.length > 0) {
       for (const credId of createdN8nCredentialIds) {
         try {
           await axios.delete(`${process.env.N8N_API_URL}/api/v1/credentials/${credId}`, {
             headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY },
           });
+          console.log("Deleted orphaned credential:", credId);
         } catch (cleanupErr) {
-          console.error(`Failed to delete orphaned credential ${credId}:`, cleanupErr);
+          console.error(`Failed to delete credential ${credId}:`, cleanupErr);
         }
       }
     }
 
+    // --- 2. Delete created workflow (if created) ---
     if (createdN8nWorkflowId) {
       try {
         await axios.delete(`${process.env.N8N_API_URL}/api/v1/workflows/${createdN8nWorkflowId}`, {
           headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY },
         });
+        console.log("Deleted orphaned workflow:", createdN8nWorkflowId);
       } catch (cleanupErr) {
-        console.error(`Failed to delete partially created workflow ${createdN8nWorkflowId}:`, cleanupErr);
+        console.error(`Failed to delete workflow ${createdN8nWorkflowId}:`, cleanupErr);
       }
     }
 
-    const error = err as AxiosError;
-    console.error("Original Error Details:", error.response ? error.response.data : error.response);
+    console.error("Original Error:", err);
 
     return res.status(500).json({
       message:
-        "Failed to create automation due to a server error. Any partial setup has been automatically rolled back. Please try again.",
+        "Failed to create automation. Partial setup rolled back automatically. Please try again.",
       success: false,
     });
   }
+
 };

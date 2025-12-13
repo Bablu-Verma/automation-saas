@@ -14,6 +14,7 @@ import { RequiredCredentialForm } from "../../_components/RequiredCradential";
 import { initialFormData } from "../initialFormData";
 import { useFormArrayHelpers } from "../useFormArrayHelpers";
 import KeywordInput from "../KeywordInput";
+import PricingPlansForm from "../../_components/PricingPlansForm";
 
 const TiptapEditor = dynamic(() => import("../../_components/TextEditor"), { ssr: false });
 
@@ -53,7 +54,7 @@ export default function AddMasterWorkflow() {
         }
       }
 
-      console.log(formData)
+      // console.log(formData)
 
       const res = await axios.post(
         admin_create_master_workflow_api,
@@ -74,7 +75,6 @@ export default function AddMasterWorkflow() {
 
   return (
     <>
-      
       <div className="bg-white p-6 rounded-2xl shadow-lg">
         <UploadImageGetLink />
         <h2 className="text-xl font-bold mb-4">➕ Add Master Workflow</h2>
@@ -101,17 +101,25 @@ export default function AddMasterWorkflow() {
             required
           />
 
-         
-
-          <div className="grid grid-cols-2 gap-5">
-           <input
-            type="text"
-            name="serviceImage"
-            placeholder="Service Icon URL"
-            value={formData.serviceImage}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-2"
-          />
+          <div className="grid grid-cols-3 gap-5">
+            <input
+              type="text"
+              name="serviceImage"
+              placeholder="Service Icon URL"
+              value={formData.serviceImage}
+              onChange={handleChange}
+              className="w-full border rounded-lg p-2"
+            />
+              <select
+              name="currency"
+              value={formData.currency}
+              onChange={handleChange}
+              className="w-full border rounded-lg p-2"
+            >
+              <option value="USD">USD</option>
+              <option value="INR">INR</option>
+              <option value="EUR">EUR</option>
+            </select>
             <select
               name="isPublished"
               value={formData.isPublished}
@@ -123,36 +131,13 @@ export default function AddMasterWorkflow() {
             </select>
           </div>
 
-          {/* Monetization */}
-          <div className="grid grid-cols-3 gap-5">
-            <input
-              type="number"
-              name="pricePerMonth"
-              placeholder="Price Per Month"
-              value={formData.pricePerMonth}
-              onChange={handleChange}
-              className="w-full border rounded-lg p-2"
-            />
-            <select
-              name="currency"
-              value={formData.currency}
-              onChange={handleChange}
-              className="w-full border rounded-lg p-2"
-            >
-              <option value="USD">USD</option>
-              <option value="INR">INR</option>
-              <option value="EUR">EUR</option>
-            </select>
+          <PricingPlansForm
+            pricingPlans={formData.pricingPlans}
+            setPricingPlans={(plans) => setFormData({ ...formData, pricingPlans: plans })}
+          />
 
-            <input
-              type="number"
-              name="trialDays"
-              placeholder="Trial Days"
-              value={formData.trialDays}
-              onChange={handleChange}
-              className="w-full border rounded-lg p-2"
-            />
-          </div>
+
+          
 
           <KeywordInput
             keywords={formData.keyword}

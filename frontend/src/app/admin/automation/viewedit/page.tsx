@@ -28,7 +28,7 @@ interface AutomationDetails {
     startTime?: string;
     endTime?: string;
   };
-  executionCount: number;
+  usageCount: number;
   lastExecutedAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -150,7 +150,7 @@ export default function AutomationDetailsPage() {
       {/* Execution Info */}
       <div className="p-6  border border-gray-600 space-y-2">
         <h2 className="text-xl font-semibold">Execution Details</h2>
-        <p><strong>Total Executions:</strong> {automation.executionCount}</p>
+        <p><strong>Total Executions:</strong> {automation.usageCount}</p>
         <p>
           <strong>Last Executed:</strong>{" "}
           {automation.lastExecutedAt ? new Date(automation.lastExecutedAt).toLocaleString() : "Never"}

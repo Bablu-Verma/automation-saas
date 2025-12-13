@@ -14,6 +14,7 @@ import { RequiredInputsForm } from "../../_components/RequiredInputsForm";
 import { useFormArrayHelpers } from "../useFormArrayHelpers";
 import { initialFormData } from "../initialFormData";
 import KeywordInput from "../KeywordInput";
+import PricingPlansForm from "../../_components/PricingPlansForm";
 
 
 const TiptapEditor = dynamic(() => import("../../_components/TextEditor"), { ssr: false });
@@ -150,7 +151,7 @@ export default function EditMasterWorkflow() {
                     />
 
                    
-                    <div className="grid grid-cols-2 gap-5">
+                    <div className="grid grid-cols-3 gap-5">
                         <input
                         type="text"
                         name="serviceImage"
@@ -159,7 +160,17 @@ export default function EditMasterWorkflow() {
                         onChange={handleChange}
                         className="w-full border rounded-lg p-2"
                     />
-
+                <select
+                            name="currency"
+                            value={formData.currency}
+                            onChange={handleChange}
+                            className="w-full border rounded-lg p-2"
+                        >
+                            <option value="USD">USD</option>
+                            <option value="INR">INR</option>
+                            <option value="EUR">EUR</option>
+                        </select>
+                       
 
                         <select
                             name="isPublished"
@@ -172,35 +183,10 @@ export default function EditMasterWorkflow() {
                         </select>
                     </div>
 
-                    {/* Monetization */}
-                    <div className="grid grid-cols-3 gap-5">
-                        <input
-                            type="number"
-                            name="pricePerMonth"
-                            placeholder="Price Per Month"
-                            value={formData.pricePerMonth}
-                            onChange={handleChange}
-                            className="w-full border rounded-lg p-2"
-                        />
-                        <select
-                            name="currency"
-                            value={formData.currency}
-                            onChange={handleChange}
-                            className="w-full border rounded-lg p-2"
-                        >
-                            <option value="USD">USD</option>
-                            <option value="INR">INR</option>
-                            <option value="EUR">EUR</option>
-                        </select>
-                        <input
-                            type="number"
-                            name="trialDays"
-                            placeholder="Trial Days"
-                            value={formData.trialDays}
-                            onChange={handleChange}
-                            className="w-full border rounded-lg p-2"
-                        />
-                    </div>
+                     <PricingPlansForm
+                                pricingPlans={formData.pricingPlans}
+                                setPricingPlans={(plans) => setFormData({ ...formData, pricingPlans: plans })}
+                      />
 
 
                     <KeywordInput

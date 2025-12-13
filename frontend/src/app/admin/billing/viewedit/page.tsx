@@ -245,9 +245,9 @@ export default function PaymentUpdatePage() {
         <div className="border border-gray-200 rounded-md p-4 mt-6 bg-gray-50">
           <h3 className="text-md font-semibold text-gray-700 mb-3">Payment Activity Log</h3>
 
-          {paymentDetails.Log && paymentDetails.Log.length > 0 ? (
+          {paymentDetails.logs && paymentDetails.logs.length > 0 ? (
             <div className="space-y-2">
-              {paymentDetails.Log.map((item:ILogItem, i) => (
+              {paymentDetails.logs.map((item:ILogItem, i) => (
                 <div key={i} className="border-b border-gray-200 pb-2 last:border-b-0">
                   <div className="flex justify-between items-center mb-1">
                     <span className="font-medium text-gray-800">{item.status}</span>

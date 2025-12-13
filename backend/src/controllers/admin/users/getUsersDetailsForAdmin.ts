@@ -46,7 +46,7 @@ export const getUserDetailsForAdmin = async (req: AuthenticatedRequest, res: Res
           _id: null,
           totalAutomations: { $sum: 1 },
           activeAutomations: { $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] } },
-          totalExecutions: { $sum: "$executionCount" },
+          totalExecutions: { $sum: "$usageCount" },
           lastActivity: { $max: "$lastExecutedAt" }
         }
       }
@@ -54,7 +54,7 @@ export const getUserDetailsForAdmin = async (req: AuthenticatedRequest, res: Res
 
     const recentAutomations = await AutomationInstance.find({ user: id })
       .populate("masterWorkflow", "name serviceIconUrl")
-      .select("instanceName executionCount lastExecutedAt createdAt isActive")
+      .select("instanceName usageCount lastExecutedAt createdAt isActive")
       .sort({ createdAt: -1 })
       .limit(5)
       .lean();

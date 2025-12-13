@@ -1,7 +1,6 @@
 import { Response } from "express";
 import { AuthenticatedRequest } from "../../../../middlewares/loginCheck";
 import AutomationInstance from "../../../../models/AutomationInstance";
-import axios from "axios";
 import { toggleN8nWorkflow } from "../../../../lib/_n8n_helper";
 
 
@@ -11,7 +10,8 @@ enum SystemStatus {
   EXPIRED = "EXPIRED",
   CONTACT_SUPPORT = "CONTACT_SUPPORT",
   NEED_PAYMENT = "NEED_PAYMENT",
-  EXPIRE_SOON = 'EXPIRE_SOON'
+  EXPIRE_SOON = 'EXPIRE_SOON',
+  USAGE_LIMIT_EXCEEDED = 'USAGE_LIMIT_EXCEEDED'
 }
 
 export const updateAutomationStatus = async (
@@ -32,31 +32,36 @@ export const updateAutomationStatus = async (
       return res.status(404).json({ message: "Automation instance not found", success: false });
     }
 
+    if (isActive === "PAUSE") {
+      const success = await toggleN8nWorkflow(automation.n8nWorkflowId, false);
 
+      if (success) {
+        automation.isActive = "PAUSE";
+        await automation.save();
 
-   if (isActive === "PAUSE") {
-  const success = await toggleN8nWorkflow(automation.n8nWorkflowId, false);
-
-  if (success) {
-    automation.isActive = "PAUSE";
-    await automation.save();
-
-    return res.status(200).json({
-      message: "Automation paused successfully",
-      success: true,
-      automation,
-    });
-  } else {
-    return res.status(500).json({
-      message: "Failed to pause automation in the backend. Please try again.",
-      success: false,
-    });
-  }
-}
+        return res.status(200).json({
+          message: "Automation paused successfully",
+          success: true,
+          automation,
+        });
+      } else {
+        return res.status(500).json({
+          message: "Failed to pause automation in the backend. Please try again.",
+          success: false,
+        });
+      }
+    }
 
     if (automation.systemStatus === SystemStatus.CONTACT_SUPPORT) {
       return res.status(400).json({
         message: `Cannot RUNNING Please contact our support some problem created `,
+        success: false,
+      });
+    }
+
+     if (automation.systemStatus === SystemStatus.NEED_PAYMENT) {
+      return res.status(400).json({
+        message: `You are already used Free Trail this automation need to subscribe`,
         success: false,
       });
     }
@@ -67,12 +72,14 @@ export const updateAutomationStatus = async (
         success: false,
       });
     }
-    if (automation.systemStatus === SystemStatus.NEED_PAYMENT) {
+
+    if (automation.systemStatus === SystemStatus.USAGE_LIMIT_EXCEEDED) {
       return res.status(400).json({
-        message: `You are already used Trail need to subscribe`,
+        message: `Your Use Limit is over, Please Re-new your subscription`,
         success: false,
       });
     }
+   
 
     if (automation.systemStatus == SystemStatus.ACTIVE || automation.systemStatus == SystemStatus.TRIAL || automation.systemStatus == SystemStatus.EXPIRE_SOON) {
 

@@ -36,6 +36,7 @@ export const automationList = async (req: AuthenticatedRequest, res: Response) =
       },
       automations,
     });
+    
   } catch (err) {
     console.error("Error fetching automation list:", err);
     return res.status(500).json({

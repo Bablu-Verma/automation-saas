@@ -13,6 +13,8 @@ import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { useSelector } from "react-redux";
 
+import { motion } from "framer-motion"
+
 
 
 export default function StartFormPage() {
@@ -174,7 +176,7 @@ export default function StartFormPage() {
       {/* Form (Framer Motion removed) */}
       <form
         onSubmit={handleSubmit}
-        className={`p-6 sm:p-10 rounded-3xl shadow-xl m-auto max-w-3xl flex flex-col gap-6 ${cardClasses}`}
+        className={`p-6 sm:p-10 overflow-hidden rounded-3xl shadow-xl m-auto max-w-3xl flex flex-col gap-6 ${cardClasses}`}
       >
         {/* Instance Name */}
         <div className="relative">
@@ -267,7 +269,40 @@ export default function StartFormPage() {
           </button>
         </div>
 
+        
+
       </form>
+        {
+           formLoading &&  <LoadingOverlay />
+        }
     </section>
   );
 }
+
+
+
+function LoadingOverlay() {
+  return (
+    <div className="fixed inset-0 z-[20] flex items-center justify-center 
+        bg-black/70 backdrop-blur-[8px] animate-fadeIn">
+
+      <div className="flex flex-col items-center">
+
+         <motion.div
+        className="w-16 h-16 border-4 border-t-secondary border-b-primary rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      />
+
+        {/* Text Message */}
+        <p className="text-white mt-6 text-xl font-semibold tracking-wide animate-pulse text-center">
+          Wait a moment…  
+          <br />
+          We are creating your automation
+        </p>
+      </div>
+    </div>
+  );
+}
+
+
