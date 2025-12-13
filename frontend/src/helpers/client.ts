@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 
 export function setClientCookie(cookie_name:string, cookie_value:string, duration_in_minutes:number) {
     const now = new Date();

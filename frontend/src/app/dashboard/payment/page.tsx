@@ -7,7 +7,7 @@ import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { FiRefreshCw, FiLock, FiCheckCircle, FiCheck, FiInfo } from "react-icons/fi";
-import Link from "next/link";
+
 import {
   payment_create_request_api,
   payment_details_request_api,
@@ -15,7 +15,6 @@ import {
 import toast from "react-hot-toast";
 import { IUser } from "@/types";
 import LoadingSpiner from "@/app/admin/_components/LoadingSpiner";
-import { IoInfinite } from "react-icons/io5";
 
 /* ================= TYPES ================= */
 
@@ -108,7 +107,8 @@ export default function PaymentPage() {
         setSubscriptionPlans(plans);
         setSelectedPlan(plans[0]?.id || null);
       } catch (error) {
-        toast.error("Failed to load payment details");
+        console.log(error)
+        toast.error("Failed to load payment details", );
       }
     }
 

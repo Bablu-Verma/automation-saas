@@ -104,7 +104,7 @@ export type IWorkflowDetail = {
   planName: string;
   monthlyPrice: number;
   usageLimit: number;
-  discountPercent:Number,
+  discountPercent:number,
   validityDays:number;
   features: string[];
 }[];
