@@ -6,7 +6,7 @@ export const sendInvoiceEmail = async (
   payment: any
 ) => {
   try {
-    const subject = `🧾 Invoice #${payment.orderId} - LoopAxis`;
+    const subject = `🧾 Invoice #${payment.orderId} -  Taskzeno`;
     
     const html = `
 <!DOCTYPE html>
@@ -14,7 +14,7 @@ export const sendInvoiceEmail = async (
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice - LoopAxis</title>
+    <title>Invoice -  Taskzeno</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
     <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto;">
@@ -25,7 +25,7 @@ export const sendInvoiceEmail = async (
                     <tr>
                         <td align="center">
                             <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: bold;">
-                                Loop<span style="color: #E6521F;">Axis</span>
+                                Task<span style="color: #E6521F;">Zeno</span>
                             </h1>
                             <p style="color: #E6521F; font-size: 16px; margin: 8px 0 0 0; font-weight: 500;">
                                 Invoice Generated
@@ -167,13 +167,13 @@ export const sendInvoiceEmail = async (
                             <table border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td align="center">
-                                        <a href="https://loopaxis.babluverma.site/dashboard/billing" 
+                                        <a href="https://taskzeno.babluverma.site/dashboard/billing" 
                                            style="background-color: #E6521F; color: white; padding: 14px 32px; 
                                                   text-decoration: none; border-radius: 6px; font-weight: bold; 
                                                   font-size: 15px; display: inline-block; margin: 5px;">
                                             View All Invoices
                                         </a>
-                                        <a href="https://loopaxis.babluverma.site/dashboard" 
+                                        <a href="https://taskzeno.babluverma.site/dashboard" 
                                            style="background-color: #131D4F; color: white; padding: 14px 32px; 
                                                   text-decoration: none; border-radius: 6px; font-weight: bold; 
                                                   font-size: 15px; display: inline-block; margin: 5px;">
@@ -190,7 +190,7 @@ export const sendInvoiceEmail = async (
                         <td style="padding-bottom: 10px;">
                             <p style="color: #131D4F; font-size: 14px; line-height: 1.6; margin: 0;">
                                 Need help with your invoice or have questions about your payment? 
-                                <a href="https://loopaxis.babluverma.site/contact" style="color: #E6521F; text-decoration: none;">Contact our support team</a> 
+                                <a href="https://taskzeno.babluverma.site/contact" style="color: #E6521F; text-decoration: none;">Contact our support team</a> 
                                 for assistance.
                             </p>
                         </td>
@@ -206,34 +206,34 @@ export const sendInvoiceEmail = async (
                     <tr>
                         <td align="center" style="padding-bottom: 20px;">
                             <p style="color: #ffffff; font-size: 16px; margin: 0 0 15px 0; font-weight: bold;">
-                                LoopAxis Automation Platform
+                               Taskzeno Automation Platform
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <td align="center" style="padding-bottom: 20px;">
-                            <a href="https://loopaxis.babluverma.site/" style="color: #E6521F; text-decoration: none; margin: 0 12px; font-size: 14px;">Home</a>
-                            <a href="https://loopaxis.babluverma.site/billing" style="color: #E6521F; text-decoration: none; margin: 0 12px; font-size: 14px;">Billing</a>
-                            <a href="https://loopaxis.babluverma.site/contact" style="color: #E6521F; text-decoration: none; margin: 0 12px; font-size: 14px;">Support</a>
+                            <a href="https://taskzeno.babluverma.site/" style="color: #E6521F; text-decoration: none; margin: 0 12px; font-size: 14px;">Home</a>
+                            <a href="https://taskzeno.babluverma.site/billing" style="color: #E6521F; text-decoration: none; margin: 0 12px; font-size: 14px;">Billing</a>
+                            <a href="https://taskzeno.babluverma.site/contact" style="color: #E6521F; text-decoration: none; margin: 0 12px; font-size: 14px;">Support</a>
                         </td>
                     </tr>
                     <tr>
                         <td align="center" style="padding-bottom: 15px;">
                             <p style="color: #bdc3c7; font-size: 12px; margin: 0 0 10px 0;">
-                                Email: <a href="mailto:loopaxisautomation@gmail.com" style="color: #E6521F; text-decoration: none;">loopaxisautomation@gmail.com</a> | 
-                                Website: <a href="https://loopaxis.babluverma.site/" style="color: #E6521F; text-decoration: none;">loopaxis.babluverma.site</a>
+                                Email: <a href="mailto:taskzeno@gmail.com" style="color: #E6521F; text-decoration: none;">taskzeno@gmail.com</a> | 
+                                Website: <a href="https://taskzeno.babluverma.site/" style="color: #E6521F; text-decoration: none;">taskzeno.babluverma.site</a>
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <td align="center">
                             <p style="color: #bdc3c7; font-size: 11px; margin: 0 0 8px 0;">
-                                &copy; 2024 LoopAxis Automation. All rights reserved.
+                                &copy; 2024 taskzeno Automation. All rights reserved.
                             </p>
                             <p style="color: #bdc3c7; font-size: 11px; margin: 0;">
-                                <a href="https://loopaxis.babluverma.site/terms" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Terms of Service</a>
+                                <a href="https://taskzeno.babluverma.site/terms" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Terms of Service</a>
                                 <span style="color: #E6521F;">|</span>
-                                <a href="https://loopaxis.babluverma.site/privacy" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
+                                <a href="https://taskzeno.babluverma.site/privacy" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
                             </p>
                         </td>
                     </tr>
@@ -246,7 +246,7 @@ export const sendInvoiceEmail = async (
     `;
 
     const info = await email_transporter.sendMail({
-      from: `LoopAxis Billing <${sender_email}>`,
+      from: `taskzeno Billing <${sender_email}>`,
       to: user.email,
       subject,
       html,

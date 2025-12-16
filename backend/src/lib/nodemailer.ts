@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 
-export const sender_email = `loopaxisautomation@gmail.com`
+export const sender_email = `taskzeno@gmail.com`
 
 export const email_transporter = nodemailer.createTransport({
   host: "smtp-relay.brevo.com",

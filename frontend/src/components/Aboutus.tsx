@@ -39,11 +39,11 @@ export default function AboutUs() {
         >
           <div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-              About Go Automat Work 
+              About taskzeno 
             </h2>
 
             <p className="mt-6 text-white/80 text-lg md:text-xl leading-relaxed max-w-xl">
-              Go Automat Work  empowers businesses to automate repetitive workflows, integrate seamlessly with hundreds of tools, and scale operations without extra hires.
+             Taskzeno empowers businesses to automate repetitive workflows, integrate seamlessly with hundreds of tools, and scale operations without extra hires.
             </p>
 
             <p className="mt-4 text-white/80 text-lg md:text-xl leading-relaxed max-w-xl">

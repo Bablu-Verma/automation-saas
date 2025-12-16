@@ -33,7 +33,7 @@ const clients = [
 ];
 
   return (
-    <section className="relative min-h-[100vh] w-full flex flex-col justify-center items-center pt-24 overflow-hidden
+    <section className="relative min-h-[90vh] w-full flex flex-col justify-center items-center pt-24 overflow-hidden
       transition-colors duration-300">
 
       {/* BG Soft Glow Effects (Already uses theme colors, looks good) */}

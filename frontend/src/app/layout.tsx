@@ -22,23 +22,23 @@ const geistMono = Geist_Mono({
 
 
 export const metadata: Metadata = {
-  title: "Go Automat Work – Intelligent Automation Solutions",
+  title: "taskzeno – Intelligent Automation Solutions",
   description:
-    "Go Automat Work delivers intelligent automation solutions to streamline workflows, enhance productivity, and accelerate business growth. Empower your organization with AI-driven process automation.",
+    "taskzeno delivers intelligent automation solutions to streamline workflows, enhance productivity, and accelerate business growth. Empower your organization with AI-driven process automation.",
   keywords:
-    "Go Automat Work, intelligent automation, workflow automation, AI automation, robotic process automation, business automation, process optimization, SaaS platform, digital transformation, productivity tools",
+    "taskzeno, intelligent automation, workflow automation, AI automation, robotic process automation, business automation, process optimization, SaaS platform, digital transformation, productivity tools",
   openGraph: {
-    title: "Go Automat Work – Intelligent Automation Solutions",
+    title: "taskzeno – Intelligent Automation Solutions",
     description:
-      "Discover Go Automat Work: the AI-powered automation platform that helps businesses optimize processes, boost efficiency, and achieve digital transformation.",
-    url: "https://loopaxis.babluverma.site",
-    siteName: "Go Automat Work",
+      "Discover taskzeno: the AI-powered automation platform that helps businesses optimize processes, boost efficiency, and achieve digital transformation.",
+    url: "https://taskzeno.babluverma.site",
+    siteName: "taskzeno",
     images: [
       {
-        url: "https://loopaxis.babluverma.site/og-image.png",
+        url: "https://taskzeno.babluverma.site/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Go Automat Work – Intelligent Automation Solutions",
+        alt: "taskzeno – Intelligent Automation Solutions",
       },
     ],
     locale: "en_US",
@@ -46,12 +46,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Go Automat Work – AI-Driven Automation Platform for Modern Businesses",
+    title: "taskzeno – AI-Driven Automation Platform for Modern Businesses",
     description:
-      "Simplify workflows and enhance efficiency with Go Automat Work automation solutions. Experience next-gen AI automation built for business success.",
-    images: ["https://loopaxis.babluverma.site/twitter-image.png"],
-    creator: "@loopaxis",
-    site: "@loopaxis",
+      "Simplify workflows and enhance efficiency with taskzeno Automation solutions. Experience next-gen AI automation built for business success.",
+    images: ["https://taskzeno.babluverma.site/twitter-image.png"],
+    creator: "@taskzeno",
+    site: "@taskzeno",
   },
   robots: {
     index: true,
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     google: "", 
   },
   alternates: {
-    canonical: "https://loopaxis.babluverma.site",
+    canonical: "https://taskzeno.babluverma.site",
   },
 };
 

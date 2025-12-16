@@ -47,10 +47,10 @@ export async function generateMetadata({ searchParams }: ServiceDetailsPageProps
     console.error("Failed to fetch docs for metadata:", err);
   }
 
-  const title = docs ? `${docs.name} – Go Automat Work` : "Docs Details – Go Automat Work";
+  const title = docs ? `${docs.name} –taskzeno` : "Docs Details –taskzeno";
   const description = docs
-    ? docs.shortDescription || docs.description?.slice(0, 150) || "Go Automat Work automation docs."
-    : "Go Automat Work docs details.";
+    ? docs.shortDescription || docs.description?.slice(0, 150) || "taskzeno Automation docs."
+    : "taskzeno docs details.";
 
   return {
     title,
@@ -58,14 +58,14 @@ export async function generateMetadata({ searchParams }: ServiceDetailsPageProps
     openGraph: {
       title,
       description,
-      url: `https://loopaxis.babluverma.site/service?id=${docsId}`,
-      siteName: "Go Automat Work",
+      url: `https://taskzeno.babluverma.site/service?id=${docsId}`,
+      siteName: "taskzeno",
       images: [
         {
-          url: docs?.serviceImage || "https://loopaxis.babluverma.site/og-image.png",
+          url: docs?.serviceImage || "https://taskzeno.babluverma.site/og-image.png",
           width: 1200,
           height: 630,
-          alt: docs?.name || "Go Automat Work Docs",
+          alt: docs?.name || "taskzeno Docs",
         },
       ],
       locale: "en_US",
@@ -75,11 +75,11 @@ export async function generateMetadata({ searchParams }: ServiceDetailsPageProps
       card: "summary_large_image",
       title,
       description,
-      images: [docs?.serviceImage || "https://loopaxis.babluverma.site/twitter-image.png"],
-      creator: "@loopaxis",
-      site: "@loopaxis",
+      images: [docs?.serviceImage || "https://taskzeno.babluverma.site/twitter-image.png"],
+      creator: "@taskzeno",
+      site: "@taskzeno",
     },
     robots: { index: true, follow: true },
-    alternates: { canonical: `https://loopaxis.babluverma.site/service?id=${docsId}` },
+    alternates: { canonical: `https://taskzeno.babluverma.site/service?id=${docsId}` },
   };
 }

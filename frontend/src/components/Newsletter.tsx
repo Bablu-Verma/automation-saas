@@ -68,7 +68,7 @@ export default function NewsletterSection() {
             className="mt-4 text-lg max-w-lg 
               text-textLight/70 dark:text-textDark/70 transition-colors duration-500"
           >
-            Subscribe to our newsletter to get the latest updates on Go Automat Work 
+            Subscribe to our newsletter to get the latest updates ontaskzeno 
             features, tips, and exclusive offers.
           </p>
         </div>

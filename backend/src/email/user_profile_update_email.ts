@@ -2,7 +2,7 @@ import { email_transporter, sender_email } from "../lib/nodemailer";
 
 export const user_profile_update_email = async (user_email: string, user_name: string) => {
   try {
-    const subject = "👤 Profile Updated Successfully - LoopAxis";
+    const subject = "👤 Profile Updated Successfully -  Taskzeno";
     
     const html = `
 <!DOCTYPE html>
@@ -10,7 +10,7 @@ export const user_profile_update_email = async (user_email: string, user_name: s
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Updated - LoopAxis</title>
+    <title>Profile Updated -  Taskzeno</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
     <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto;">
@@ -21,7 +21,7 @@ export const user_profile_update_email = async (user_email: string, user_name: s
                     <tr>
                         <td align="center">
                             <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: bold;">
-                                Loop<span style="color: #E6521F;">Axis</span>
+                                Task<span style="color: #E6521F;">Zeno</span>
                             </h1>
                             <p style="color: #E6521F; font-size: 16px; margin: 8px 0 0 0; font-weight: 500;">
                                 Profile Update Confirmation
@@ -67,7 +67,7 @@ export const user_profile_update_email = async (user_email: string, user_name: s
                     <tr>
                         <td style="padding-bottom: 25px;">
                             <p style="color: #131D4F; font-size: 16px; line-height: 1.6; margin: 0;">
-                                We wanted to let you know that your LoopAxis profile has been updated successfully.
+                                We wanted to let you know that your taskzeno profile has been updated successfully.
                             </p>
                         </td>
                     </tr>
@@ -141,14 +141,14 @@ export const user_profile_update_email = async (user_email: string, user_name: s
                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
                                     <td align="center">
-                                        <a href="https://loopaxis.babluverma.site/dashboard/profile" 
+                                        <a href="https://taskzeno.babluverma.site/dashboard/profile" 
                                            style="background-color: #E6521F; color: white; padding: 12px 25px; 
                                                   text-decoration: none; border-radius: 5px; font-weight: bold; 
                                                   font-size: 14px; display: inline-block; margin: 5px;">
                                             View Updated Profile
                                         </a>
                                   
-                                        <a href="https://loopaxis.babluverma.site/contact" 
+                                        <a href="https://taskzeno.babluverma.site/contact" 
                                            style="background-color: #3498db; color: white; padding: 12px 25px; 
                                                   text-decoration: none; border-radius: 5px; font-weight: bold; 
                                                   font-size: 14px; display: inline-block; margin: 5px;">
@@ -181,7 +181,7 @@ export const user_profile_update_email = async (user_email: string, user_name: s
                     <tr>
                         <td align="center" style="padding-bottom: 20px;">
                             <p style="color: #ffffff; font-size: 16px; margin: 0 0 15px 0; font-weight: bold;">
-                                LoopAxis Automation Platform
+                               Taskzeno Automation Platform
                             </p>
                         </td>
                     </tr>
@@ -189,20 +189,20 @@ export const user_profile_update_email = async (user_email: string, user_name: s
                     <tr>
                         <td align="center" style="padding-bottom: 15px;">
                             <p style="color: #bdc3c7; font-size: 12px; margin: 0 0 10px 0;">
-                                Email: <a href="mailto:loopaxisautomation@gmail.com" style="color: #E6521F; text-decoration: none;">loopaxisautomation@gmail.com</a> | 
-                                Website: <a href="https://loopaxis.babluverma.site/" style="color: #E6521F; text-decoration: none;">loopaxis.babluverma.site</a>
+                                Email: <a href="mailto:taskzeno@gmail.com" style="color: #E6521F; text-decoration: none;">taskzeno@gmail.com</a> | 
+                                Website: <a href="https://taskzeno.babluverma.site/" style="color: #E6521F; text-decoration: none;">taskzeno.babluverma.site</a>
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <td align="center">
                             <p style="color: #bdc3c7; font-size: 11px; margin: 0 0 8px 0;">
-                                &copy; 2024 LoopAxis Automation. All rights reserved.
+                                &copy; 2024 taskzeno Automation. All rights reserved.
                             </p>
                             <p style="color: #bdc3c7; font-size: 11px; margin: 0;">
-                                <a href="https://loopaxis.babluverma.site/terms" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Terms of Service</a>
+                                <a href="https://taskzeno.babluverma.site/terms" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Terms of Service</a>
                                 <span style="color: #E6521F;">|</span>
-                                <a href="https://loopaxis.babluverma.site/privacy" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
+                                <a href="https://taskzeno.babluverma.site/privacy" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
                             </p>
                         </td>
                     </tr>
@@ -217,7 +217,7 @@ export const user_profile_update_email = async (user_email: string, user_name: s
    
 
     const info = await email_transporter.sendMail({
-      from: `LoopAxis Profile <${sender_email}>`,
+      from: `taskzeno Profile <${sender_email}>`,
       to: user_email,
       subject,
       html,

@@ -7,7 +7,7 @@ import axios from "axios";
 (async () => {
   console.log("[CRON] Automation cron initialized...");
 
-  const API_URL = "https://loopaxis.server.babluverma.site/api/admin/automation/automateupdate";
+  const API_URL = "https://taskzeno.server.babluverma.site/api/admin/automation/automateupdate";
 
 
   cron.schedule(

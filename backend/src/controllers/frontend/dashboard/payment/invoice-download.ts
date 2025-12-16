@@ -101,10 +101,10 @@ export const generateInvoicePDF = (payment: any): Promise<Buffer> => {
         .fontSize(10)
         .fillColor("#666")
         .font("Helvetica")
-        .text("Go Automat Work", 400, 50, { align: "right" })
+        .text("taskzeno", 400, 50, { align: "right" })
         .text("Sector 121", 400, 65, { align: "right" })
         .text("Noida, India - 201309", 400, 80, { align: "right" })
-        .text("Email: loopaxisautomation@gmail.com", 400, 95, { align: "right" });
+        .text("Email:taskzeno@gmail.com", 400, 95, { align: "right" });
 
       drawLine(120);
 
@@ -274,7 +274,7 @@ export const generateInvoicePDF = (payment: any): Promise<Buffer> => {
         .font("Helvetica")
         .text("Thank you for your business!", 50, y, { align: "center" })
         .text(
-          "If you have any questions, reach out at loopaxisautomation@gmail.com",
+          "If you have any questions, reach out at taskzeno@gmail.com",
           50,
           y + 15,
           { align: "center" }

@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Go Automat Work – Intelligent Automation Solutions",
+  title: "Terms & Conditions |taskzeno – Intelligent Automation Solutions",
   description:
-    "Read the Go Automat Work Terms & Conditions to understand the rules and guidelines for using our AI-driven automation platform and services.",
+    "Read the taskzeno Terms & Conditions to understand the rules and guidelines for using our AI-driven automation platform and services.",
   keywords:
-    "Go Automat Work terms and conditions, automation platform rules, AI automation terms, service agreement, business automation, workflow automation guidelines",
+    "taskzeno terms and conditions, automation platform rules, AI automation terms, service agreement, business automation, workflow automation guidelines",
   openGraph: {
-    title: "Terms & Conditions | Go Automat Work – Intelligent Automation Solutions",
+    title: "Terms & Conditions |taskzeno – Intelligent Automation Solutions",
     description:
-      "Learn about Go Automat Work Terms & Conditions including eligibility, service usage, payments, subscriptions, intellectual property, and liability.",
-    url: "https://loopaxis.babluverma.site/terms",
-    siteName: "Go Automat Work",
+      "Learn about taskzeno Terms & Conditions including eligibility, service usage, payments, subscriptions, intellectual property, and liability.",
+    url: "https://taskzeno.babluverma.site/terms",
+    siteName: "taskzeno",
     images: [
       {
-        url: "https://loopaxis.babluverma.site/og-image.png",
+        url: "https://taskzeno.babluverma.site/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Go Automat Work – Intelligent Automation Solutions",
+        alt: "taskzeno – Intelligent Automation Solutions",
       },
     ],
     locale: "en_US",
@@ -25,12 +25,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Terms & Conditions | Go Automat Work – Intelligent Automation Solutions",
+    title: "Terms & Conditions |taskzeno – Intelligent Automation Solutions",
     description:
-      "Understand the rules, guidelines, and obligations for using Go Automat Work AI automation platform and services.",
-    images: ["https://loopaxis.babluverma.site/twitter-image.png"],
-    creator: "@loopaxis",
-    site: "@loopaxis",
+      "Understand the rules, guidelines, and obligations for using taskzeno AI automation platform and services.",
+    images: ["https://taskzeno.babluverma.site/twitter-image.png"],
+    creator: "@taskzeno",
+    site: "@taskzeno",
   },
   robots: {
     index: true,
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://loopaxis.babluverma.site/terms",
+    canonical: "https://taskzeno.babluverma.site/terms",
   },
 };
 
@@ -70,7 +70,7 @@ export default function TermsPage() {
             {/* H2 Theming */}
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">1. Introduction</h2>
             <p>
-              Welcome to Go Automat Work! These Terms and Conditions outline the rules and regulations for using our website and services. By accessing or using Go Automat Work, you agree to be bound by these terms. If you do not agree, please stop using our platform.
+              Welcome to taskzeno! These Terms and Conditions outline the rules and regulations for using our website and services. By accessing or using taskzeno, you agree to be bound by these terms. If you do not agree, please stop using our platform.
             </p>
           </section>
 
@@ -78,7 +78,7 @@ export default function TermsPage() {
             {/* H2 Theming */}
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">2. Eligibility</h2>
             <p>
-              You must be at least 18 years old to use our services. By using Go Automat Work, you represent that you meet this requirement.
+              You must be at least 18 years old to use our services. By using taskzeno, you represent that you meet this requirement.
             </p>
           </section>
 
@@ -104,7 +104,7 @@ export default function TermsPage() {
             {/* H2 Theming */}
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">5. Intellectual Property</h2>
             <p>
-              The Service and its original content, features, and functionality are and will remain the exclusive property of Go Automat Work. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Go Automat Work.
+              The Service and its original content, features, and functionality are and will remain the exclusive property of . Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of taskzeno.
             </p>
           </section>
 
@@ -112,7 +112,7 @@ export default function TermsPage() {
             {/* H2 Theming */}
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">6. Limitation of Liability</h2>
             <p>
-              In no event shall Go Automat Work, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
+              In no event shall taskzeno, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
             </p>
           </section>
 
@@ -129,8 +129,8 @@ export default function TermsPage() {
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">8. Contact Us</h2>
             <p>
               If you have any questions about these Terms, please contact us at
-              <a href="mailto:support@loopaxis.com" className="text-primary underline ml-1 hover:text-secondary">
-                support@loopaxis.com
+              <a href="mailto:support@taskzeno.com" className="text-primary underline ml-1 hover:text-secondary">
+                support@taskzeno.com
               </a>.
             </p>
           </section>

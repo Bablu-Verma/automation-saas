@@ -2,7 +2,7 @@ import { email_transporter, sender_email } from "../lib/nodemailer";
 
 export const user_verify_email = async (otp: string, user_email: string) => {
   try {
-    const subject = "🔐 Verify Your Email - LoopAxis";
+    const subject = "🔐 Verify Your Email -  Taskzeno";
     
     const html = `
 <!DOCTYPE html>
@@ -10,7 +10,7 @@ export const user_verify_email = async (otp: string, user_email: string) => {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Verification - LoopAxis</title>
+    <title>Email Verification -  Taskzeno</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
     <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto;">
@@ -21,7 +21,7 @@ export const user_verify_email = async (otp: string, user_email: string) => {
                     <tr>
                         <td align="center">
                             <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: bold;">
-                                Loop<span style="color: #E6521F;">Axis</span>
+                                Task<span style="color: #E6521F;">Zeno</span>
                             </h1>
                             <p style="color: #E6521F; font-size: 16px; margin: 8px 0 0 0; font-weight: 500;">
                                 Email Verification
@@ -58,7 +58,7 @@ export const user_verify_email = async (otp: string, user_email: string) => {
                     <tr>
                         <td style="padding-bottom: 25px;">
                             <p style="color: #131D4F; font-size: 16px; line-height: 1.6; margin: 0; text-align: center;">
-                                Thank you for signing up with LoopAxis! To complete your registration, please verify your email address using the OTP below.
+                                Thank you for signing up with taskzeno! To complete your registration, please verify your email address using the OTP below.
                             </p>
                         </td>
                     </tr>
@@ -88,7 +88,7 @@ export const user_verify_email = async (otp: string, user_email: string) => {
                             <div style="background-color: #fff9f7; padding: 20px; border-radius: 8px; border: 1px solid #E6521F;">
                                 <h3 style="color: #E6521F; margin: 0 0 15px 0; font-size: 16px;">📝 How to Use This Code</h3>
                                 <ol style="color: #131D4F; font-size: 14px; line-height: 1.6; margin: 0; padding-left: 20px;">
-                                    <li>Return to the LoopAxis verification page</li>
+                                    <li>Return to the taskzeno verification page</li>
                                     <li>Enter the 6-digit code shown above</li>
                                     <li>Click "Verify Email" to complete registration</li>
                                     <li>You'll be redirected to your dashboard upon success</li>
@@ -104,7 +104,7 @@ export const user_verify_email = async (otp: string, user_email: string) => {
                                 <h3 style="color: #e74c3c; margin: 0 0 15px 0; font-size: 16px;">🚨 Important Security Notice</h3>
                                 <ul style="color: #131D4F; font-size: 14px; line-height: 1.6; margin: 0; padding-left: 20px;">
                                     <li>Never share this OTP with anyone</li>
-                                    <li>LoopAxis team will never ask for your OTP</li>
+                                    <li>taskzeno team will never ask for your OTP</li>
                                     <li>This code is valid for 10 minutes only</li>
                                     <li>Delete this email after verification</li>
                                 </ul>
@@ -120,7 +120,7 @@ export const user_verify_email = async (otp: string, user_email: string) => {
                                 <ul style="color: #131D4F; font-size: 14px; line-height: 1.6; margin: 0; padding-left: 20px;">
                                     <li>If you didn't request this code, please ignore this email</li>
                                     <li>Code not working? Wait for 10 minutes and request a new one</li>
-                                    <li>Having trouble verifying? <a href="https://loopaxis.babluverma.site/contact" style="color: #E6521F; text-decoration: none;">Contact our support team</a></li>
+                                    <li>Having trouble verifying? <a href="https://taskzeno.babluverma.site/contact" style="color: #E6521F; text-decoration: none;">Contact our support team</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -131,7 +131,7 @@ export const user_verify_email = async (otp: string, user_email: string) => {
                         <td style="padding-bottom: 10px;">
                             <div style="background-color: #e8f5e8; padding: 15px; border-radius: 6px; text-align: center;">
                                 <p style="color: #27ae60; font-size: 14px; font-weight: bold; margin: 0;">
-                                    Once verified, you'll get full access to LoopAxis automation features! 🚀
+                                    Once verified, you'll get full access to taskzeno Automation features! 🚀
                                 </p>
                             </div>
                         </td>
@@ -147,7 +147,7 @@ export const user_verify_email = async (otp: string, user_email: string) => {
                     <tr>
                         <td align="center" style="padding-bottom: 20px;">
                             <p style="color: #ffffff; font-size: 16px; margin: 0 0 15px 0; font-weight: bold;">
-                                LoopAxis Automation Platform
+                               Taskzeno Automation Platform
                             </p>
                         </td>
                     </tr>
@@ -155,20 +155,20 @@ export const user_verify_email = async (otp: string, user_email: string) => {
                     <tr>
                         <td align="center" style="padding-bottom: 15px;">
                             <p style="color: #bdc3c7; font-size: 12px; margin: 0 0 10px 0;">
-                                Email: <a href="mailto:loopaxisautomation@gmail.com" style="color: #E6521F; text-decoration: none;">loopaxisautomation@gmail.com</a> | 
-                                Website: <a href="https://loopaxis.babluverma.site/" style="color: #E6521F; text-decoration: none;">loopaxis.babluverma.site</a>
+                                Email: <a href="mailto:taskzeno@gmail.com" style="color: #E6521F; text-decoration: none;">taskzeno@gmail.com</a> | 
+                                Website: <a href="https://taskzeno.babluverma.site/" style="color: #E6521F; text-decoration: none;">taskzeno.babluverma.site</a>
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <td align="center">
                             <p style="color: #bdc3c7; font-size: 11px; margin: 0 0 8px 0;">
-                                &copy; 2024 LoopAxis Automation. All rights reserved.
+                                &copy; 2024 taskzeno Automation. All rights reserved.
                             </p>
                             <p style="color: #bdc3c7; font-size: 11px; margin: 0;">
-                                <a href="https://loopaxis.babluverma.site/terms" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Terms of Service</a>
+                                <a href="https://taskzeno.babluverma.site/terms" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Terms of Service</a>
                                 <span style="color: #E6521F;">|</span>
-                                <a href="https://loopaxis.babluverma.site/privacy" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
+                                <a href="https://taskzeno.babluverma.site/privacy" style="color: #E6521F; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
                             </p>
                         </td>
                     </tr>
@@ -183,7 +183,7 @@ export const user_verify_email = async (otp: string, user_email: string) => {
  
 
     const info = await email_transporter.sendMail({
-      from: `LoopAxis Verification <${sender_email}>`,
+      from: `taskzeno Verification <${sender_email}>`,
       to: user_email,
       subject,
       html

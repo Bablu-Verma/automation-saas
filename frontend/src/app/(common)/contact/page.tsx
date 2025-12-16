@@ -2,23 +2,23 @@ import type { Metadata } from "next";
 import ContactClient from "./ContactUsClient";
 
 export const metadata: Metadata = {
-  title: "Contact Us | Go Automat Work – Intelligent Automation Solutions",
+  title: "Contact Us | taskzeno – Intelligent Automation Solutions",
   description:
-    "Get in touch with the Go Automat Work team. We're here to help you with intelligent automation solutions that streamline workflows, enhance productivity, and transform your business operations.",
+    "Get in touch with the taskzeno team. We're here to help you with intelligent automation solutions that streamline workflows, enhance productivity, and transform your business operations.",
   keywords:
-    "Go Automat Work contact, contact Go Automat Work, automation support, AI automation inquiry, workflow automation company, automation software support, business automation solutions, contact automation experts",
+    "taskzeno contact, contact taskzeno, automation support, AI automation inquiry, workflow automation company, automation software support, business automation solutions, contact automation experts",
   openGraph: {
-    title: "Contact Go Automat Work – Get in Touch with Our Automation Experts",
+    title: "Contact taskzeno – Get in Touch with Our Automation Experts",
     description:
-      "Reach out to Go Automat Work for personalized automation solutions and expert support. Discover how our intelligent automation platform can accelerate your business growth.",
-    url: "https://loopaxis.babluverma.site/contact",
-    siteName: "Go Automat Work",
+      "Reach out to taskzeno for personalized automation solutions and expert support. Discover how our intelligent automation platform can accelerate your business growth.",
+    url: "https://taskzeno.babluverma.site/contact",
+    siteName: "taskzeno",
     images: [
       {
-        url: "https://loopaxis.babluverma.site/og-image.png",
+        url: "https://taskzeno.babluverma.site/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Go Automat Work – Intelligent Automation Solutions",
+        alt: "taskzeno – Intelligent Automation Solutions",
       },
     ],
     locale: "en_US",
@@ -26,12 +26,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contact Go Automat Work – Intelligent Automation Solutions",
+    title: "Contact taskzeno – Intelligent Automation Solutions",
     description:
-      "Have questions or need automation support? Contact Go Automat Work today and discover how AI-powered automation can transform your business.",
-    images: ["https://loopaxis.babluverma.site/twitter-image.png"],
-    creator: "@loopaxis",
-    site: "@loopaxis",
+      "Have questions or need automation support? Contact taskzeno today and discover how AI-powered automation can transform your business.",
+    images: ["https://taskzeno.babluverma.site/twitter-image.png"],
+    creator: "@taskzeno",
+    site: "@taskzeno",
   },
   robots: {
     index: true,
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://loopaxis.babluverma.site/contact",
+    canonical: "https://taskzeno.babluverma.site/contact",
   },
 };
 

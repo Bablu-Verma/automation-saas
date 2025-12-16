@@ -34,10 +34,10 @@ export async function generateMetadata({ searchParams }: ServiceDetailsPageProps
     console.error("Failed to fetch workflow for metadata:", err);
   }
 
-  const title = workflow ? `${workflow.name} – Go Automat Work` : "Service Details – Go Automat Work";
+  const title = workflow ? `${workflow.name} –taskzeno` : "Service Details –taskzeno";
   const description = workflow
-    ? workflow.shortDescription || workflow.description?.slice(0, 150) || "Go Automat Work automation service."
-    : "Go Automat Work automation service details.";
+    ? workflow.shortDescription || workflow.description?.slice(0, 150) || "taskzeno Automation service."
+    : "taskzeno Automation service details.";
 
   return {
     title,
@@ -45,14 +45,14 @@ export async function generateMetadata({ searchParams }: ServiceDetailsPageProps
     openGraph: {
       title,
       description,
-      url: `https://loopaxis.babluverma.site/service?id=${workflowId}`,
-      siteName: "Go Automat Work",
+      url: `https://taskzeno.babluverma.site/service?id=${workflowId}`,
+      siteName: "taskzeno",
       images: [
         {
-          url: workflow?.serviceImage || "https://loopaxis.babluverma.site/og-image.png",
+          url: workflow?.serviceImage || "https://taskzeno.babluverma.site/og-image.png",
           width: 1200,
           height: 630,
-          alt: workflow?.name || "Go Automat Work Service",
+          alt: workflow?.name || "taskzeno Service",
         },
       ],
       locale: "en_US",
@@ -62,11 +62,11 @@ export async function generateMetadata({ searchParams }: ServiceDetailsPageProps
       card: "summary_large_image",
       title,
       description,
-      images: [workflow?.serviceImage || "https://loopaxis.babluverma.site/twitter-image.png"],
-      creator: "@loopaxis",
-      site: "@loopaxis",
+      images: [workflow?.serviceImage || "https://taskzeno.babluverma.site/twitter-image.png"],
+      creator: "@taskzeno",
+      site: "@taskzeno",
     },
     robots: { index: true, follow: true },
-    alternates: { canonical: `https://loopaxis.babluverma.site/service?id=${workflowId}` },
+    alternates: { canonical: `https://taskzeno.babluverma.site/service?id=${workflowId}` },
   };
 }

@@ -11,4 +11,4 @@ Allow: /terms
 # Allow everything else
 Allow: /
 
-Sitemap: https://loopaxis.babluverma.site/sitemap.xml
+Sitemap: https://taskzeno.babluverma.site/sitemap.xml

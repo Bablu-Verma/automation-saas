@@ -55,7 +55,7 @@ export default function HomePage() {
         className="mt-4 text-lg md:text-xl max-w-2xl mx-auto 
           text-textLight/70 dark:text-textDark/70"
       >
-        Join 100+ businesses saving time, reducing errors, and growing faster with Go Automat Work.
+        Join 100+ businesses saving time, reducing errors, and growing faster with taskzeno.
       </p>
 
       {/* Button Container (Framer Motion removed) */}

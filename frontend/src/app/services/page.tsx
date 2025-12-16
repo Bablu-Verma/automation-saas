@@ -33,12 +33,12 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   const title = workflows.length
-    ? `Services – Go Automat Work | ${workflows[0].name}${workflows.length > 1 ? " & more" : ""}`
-    : "Services – Go Automat Work – Intelligent Automation Solutions";
+    ? `Services –taskzeno | ${workflows[0].name}${workflows.length > 1 ? " & more" : ""}`
+    : "Services –taskzeno – Intelligent Automation Solutions";
 
   const description = workflows.length
-    ? `Explore Go Automat Work services such as ${workflows.slice(0, 3).map(w => w.name).join(", ")} and more to optimize your business.`
-    : "Explore Go Automat Work automation services to streamline workflows, enhance productivity, and scale your business.";
+    ? `Explore taskzeno services such as ${workflows.slice(0, 3).map(w => w.name).join(", ")} and more to optimize your business.`
+    : "Explore taskzeno Automation services to streamline workflows, enhance productivity, and scale your business.";
 
   return {
     title,
@@ -46,14 +46,14 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: "https://loopaxis.babluverma.site/services",
-      siteName: "Go Automat Work",
+      url: "https://taskzeno.babluverma.site/services",
+      siteName: "taskzeno",
       images: [
         {
-          url: "https://loopaxis.babluverma.site/og-image.png",
+          url: "https://taskzeno.babluverma.site/og-image.png",
           width: 1200,
           height: 630,
-          alt: "Go Automat Work Services",
+          alt: "taskzeno Services",
         },
       ],
       locale: "en_US",
@@ -63,11 +63,11 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: ["https://loopaxis.babluverma.site/twitter-image.png"],
-      creator: "@loopaxis",
-      site: "@loopaxis",
+      images: ["https://taskzeno.babluverma.site/twitter-image.png"],
+      creator: "@taskzeno",
+      site: "@taskzeno",
     },
     robots: { index: true, follow: true },
-    alternates: { canonical: "https://loopaxis.babluverma.site/services" },
+    alternates: { canonical: "https://taskzeno.babluverma.site/services" },
   };
 }

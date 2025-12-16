@@ -9,8 +9,8 @@ export default function HelpSupport() {
     {
       icon: <FiMail size={28} />,
       title: "Email Us",
-      desc: '"support@Go Automat Work .com" par hamesha available.',
-      href: "mailto:support@Go Automat Work .com",
+      desc: '"support@taskzeno .com" par hamesha available.',
+      href: "mailto:support@taskzeno .com",
     },
     {
       icon: <FiPhone size={28} />,

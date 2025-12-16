@@ -55,7 +55,7 @@ export default function Footer() {
           
           {/* ✨ सुधार: टेक्स्ट कलर थीम-अवेयर */}
           <p className="mt-4 text-sm text-textLight/70 dark:text-textDark/70">
-            Automate your work, save time, and focus on what matters most.
+            Automate your tasks, save time, and focus on what matters most.
           </p>
           
           {/* Social Icons (Icons are always primary on hover) */}
@@ -63,7 +63,7 @@ export default function Footer() {
             <a href="#" className="hover:text-primary"><FiFacebook size={20} /></a>
             <a href="#" className="hover:text-primary"><FiTwitter size={20} /></a>
             <a href="#" className="hover:text-primary"><FiLinkedin size={20} /></a>
-            <a href="mailto:info@Go Automat Work .com" className="hover:text-primary"><FiMail size={20} /></a>
+            <a href="mailto:info@taskzeno .com" className="hover:text-primary"><FiMail size={20} /></a>
           </div>
         </div>
 
@@ -118,7 +118,7 @@ export default function Footer() {
           {/* ✨ सुधार: हेडिंग टेक्स्ट कलर थीम-अवेयर */}
           <h2 className="text-lg font-semibold text-textLight dark:text-textDark mb-4">Contact</h2>
           <ul className="space-y-2 text-sm text-textLight/80 dark:text-textDark/80">
-            <li>Email: <a href="mailto:info@tasktantra.com" className="hover:text-primary">{process.env.NEXT_PUBLIC_EMAIL}</a></li>
+            <li>Email: <a href="mailto:info@taskzeno.com" className="hover:text-primary">{process.env.NEXT_PUBLIC_EMAIL}</a></li>
             <li>Phone: <a href="tel:+910000000000" className="hover:text-primary">{process.env.NEXT_PUBLIC_NUMBER}</a></li>
             <li>Noida Sector 121, India - 201309</li>
           </ul>
@@ -128,7 +128,7 @@ export default function Footer() {
       {/* Bottom Bar */}
       {/* ✨ सुधार: बॉर्डर और टेक्स्ट कलर थीम-अवेयर */}
       <div className=" mt-6 py-6 text-center text-sm text-textLight/50 dark:text-textDark/50">
-        © {new Date().getFullYear()} Go Automat Work . All rights reserved.
+        © {new Date().getFullYear()} taskzeno . All rights reserved.
       </div>
     </footer>
   )
