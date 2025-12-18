@@ -12,8 +12,12 @@ import {
 } from "react-icons/fi"
 import "swiper/css"
 import { FaAmazon, FaApple, FaFacebookF, FaGoogle, FaInstagram, FaLinkedinIn, FaMicrosoft, FaTwitter } from "react-icons/fa"
+import useTheme from "@/hooks/useTheam"
 
 export default function HomeHero() {
+
+   const [theme] = useTheme();
+
   const slides = [
     { icon: <FiZap size={28} />, text: "Save 20+ hours every week with automation." },
     { icon: <FiCpu size={28} />, text: "Integrate with 100+ tools effortlessly." },
@@ -21,19 +25,19 @@ export default function HomeHero() {
     { icon: <FiCloudLightning size={28} />, text: "Your business, on autopilot ⚡" },
   ]
 
-const clients = [
-  FaApple,
-  FaGoogle,
-  FaAmazon,
-  FaMicrosoft,
-  FaFacebookF,
-  FaTwitter,
-  FaLinkedinIn,
-  FaInstagram,
-];
+  const clients = [
+    FaApple,
+    FaGoogle,
+    FaAmazon,
+    FaMicrosoft,
+    FaFacebookF,
+    FaTwitter,
+    FaLinkedinIn,
+    FaInstagram,
+  ];
 
   return (
-    <section className="relative min-h-[90vh] w-full flex flex-col justify-center items-center pt-24 overflow-hidden
+    <section className="relative min-h-[90vh] w-full flex flex-col justify-center items-center pb-16 pt-24 overflow-hidden
       transition-colors duration-300">
 
       {/* BG Soft Glow Effects (Already uses theme colors, looks good) */}
@@ -44,6 +48,25 @@ const clients = [
         <div className="absolute bottom-20 right-1/4 w-80 h-80
           bg-secondary/20 dark:bg-secondary/10 rounded-full blur-[150px]"></div>
       </div>
+
+      
+       <div className="absolute inset-0 -z-20 overflow-hidden">
+        <video
+          autoPlay
+          muted
+          // loop
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          <source src='/hero_video1.mp4' type="video/mp4" />
+        </video>
+        <div className="absolute inset-0
+  bg-neutral-100/20
+  dark:bg-black/70"></div>
+      </div>
+
+     
+
 
       {/* Main Content */}
       <div className="text-center w-full max-w-4xl pb-10 px-4 sm:px-6">
@@ -65,7 +88,7 @@ const clients = [
         </h1>
 
         {/* Sub Heading (Text color updated) */}
-        <p className="mt-8 text-lg md:text-xl text-textLight/70 dark:text-textDark/70 max-w-3xl mx-auto leading-relaxed">
+        <p className="mt-8 text-lg  md:text-xl text-textLight/70 dark:text-textDark/70 max-w-3xl mx-auto leading-relaxed">
           Supercharge your workflows with
           <span className="text-primary font-semibold"> AI-powered automation</span>.
           Spend less time on manual tasks and more time growing your business.
@@ -126,26 +149,26 @@ const clients = [
         </div>
       </div>
 
-   <div className="mt-6 w-full px-8">
-  <p className="text-center 
+      <div className="mt-6 w-full px-8">
+        <p className="text-center 
      text-[color:var(--text-light)]/60 
      dark:text-[color:var(--text-dark)]/60 
      text-sm mb-6">
-    Trusted by 100+ leading Clients
-  </p>
+          Trusted by 100+ leading Clients
+        </p>
 
-  <div className="flex items-center justify-center gap-6 sm:gap-12 flex-wrap opacity-90">
-    {clients.map((Icon, i) => (
-      <div
-        key={i}
-        className="text-gray-400 dark:text-gray-500 text-4xl 
+        <div className="flex items-center justify-center gap-6 sm:gap-12 flex-wrap opacity-90">
+          {clients.map((Icon, i) => (
+            <div
+              key={i}
+              className="text-gray-400 dark:text-gray-500 text-4xl 
                    hover:text-primary hover:scale-110 transition-all duration-300"
-      >
-        <Icon />
+            >
+              <Icon />
+            </div>
+          ))}
+        </div>
       </div>
-    ))}
-  </div>
-</div>
 
 
     </section>

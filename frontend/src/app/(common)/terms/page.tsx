@@ -129,8 +129,8 @@ export default function TermsPage() {
             <h2 className="text-2xl font-bold mb-3 text-textLight dark:text-textDark">8. Contact Us</h2>
             <p>
               If you have any questions about these Terms, please contact us at
-              <a href="mailto:support@taskzeno.com" className="text-primary underline ml-1 hover:text-secondary">
-                support@taskzeno.com
+              <a href="mailto:taskzenoautomat@gmail.com" className="text-primary underline ml-1 hover:text-secondary">
+                taskzenoautomat@gmail.com
               </a>.
             </p>
           </section>

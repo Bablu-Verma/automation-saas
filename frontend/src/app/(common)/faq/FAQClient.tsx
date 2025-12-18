@@ -89,7 +89,7 @@ const faqs: FAQItem[] = [
   },
   {
     question: "How can I contact support?",
-    answer: "You can reach us via email at support@taskzeno.com or through the Contact Us page.",
+    answer: "You can reach us via email at taskzenoautomat@gmail.com or through the Contact Us page.",
   },
 ]
 

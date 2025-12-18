@@ -152,7 +152,7 @@ export const send_password_reset_email = async (resetLink: string, user_email: s
                     <tr>
                         <td align="center" style="padding-bottom: 15px;">
                             <p style="color: #bdc3c7; font-size: 12px; margin: 0 0 10px 0;">
-                                Email: <a href="mailto:taskzeno@gmail.com" style="color: #E6521F; text-decoration: none;">taskzeno@gmail.com</a> | 
+                                Email: <a href="mailto:taskzenoautomat@gmail.com" style="color: #E6521F; text-decoration: none;">taskzenoautomat@gmail.com</a> | 
                                 Website: <a href="https://taskzeno.babluverma.site/" style="color: #E6521F; text-decoration: none;">taskzeno.babluverma.site</a>
                             </p>
                         </td>

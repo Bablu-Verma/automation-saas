@@ -141,10 +141,10 @@ export default function PrivacyPolicyPage() {
             <p>
               For questions or concerns about this Privacy Policy, please contact us at
               <a
-                href="mailto:support@taskzeno.com"
+                href="mailto:taskzenoautomat@gmail.com"
                 className="text-primary underline ml-1 hover:text-secondary"
               >
-                support@taskzeno.com
+                taskzenoautomat@gmail.com
               </a>.
             </p>
           </section>
