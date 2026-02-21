@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { v4 as uuidv4 } from 'uuid';
 import { IPayment, IPaymentLog } from "../types/types";
 
 
@@ -17,10 +16,10 @@ const PaymentSchema = new mongoose.Schema<IPayment>(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
 
-    orderId: { type: String, default: () => uuidv4(), unique: true },
+    orderId: { type: String, unique: true },
 
     instanceId: { type: mongoose.Schema.Types.ObjectId, ref: "AutomationInstance", required: true },
-
+    
     subscriptionMonths: { type: Number, required: true, min: 1 },
 
     period: {

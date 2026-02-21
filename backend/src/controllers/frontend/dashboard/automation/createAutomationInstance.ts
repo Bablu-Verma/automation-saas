@@ -14,8 +14,9 @@ import {
 } from "../../../../lib/_n8n_helper";
 import slug from "slug";
 import { automation_create_success_email } from "../../../../email/automation_create_success_email";
-import util from 'util';
 import { autoSaveN8nWorkflow } from "../../../../lib/puppeteer_code_save_workflow";
+
+import { cleanName, generateId } from "../../../../utils/utils";
 
 
 // Helper function to safely get credential name
@@ -39,6 +40,7 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
     if (!instanceName) return res.status(400).json({ message: "Instance name is required.", success: false });
 
     const instance_name_slug = slug(instanceName, '_');
+    const instance_name = cleanName(instanceName);
 
     const masterWorkflow = await MasterWorkflow.findById(workflowId).select('-description');
     if (!masterWorkflow) return res.status(404).json({ message: "Master workflow not found.", success: false });
@@ -153,12 +155,15 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
     const triggers = extractTriggersFromNodes(n8nGetJson.data.nodes);
 
+    const generate_id = generateId('AUT');
+
     // Save automation instance
     const automationInstance = new AutomationInstance({
       user: userId,
       masterWorkflow: workflowId,
       n8nWorkflowId: createdN8nWorkflowId,
-      instanceName: instance_name_slug,
+      instanceName: instance_name,
+      instanceId: generate_id,
       isActive: "PAUSE",
       usageCount: 0,
       userCredentialsId: createdN8nCredentialIds,
@@ -197,7 +202,7 @@ export const createAutomationInstance = async (req: AuthenticatedRequest, res: R
 
     await automationInstance.save();
 
-    await automation_create_success_email(user.email, user.name, instance_name_slug)
+    await automation_create_success_email(user.email, user.name, instance_name)
 
     return res.status(201).json({
       message: "Automation instance created successfully!",

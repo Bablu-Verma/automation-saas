@@ -8,6 +8,8 @@ export const automationDetail = async (req: AuthenticatedRequest, res: Response)
     const userId = req.user?.id;
     const { id } = req.body;
 
+    console.log("Fetching details for automation ID:", id, "for user ID:", userId);
+
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized", success: false });
     }

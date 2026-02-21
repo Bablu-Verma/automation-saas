@@ -5,10 +5,12 @@ const { Schema } = mongoose;
 const AutomationInstanceSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
-    masterWorkflow: { type: Schema.Types.ObjectId, ref: "MasterWorkflow", required: true },
 
+    masterWorkflow: { type: Schema.Types.ObjectId, ref: "MasterWorkflow", required: true },
     n8nWorkflowId: { type: String, required: true, index: true },
+
     instanceName: { type: String, required: true },
+    instanceId: { type: String, required: true },
 
     isActive: {
       type: String,

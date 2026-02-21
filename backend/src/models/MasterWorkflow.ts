@@ -14,7 +14,7 @@ const MasterWorkflowSchema = new Schema({
 
   isPublished: {
     type: String,
-    enum: ["ACTIVE", "PAUSE"],
+    enum: ["ACTIVE", "PAUSE", 'DRAFT'],
     default: "PAUSE",
   },
 

@@ -68,7 +68,7 @@ export const addMasterWorkflow = async (req: AuthenticatedRequest, res: Response
       keyword,
       pricingPlans,
       currency,
-      isPublished: isPublished ?? "PAUSE", // default string
+      isPublished: isPublished ?? "DRAFT", 
       requiredInputs: requiredInputs ?? [],
       requiredCredentials: requiredCredentials ?? [],
     });

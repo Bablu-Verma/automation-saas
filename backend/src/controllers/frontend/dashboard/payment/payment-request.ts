@@ -4,6 +4,7 @@ import AutomationInstance from "../../../../models/AutomationInstance";
 import Payment from "../../../../models/Payment";
 import { payment_request_success_email } from "../../../../email/payment_request_success_email";
 import { payment_request_success_email_admin_notify } from "../../../../email/payment_request_success_email_admin_notify";
+import { generateId } from "../../../../utils/utils";
 
 export const createPayment = async (
   req: AuthenticatedRequest,
@@ -18,7 +19,6 @@ export const createPayment = async (
       subscriptionMonths,
       planDetails,
       amountDetails,
-      
     } = req.body;
 
     if (!userId) {
@@ -75,9 +75,13 @@ export const createPayment = async (
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + subscriptionMonths);
 
+  
+    const order_id =  generateId('ORD')
+
     const payment = await Payment.create({
       user: userId,
       instanceId,
+      orderId: order_id,
       subscriptionMonths,
 
       period: { startDate, endDate },

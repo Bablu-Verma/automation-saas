@@ -42,6 +42,7 @@ export interface IAutomationInstance extends Document {
   
   n8nWorkflowId: string;
   instanceName: string;
+  instanceId: string;
 
   selectedPlanDetails?: {
     planName: string;
@@ -123,7 +124,7 @@ export interface IMasterWorkflow extends Document {
     features: string[];
   }[];
   keyword?: string[];
-  isPublished?: "ACTIVE" | "PAUSE";
+  isPublished?: "ACTIVE" | "PAUSE" | 'DRAFT';
   currency?: string;
   requiredInputs?: IRequiredInput[];
   requiredCredentials?: IRequiredCredential[];

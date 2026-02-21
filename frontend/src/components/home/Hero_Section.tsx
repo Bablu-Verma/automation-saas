@@ -12,11 +12,16 @@ import {
 } from "react-icons/fi"
 import "swiper/css"
 import { FaAmazon, FaApple, FaFacebookF, FaGoogle, FaInstagram, FaLinkedinIn, FaMicrosoft, FaTwitter } from "react-icons/fa"
-import useTheme from "@/hooks/useTheam"
+
+import Lottie from "lottie-react";
+import AiBrainBoard from "../../lootie/Ai  brain board.json";
+import AiData from "../../lootie/AI data.json";
+
+
+
 
 export default function HomeHero() {
 
-   const [theme] = useTheme();
 
   const slides = [
     { icon: <FiZap size={28} />, text: "Save 20+ hours every week with automation." },
@@ -37,34 +42,16 @@ export default function HomeHero() {
   ];
 
   return (
-    <section className="relative min-h-[90vh] w-full flex flex-col justify-center items-center pb-16 pt-24 overflow-hidden
+    <section className="relative min-h-[90vh] w-full flex flex-col justify-center items-center pb-5 md:pb-16 pt-24 overflow-hidden
       transition-colors duration-300">
 
-      {/* BG Soft Glow Effects (Already uses theme colors, looks good) */}
-      <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute top-20 left-1/4 w-96 h-64 
-          bg-primary/20 dark:bg-primary/10 rounded-full blur-[120px]"></div>
-
-        <div className="absolute bottom-20 right-1/4 w-80 h-80
-          bg-secondary/20 dark:bg-secondary/10 rounded-full blur-[150px]"></div>
-      </div>
-
-      
-       <div className="absolute inset-0 -z-20 overflow-hidden">
-        <video
-          autoPlay
-          muted
-          // loop
-          playsInline
-          className="w-full h-full object-cover"
-        >
-          <source src='/hero_video1.mp4' type="video/mp4" />
-        </video>
-        <div className="absolute inset-0
-  bg-neutral-100/20
-  dark:bg-black/70"></div>
-      </div>
-
+     <div className="absolute hidden md:block top-40 left-10">
+      <Lottie className="h-44" animationData={AiBrainBoard} loop={true} />
+     </div>
+     <div className="absolute hidden md:block bottom-20 right-10">
+      <Lottie className="h-44" animationData={AiData} loop={true} />
+     </div>
+         
      
 
 
@@ -157,14 +144,14 @@ export default function HomeHero() {
           Trusted by 100+ leading Clients
         </p>
 
-        <div className="flex items-center justify-center gap-6 sm:gap-12 flex-wrap opacity-90">
+        <div className="flex items-center justify-center gap-6 sm:gap-12 overflow-x-auto opacity-90">
           {clients.map((Icon, i) => (
             <div
               key={i}
               className="text-gray-400 dark:text-gray-500 text-4xl 
                    hover:text-primary hover:scale-110 transition-all duration-300"
             >
-              <Icon />
+              <Icon className="h-12 md:h-16" />
             </div>
           ))}
         </div>

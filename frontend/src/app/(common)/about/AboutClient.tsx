@@ -45,7 +45,7 @@ export default function AboutUsClinet() {
                         dark:bg-darkBg dark:border-textDark/10"
                     >
                         <Image
-                            src="/about.png"
+                            src="/about.webp"
                             alt="About taskzeno "
                             fill
                             className="object-cover object-center"

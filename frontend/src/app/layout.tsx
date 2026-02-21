@@ -8,6 +8,8 @@ import Footer from "@/components/Footer";
 
 import { Toaster } from 'react-hot-toast';
 import ReduxProvider from "@/redux-store/provider_";
+import AnnouncementBar from "@/components/header/AnnouncementBar";
+import CookieConsentBar from "@/components/CookieConsentBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -88,6 +90,8 @@ export default function RootLayout({
         <ReduxProvider>
           <Navbar />
           {children}
+          <CookieConsentBar />
+          <AnnouncementBar />
           <Footer />
         </ReduxProvider>
 
