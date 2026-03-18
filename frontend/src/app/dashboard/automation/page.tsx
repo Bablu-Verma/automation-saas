@@ -73,80 +73,80 @@ export default function AutomationInstances() {
   }, [token, page]);
 
 
+  const textPrimary = `text-textLight dark:text-textDark`;
+  const textSecondary = `text-textLight/70 dark:text-textDark/70`;
+  const textFaded = `text-textLight/50 dark:text-textDark/50`;
+
+  // ✅ Clean Status Icon
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "RUNNING":
-        return <FiCheckCircle className="text-green-500" size={20} />;
+        return <FiCheckCircle className="text-green-600" size={16} />;
       case "PAUSE":
-        return <FiClock className="text-yellow-500" size={20} />;
+        return <FiClock className="text-yellow-600" size={16} />;
       default:
-        return <FiActivity className="text-gray-500" size={20} />;
+        return <FiActivity className="text-gray-500" size={16} />;
     }
   };
 
+  // ✅ Soft Badge Colors
   const getStatusColor = (status: string) => {
     switch (status) {
       case "RUNNING":
-        return "text-green-500 bg-green-500/10";
+        return "text-green-600 bg-green-500/10";
       case "PAUSE":
-        return "text-yellow-500 bg-yellow-500/10";
+        return "text-yellow-600 bg-yellow-500/10";
       default:
         return "text-gray-500 bg-gray-500/10";
     }
   };
 
-  // --- Reusable Card Container Class (Glassmorphism) ---
+  // ✅ Minimal Card Style
   const cardClasses = `
-    p-5 rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-[1.02]
-    
-    /* Light Mode Glassmorphism */
-    bg-lightBg/80 backdrop-blur-lg border border-textLight/10
-    
-    /* Dark Mode Glassmorphism */
-    dark:bg-darkBg/80 dark:border-textDark/10
-    hover:shadow-[0_0_15px_rgba(230,82,31,0.2)] dark:hover:shadow-[0_0_15px_rgba(230,82,31,0.2)]
+    p-5 rounded-lg
+    border border-black/5 dark:border-white/10
+    bg-lightBg dark:bg-darkBg
   `;
-  
-  const textPrimary = `text-textLight dark:text-textDark`;
-  const textSecondary = `text-textLight/70 dark:text-textDark/70`;
-  const textFaded = `text-textLight/50 dark:text-textDark/50`;
 
+  if (loading) return <LoadingSpiner />;
 
-  if (loading)
+  if (error)
     return (
-      <LoadingSpiner />
-    );
-
-    // Error state Theming
-    if(error) return (
-      <div className="text-center py-12">
-        <FaPager className="mx-auto text-textLight/40 dark:text-textDark/40 mb-4" size={48} />
-        <h3 className={`text-xl font-semibold mb-2 ${textPrimary}`}>No Automation found</h3>
-        <p className={textSecondary}>Failed to load automations. Please refresh again.</p>
+      <div className="text-center py-16">
+        <FaPager
+          className="mx-auto mb-4 text-textLight/30 dark:text-textDark/30"
+          size={40}
+        />
+        <h3 className={`text-lg font-medium ${textPrimary}`}>
+          No Automations Found
+        </h3>
+        <p className={`mt-2 text-sm ${textSecondary}`}>
+          Failed to load automations. Please refresh again.
+        </p>
       </div>
     );
 
   return (
-    <div className="max-w-7xl mx-auto pb-28 px-6">
-      <h1
-        className={`text-3xl font-extrabold mb-8 ${textPrimary}`}
-      >
+    <div className="max-w-7xl mx-auto pb-20 px-6">
+
+      {/* Page Title */}
+      <h1 className={`text-2xl font-semibold mb-8 ${textPrimary}`}>
         Your Automations
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {instances.map((inst) => (
-          // Framer Motion removed, standard div used with CSS hover effects
-          <div
-            key={inst._id}
-            className={cardClasses}
-          >
+      {/* Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {instances.map((inst: any) => (
+          <div key={inst._id} className={cardClasses}>
+
+            {/* Header */}
             <div className="flex items-center justify-between mb-3">
-              {/* Instance Name Theming */}
-              <h3 className={`text-lg font-bold ${textPrimary}`}>{inst.instanceName}</h3>
-              {/* Status Tag (Colors remain consistent) */}
+              <h3 className={`text-base font-medium ${textPrimary}`}>
+                {inst.instanceName}
+              </h3>
+
               <span
-                className={`px-3 py-1 text-xs rounded-full font-semibold ${getStatusColor(
+                className={`px-2 py-1 text-xs rounded-md ${getStatusColor(
                   inst.isActive
                 )}`}
               >
@@ -154,14 +154,16 @@ export default function AutomationInstances() {
               </span>
             </div>
 
-            <div className={`flex items-center gap-2 ${textSecondary} mb-2`}>
-              <FiCpu className="text-secondary" />{" "}
+            {/* Automation ID */}
+            <div className={`flex items-center gap-2 mb-2 ${textSecondary}`}>
+              <FiCpu size={14} />
               <span className="text-sm">
                 Automation ID: {inst.n8nWorkflowId}
               </span>
             </div>
 
-            <div className={`flex items-center gap-2 ${textSecondary} mb-2`}>
+            {/* Status */}
+            <div className={`flex items-center gap-2 mb-2 ${textSecondary}`}>
               {getStatusIcon(inst.isActive)}
               <span className="text-sm">
                 {inst.isActive === "RUNNING"
@@ -170,41 +172,42 @@ export default function AutomationInstances() {
               </span>
             </div>
 
-            <p className={`text-xs mb-4 ${textFaded}`}>
-              Created: {new Date(inst.createdAt).toLocaleString()}
+            {/* Executions */}
+            <div className={`flex items-center gap-2 mb-2 ${textSecondary}`}>
+              <FiActivity size={14} />
+              <span className="text-sm">
+                Executions: {inst.usageCount}
+              </span>
+            </div>
+
+           <div className="flex justify-between items-center mt-5 gap-5">
+             {/* Created Date */}
+            <p className={`text-xs ${textFaded}`}>
+              Created: {new Date(inst.createdAt).toLocaleDateString()}
             </p>
 
-            <div className="flex gap-6 items-center justify-start">
-            
-              <Link
-                href={`/dashboard/automation-view?id=${inst._id}`}
-                // Link Button Theming
-                className={`px-4 py-2 rounded-full border text-textLight dark:text-textDark font-semibold transition hover:bg-primary hover:text-white 
-                  border-textLight/30 dark:border-textDark/30`}
-              >
-                Logs Detail
-              </Link>
+            {/* View Logs */}
+            <Link
+              href={`/dashboard/automation-view?id=${inst._id}`}
+              className="text-sm text-primary hover:underline inline-block"
+            >
+              View Logs
+            </Link>
+           </div>
 
-              <div className={`flex items-center gap-2 ${textSecondary} mb-2`}>
-                <FiActivity className="text-primary" />{" "}
-                <span className="text-sm">
-                  Executions: {inst.usageCount}
-                </span>
-              </div>
-
-            </div>
           </div>
         ))}
       </div>
 
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-        showPageNumbers={true}
-        compact={false}
-        // Pagination component should handle its own theming
-      />
+      {/* Pagination */}
+      <div className="mt-10">
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      </div>
+
     </div>
   );
 }

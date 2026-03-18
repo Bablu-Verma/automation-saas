@@ -141,22 +141,25 @@ export default function StartFormPage() {
   if (loading) return <Loading_ />;
 
 
-  const inputClasses = `
-    w-full px-5 py-2 rounded-xl border transition focus:outline-none focus:ring-2 focus:ring-primary
-    
-    /* Light Mode Input */
-    bg-lightBg/50 text-textLight border-textLight/20 placeholder-textLight/60
-    
-    /* Dark Mode Input */
-    dark:bg-darkBg/50  dark:border-textDark/20 dark:placeholder-textDark/60
+   const inputClasses = `
+    w-full px-4 py-2.5
+    rounded-md
+    border border-black/10 dark:border-white/10
+    bg-transparent
+    text-textLight dark:text-textDark
+    placeholder:text-textLight/50 dark:placeholder:text-textDark/50
+    focus:outline-none focus:ring-1 focus:ring-primary
+    transition
   `;
 
   const cardClasses = `
-    bg-lightBg/80 backdrop-blur-xl border border-textLight/10 dark:bg-darkBg/80 dark:border-textDark/10
+    bg-lightBg dark:bg-darkBg
+    border border-black/5 dark:border-white/10
+    rounded-xl
   `;
 
   const subCardClasses = `
-    bg-lightBg/50 dark:bg-darkBg/50 border border-textLight/10 dark:border-textDark/10 p-3 sm:p-6 rounded-xl
+    py-3
   `;
 
   return (

@@ -2,13 +2,14 @@ import { Response } from "express";
 import { AuthenticatedRequest } from "../../../../middlewares/loginCheck";
 import AutomationInstance from "../../../../models/AutomationInstance";
 import axios from "axios";
+import { CONNREFUSED } from "dns";
 
 export const automationDetail = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?.id;
     const { id } = req.body;
 
-    console.log("Fetching details for automation ID:", id, "for user ID:", userId);
+    // console.log("Fetching details for automation ID:", id, "for user ID:", userId);
 
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized", success: false });
@@ -24,6 +25,8 @@ export const automationDetail = async (req: AuthenticatedRequest, res: Response)
       .populate("user", "name email")
       .populate("masterWorkflow", "name category serviceImage");
 
+      console.log("Fetched automation instance:", instance)
+
     if (!instance) {
       return res.status(404).json({
         message: "Automation instance not found",
@@ -33,23 +36,23 @@ export const automationDetail = async (req: AuthenticatedRequest, res: Response)
 
     // console.log(instance)
 
-    const executionsResponse = await axios.get(
-      `${process.env.N8N_API_URL}/api/v1/executions`,
-      {
-        headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY },
-        params: { workflowId: instance.n8nWorkflowId, limit: 100 }
-      }
-    );
+    // const executionsResponse = await axios.get(
+    //   `${process.env.N8N_API_URL}/api/v1/executions`,
+    //   {
+    //     headers: { "X-N8N-API-KEY": process.env.N8N_API_KEY },
+    //     params: { workflowId: instance.n8nWorkflowId, limit: 100 }
+    //   }
+    // );
 
-    const executions = executionsResponse.data.data;
+    // const executions = executionsResponse.data.data;
 
-    const totalExecutions = executions.length;
-    const lastExecution = executions[0]?.startedAt || null;
+    // const totalExecutions = executions.length;
+    // const lastExecution = executions[0]?.startedAt || null;
 
-    instance.usageCount = totalExecutions,
-    instance.lastExecutedAt = lastExecution,
+    // instance.usageCount = 0,
+    // instance.lastExecutedAt = undefined,
 
-    await instance.save()
+    // await instance.save()
 
     return res.status(200).json({
       message: "Automation instance detail fetched successfully",

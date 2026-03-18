@@ -1,129 +1,123 @@
 "use client"
 
-import { RootState } from "@/redux-store/redux_store";
-import { IUser } from "@/types";
-import {
-  FiUserPlus,
-  FiSettings,
-  FiCpu,
-  FiTrendingUp,
-  FiBarChart2,
-  FiLayers,
-  FiPlay,
-  FiCheckCircle
-} from "react-icons/fi"
-import { useSelector } from "react-redux";
+import Image from "next/image"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux-store/redux_store"
+import { IUser } from "@/types"
 
 export default function HowItWorks() {
-   const user = useSelector(
+  const user = useSelector(
     (state: RootState) => state.user.user
-  ) as IUser | null;
+  ) as IUser | null
 
   const loggedIn = Boolean(user)
 
-
-
-  // 🟦 Steps for non-logged in users
   const publicSteps = [
     {
-      step: "Create Your Account",
-      description:
-        "Create your account in less than 30 seconds and unlock your automation dashboard instantly.",
-      icon: <FiUserPlus size={24} />,
-      color: "from-blue-500 to-cyan-500",
+      title: "Create Your Account",
+      desc: "Create your account in less than 30 seconds and unlock your automation dashboard instantly.",
+      image: "/how/login.png",
     },
     {
-      step: "Select or Request a Custom Automation",
-      description:
-        "Pick from ready-made workflows or request a fully tailored automation designed for your business.",
-      icon: <FiSettings size={24} />,
-      color: "from-purple-500 to-pink-500",
+      title: "Select or Request Automation",
+      desc: "Pick from ready-made workflows or request a fully tailored automation.",
+      image: "/how/select-req.png",
     },
     {
-      step: "Configure & Launch",
-      description:
-        "Our AI configures, optimizes, and manages your workflows automatically — no manual setup required.",
-      icon: <FiCpu size={24} />,
-      color: "from-orange-500 to-red-500",
+      title: "Configure & Launch",
+      desc: "Our AI configures and optimizes your workflows automatically.",
+      image: "/how/co-launch.png",
     },
     {
-      step: "Scale & Grow Effortlessly",
-      description:
-        "Let automation handle routine work while you focus on strategy, growth, and delivering real impact.",
-      icon: <FiTrendingUp size={24} />,
-      color: "from-green-500 to-teal-500",
+      title: "Scale & Grow",
+      desc: "Let automation handle routine work while you focus on growth.",
+      image: "/how/sc-grow.png",
     },
   ]
 
-  // 🟩 Steps for logged-in users
   const loggedInSteps = [
     {
-      step: "Access Your Dashboard",
-      description:
-        "View all your workflows, analytics, and automation insights in one place.",
-      icon: <FiBarChart2 size={24} />,
-      color: "from-green-500 to-emerald-500",
+      title: "Access Your Dashboard",
+      desc: "View workflows, analytics, and insights in one place.",
+      image: "/how/dashboard.png",
     },
     {
-      step: "Create or Manage Workflows",
-      description:
-        "Easily create new automations or optimize your existing ones with our smart builder.",
-      icon: <FiLayers size={24} />,
-      color: "from-blue-500 to-indigo-500",
+      title: "Manage Workflows",
+      desc: "Create or optimize automations easily with smart tools.",
+      image: "/how/manage-w.png",
     },
     {
-      step: "Run & Monitor Automations",
-      description:
-        "Track performance in real-time and let AI optimize your automation efficiency.",
-      icon: <FiPlay size={24} />,
-      color: "from-purple-500 to-pink-500",
+      title: "Run & Monitor",
+      desc: "Track performance in real-time and improve efficiency.",
+      image: "/how/select-req.png",
     },
     {
-      step: "Achieve Consistent Growth",
-      description:
-        "Free up your time and allow automations to deliver continuous results 24/7.",
-      icon: <FiCheckCircle size={24} />,
-      color: "from-teal-500 to-cyan-500",
+      title: "Achieve Growth",
+      desc: "Free up time and let automations deliver results 24/7.",
+      image: "/how/sc-grow.png",
     },
   ]
 
   const steps = loggedIn ? loggedInSteps : publicSteps
 
   return (
-    <section className="pt-32 px-4 sm:px-6 max-w-7xl mx-auto relative">
-      <div className="text-center mb-20 transition-colors duration-500">
-        <h2 className="text-4xl font-bold text-textLight dark:text-textDark">
-          How It Works
-        </h2>
-        <p className="mt-4 text-lg text-textLight/70 dark:text-textDark/70 max-w-2xl mx-auto">
-          {loggedIn
-            ? "Your personalized automation workflow journey."
-            : "Get started in minutes with a simple automation process."}
-        </p>
-      </div>
+    <section className="relative pt-28 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto">
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {steps.map((item, i) => (
-          <div key={i} className="group hover:scale-[1.03] transition-all duration-500">
-            <div className="rounded-3xl p-8 shadow-lg bg-lightBg/60 dark:bg-darkBg/60 border border-textLight/10 dark:border-textDark/10 backdrop-blur-xl">
-              <div className={`w-16 h-16 mx-auto rounded-full bg-gradient-to-r ${item.color} text-white flex items-center justify-center text-2xl font-bold shadow-lg mb-6`}>
-                {i + 1}
+        {/* Header */}
+        <div className="text-center mb-20">
+          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white">
+            How It Works
+          </h2>
+
+          <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            {loggedIn
+              ? "Your personalized automation journey."
+              : "Get started in minutes with our simple automation process."}
+          </p>
+        </div>
+
+        {/* Steps Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          {steps.map((step, i) => (
+            <div
+              key={i}
+              className="
+                group rounded-2xl overflow-hidden
+                border bg-white shadow-sm
+                dark:bg-neutral-900 dark:border-neutral-800
+                transition-all duration-300
+                hover:-translate-y-2 hover:shadow-xl
+              "
+            >
+              {/* Image */}
+              <div className="relative w-full h-40 overflow-hidden">
+                <Image
+                  src={step.image}
+                  alt={step.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
               </div>
 
-              <div className="w-12 h-12 mx-auto rounded-xl flex items-center justify-center bg-textLight/5 dark:bg-textDark/5 text-textLight dark:text-textDark mb-4">
-                {item.icon}
+              {/* Content */}
+              <div className="p-6">
+                <div className="text-sm font-semibold text-primary mb-2">
+                  Step {i + 1}
+                </div>
+
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                  {step.title}
+                </h3>
+
+                <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                  {step.desc}
+                </p>
               </div>
-
-              <h3 className="text-xl font-bold text-center text-textLight dark:text-textDark mb-2">
-                {item.step}
-              </h3>
-
-              <p className="text-center text-sm text-textLight/70 dark:text-textDark/70">
-                {item.description}
-              </p>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
       </div>
     </section>
   )

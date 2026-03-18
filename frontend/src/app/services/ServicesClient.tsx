@@ -9,6 +9,7 @@ import AppIntegrationSlider from "@/components/IntegratesWith";
 import NewsletterSection from "@/components/Newsletter";
 import { service_list_api } from "@/api";
 import CustomAutomationCTA from "@/components/CustomAutomationCTA";
+import SubHero from "@/components/SubHero";
 
 interface ServicesClientPageProps {
   initialWorkflows: any[];
@@ -45,21 +46,8 @@ export default function ServicesClientPage({ initialWorkflows }: ServicesClientP
   return (
     <section className="pt-28 mx-auto transition-colors duration-500">
       
-      {/* Hero Section (Framer Motion removed) */}
-      <div
-        className="text-center px-6 mb-16"
-      >
-        {/* H1 Theming */}
-        <h1 className="text-4xl md:text-5xl font-extrabold 
-          text-textLight dark:text-textDark transition-colors duration-500">
-          Our Services
-        </h1>
-        {/* Paragraph Theming */}
-        <p className="mt-4 text-lg md:text-xl max-w-3xl mx-auto
-          text-textLight/80 dark:text-textDark/80 transition-colors duration-500">
-          Explore the wide range of automation services we offer to help businesses save time, reduce costs, and scale effortlessly.
-        </p>
-      </div>
+      <SubHero title="Our Services" description="Explore the wide range of automation services we offer to help businesses save time, reduce costs, and scale effortlessly." />
+     
 
       {/* Services Grid */}
       <div className="grid grid-cols-1 px-6 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">

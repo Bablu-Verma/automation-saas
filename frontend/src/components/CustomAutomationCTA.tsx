@@ -1,54 +1,102 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { FiArrowRight, FiMessageSquare } from "react-icons/fi"
 
 export default function CustomAutomationCTA() {
   return (
-    <section className="pt-20 px-4">
-      {/* Framer Motion removed. Using standard div with theme-aware classes. */}
+    <section className="relative pt-24 px-4">
+
+      {/* Soft Background Glow */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 blur-3xl opacity-40" />
+
       <div
-        // ✨ सुधार: थीम-अवेयर glassmorphism स्टाइल
         className="
-          py-8 md:py-20 px-4 text-center overflow-hidden rounded-3xl mx-auto max-w-6xl transition-all duration-500
-          
-          /* Light Mode Glassmorphism */
-          bg-lightBg/60 backdrop-blur-md border border-textLight/10 shadow-md
-          
-          /* Dark Mode Glassmorphism */
-          dark:bg-darkBg/60 dark:border-textDark/10
-        "
+          relative max-w-7xl mx-auto
+          px-6 md:px-12 py-16 rounded-3xl
+          border transition-all duration-500
+          "
       >
-        {/* Icon (Gradient remains for consistency) */}
-        <div className="flex justify-center mb-6">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-secondary text-white shadow-lg">
-            <FiMessageSquare size={30} />
+
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+
+          {/* LEFT CONTENT */}
+          <div>
+
+            {/* Icon */}
+            <div className="flex mb-6">
+              <div className="flex items-center justify-center w-14 h-14 rounded-xl 
+                bg-gradient-to-tr from-primary to-secondary 
+                text-white shadow-lg">
+                <FiMessageSquare size={26} />
+              </div>
+            </div>
+
+            {/* Headline */}
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
+              Need a Custom Automation?
+            </h2>
+
+            {/* Description */}
+            <p className="mt-6 text-lg text-gray-600 dark:text-gray-400">
+              Can’t find the exact workflow you’re looking for? 
+              Our team can build a bespoke automation tailored specifically 
+              to your business needs.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="mt-8 flex flex-col sm:flex-row items-start gap-4">
+
+              <Link
+                href="/contact"
+                className="
+                  inline-flex items-center gap-2
+                  px-8 py-3 rounded-full
+                  text-white font-semibold
+                  bg-gradient-to-r from-primary to-secondary
+                  shadow-lg transition-all duration-300
+                  hover:scale-[1.05] hover:shadow-2xl
+                  active:scale-[0.98]
+                "
+              >
+                Request a Custom Build
+                <FiArrowRight />
+              </Link>
+
+              <Link
+                href="/services"
+                className="
+                  inline-flex items-center gap-2
+                  px-8 py-3 rounded-full
+                  text-primary font-semibold
+                  border border-primary
+                  hover:bg-primary/10
+                  transition-all duration-300
+                "
+              >
+                Explore Services
+              </Link>
+
+            </div>
           </div>
+
+          {/* RIGHT IMAGE */}
+          <div className="relative">
+            <div className="relative w-full h-[300px] md:h-[380px] rounded-2xl overflow-hidden">
+              <Image
+                src="/custom-automation.webp"
+                alt="Custom Automation"
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            {/* Subtle Floating Glow */}
+            <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-primary/20 blur-3xl rounded-full opacity-40" />
+          </div>
+
         </div>
-
-        {/* Headline (Text color updated) */}
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 
-          text-textLight dark:text-textDark">
-          Need a Custom Automation?
-        </h2>
-
-        {/* Description (Text color updated) */}
-        <p className="text-lg mb-8 max-w-2xl mx-auto 
-          text-textLight/80 dark:text-textDark/80">
-          Cant find the exact workflow youre looking for? Our team can build a
-          bespoke automation tailored specifically to your business needs.
-        </p>
-
-        {/* Button (Framer Motion removed, standard hover effect added) */}
-        <Link href="/contact" passHref>
-          <div
-            className="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-full shadow-md text-lg 
-              transition duration-300 transform hover:scale-[1.05] hover:shadow-xl"
-          >
-            Request a Custom Build
-            <FiArrowRight className="ml-2" />
-          </div>
-        </Link>
       </div>
     </section>
   )

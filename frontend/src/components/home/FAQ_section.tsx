@@ -1,114 +1,134 @@
 "use client"
 
 import { useState } from "react"
-// Framer Motion removed from imports
 import {
-  FiZap,
-  FiShield,
-  FiUsers,
-  FiSettings,
-  FiCloud,
-  FiBarChart2,
-  FiMail,
-  FiTrendingUp,
   FiChevronDown
 } from "react-icons/fi"
 import Link from "next/link"
+import Image from "next/image"
 
 const faqs = [
-  { icon: <FiZap size={28} />, question: "What is taskzeno?", answer: "taskzeno is an automation platform that helps businesses streamline workflows and save time." },
-  { icon: <FiShield size={28} />, question: "Is it secure?", answer: "Yes! taskzeno uses enterprise-grade security to protect your data." },
-  { icon: <FiUsers size={28} />, question: "Who can use taskzeno?", answer: "Small to large businesses and freelancers can automate their workflows easily." },
-  { icon: <FiSettings size={28} />, question: "Does it require coding?", answer: "No coding required. taskzeno is user-friendly and intuitive for all users." },
-  { icon: <FiCloud size={28} />, question: "Which apps can I integrate?", answer: "Integrate with 100+ apps including CRMs, email, e-commerce, and project tools." },
-  { icon: <FiBarChart2 size={28} />, question: "Can I track analytics?", answer: "Yes! Real-time dashboards help you monitor performance with ease." },
-  { icon: <FiMail size={28} />, question: "Can I automate emails?", answer: "Yes! Automate marketing campaigns, reminders, and transactional messages." },
-  { icon: <FiTrendingUp size={28} />, question: "Is it scalable?", answer: "Absolutely! taskzeno grows with your business and workflow complexity." },
+  {
+    question: "What is taskzeno?",
+    answer:
+      "taskzeno is an automation platform that helps businesses streamline workflows and save time.",
+  },
+  {
+    question: "Is it secure?",
+    answer:
+      "Yes! taskzeno uses enterprise-grade security to protect your data.",
+  },
+  {
+    question: "Does it require coding?",
+    answer:
+      "No coding required. taskzeno is user-friendly and intuitive for all users.",
+  },
+  {
+    question: "Which apps can I integrate?",
+    answer:
+      "Integrate with 100+ apps including CRMs, email, e-commerce, and project tools.",
+  },
 ]
 
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
-  const toggleFAQ = (i: number) => {
-    setOpenIndex(openIndex === i ? null : i)
-  }
-
   return (
     <section className="pt-28 px-4 sm:px-6 max-w-7xl mx-auto">
-      <div className="grid md:grid-cols-2 gap-12 items-start">
-        {/* ---------- Left Side (Title + Subtitle) ---------- */}
-        <div className="space-y-6">
-          {/* H2 Theming */}
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight
-            text-textLight dark:text-textDark transition-colors duration-500">
-            Frequently <br className="hidden sm:block" /> Asked Questions
+      <div className="grid md:grid-cols-2 gap-16 ">
+
+         {/* -------- RIGHT SIDE (IMAGE) -------- */}
+        <div className="relative ">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-textLight dark:text-textDark">
+            Frequently Asked Questions
           </h2>
-          {/* Paragraph Theming */}
-          <p className="text-lg leading-relaxed max-w-md
-            text-textLight/70 dark:text-textDark/70 transition-colors duration-500">
-            Everything you need to know about <span className="text-primary font-semibold">taskzeno</span>.  
-            Learn how it helps automate workflows, integrate apps, and scale with your business. 
+
+          <p className="text-textLight/70 dark:text-textDark/70 mb-8">
+            Everything you need to know about taskzeno and how it helps automate
+            your business workflows efficiently.
           </p>
 
-          <div className="hidden md:block border-t border-textLight/10 dark:border-textDark/10 pt-6">
-            {/* Footer Text Theming */}
-            <p className="text-textLight/50 dark:text-textDark/50 text-sm transition-colors duration-500">
-              Need more help? Contact our support team anytime. 
-              <Link className="text-primary hover:text-secondary ml-1" href='/faq'>
-                All FAQ
-              </Link>
-            </p>
+          <Image
+            src="/faq.webp"
+            alt="FAQ Illustration"
+            width={500}
+            height={500}
+            className="relative w-full h-auto max-w-[450px] "
+          />
+          
+        </div>
+
+
+        {/* -------- LEFT SIDE -------- */}
+        <div>
+         
+          <div className="space-y-4">
+            {faqs.map((faq, i) => {
+              const isOpen = openIndex === i
+              return (
+                <div
+                  key={i}
+                  onClick={() =>
+                    setOpenIndex(openIndex === i ? null : i)
+                  }
+                  className={`
+                    rounded-xl border p-5 cursor-pointer
+                    transition-all duration-300
+                    bg-white dark:bg-neutral-900
+                    border-gray-200 dark:border-neutral-800
+                    ${isOpen ? "border-primary shadow-lg" : ""}
+                  `}
+                >
+                  <div className="flex justify-between items-center">
+                    <h3 className="font-medium text-lg">
+                      {faq.question}
+                    </h3>
+                    <FiChevronDown
+                      className={`transition-transform duration-300 ${
+                        isOpen ? "rotate-180" : ""
+                      }`}
+                      size={20}
+                    />
+                  </div>
+
+                  <div
+                    className={`
+                      overflow-hidden transition-all duration-500
+                      ${
+                        isOpen
+                          ? "max-h-40 opacity-100 mt-3"
+                          : "max-h-0 opacity-0"
+                      }
+                    `}
+                  >
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* ✨ Better Designed CTA */}
+          <div className="mt-8">
+            <Link
+              href="/faq"
+              className="
+                inline-flex items-center justify-center
+                px-6 py-3 rounded-full
+                text-sm font-semibold text-white
+                bg-gradient-to-r from-primary to-secondary
+                shadow-md transition-all duration-300
+                hover:shadow-xl hover:scale-105
+              "
+            >
+              View All FAQs →
+            </Link>
           </div>
         </div>
 
-        {/* ---------- Right Side (FAQ Accordion) ---------- */}
-        <div className="space-y-4">
-          {faqs.map((faq, i) => {
-            const isOpen = openIndex === i;
-            return (
-              // Framer Motion removed, standard div used
-              <div
-                key={i}
-                className={`
-                  rounded-2xl p-5 cursor-pointer transition-all duration-300 transform 
-                  
-                  /* Glassmorphism Theming */
-                  bg-lightBg/60 border border-textLight/10 dark:bg-darkBg/60 dark:border-textDark/10 
-                  hover:shadow-lg
-                  ${isOpen ? 'shadow-xl' : ''}
-                `}
-                onClick={() => toggleFAQ(i)}
-              >
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-4">
-                    <div className="text-primary">{faq.icon}</div>
-                    {/* Question Theming */}
-                    <h3 className="text-lg sm:text-xl font-semibold text-textLight dark:text-textDark">
-                      {faq.question}
-                    </h3>
-                  </div>
-                  <div
-                    className={`text-textLight/70 dark:text-textDark/70 transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
-                  >
-                    <FiChevronDown size={22} />
-                  </div>
-                </div>
-
-                {/* Answer Content (Using CSS max-height for accordion effect) */}
-                <div
-                  className={`
-                    mt-3 text-base leading-relaxed pl-12 pr-2 overflow-hidden transition-all duration-500 ease-in-out
-                    ${isOpen ? 'max-h-96 opacity-100 pt-2' : 'max-h-0 opacity-0'}
-                    /* Answer Text Theming */
-                    text-textLight/80 dark:text-textDark/80
-                  `}
-                >
-                  {faq.answer}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+       
       </div>
     </section>
   )

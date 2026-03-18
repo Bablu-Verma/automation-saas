@@ -1,5 +1,6 @@
 "use client"
 
+import SubHero from "@/components/SubHero"
 import { useState } from "react"
 // Framer Motion removed from imports
 import { FiSearch, FiChevronDown } from "react-icons/fi"
@@ -108,87 +109,82 @@ export default function FAQClient() {
   }
 
   return (
-    <section className="py-28 px-6 max-w-5xl mx-auto">
-      {/* Hero (Framer Motion removed) */}
-      <div
-        className="text-center mb-12"
-      >
-        {/* H1 Theming */}
-        <h1 className="text-4xl md:text-5xl font-extrabold 
-          text-textLight dark:text-textDark transition-colors duration-500">
-          Frequently Asked Questions
-        </h1>
-        {/* Paragraph Theming */}
-        <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto
-          text-textLight/80 dark:text-textDark/80 transition-colors duration-500">
-          Find answers to common questions about taskzeno. Use the search below to quickly find what you’re looking for.
-        </p>
-      </div>
+   <section className="py-28 px-6 max-w-6xl mx-auto">
 
-      {/* Search Input (Theming) */}
-      <div className="relative max-w-xl mx-auto mb-12">
-        {/* Icon Theming */}
-        <FiSearch className="absolute left-4 top-3.5 text-textLight/60 dark:text-textDark/60 text-xl" />
-      <input
-  type="text"
-  value={query}
-  onChange={e => setQuery(e.target.value)}
-  placeholder="Search FAQs..."
-  className="w-full pl-12 pr-4 py-3 rounded-full 
-    border-2 focus:ring-2 focus:ring-primary focus:outline-none transition
-    
-    /* Light Mode Input */
-    bg-lightBg/80 text-textLight border-textLight/20 placeholder-textLight/60
-    
-    /* Dark Mode Input: Full opacity text, softer placeholder */
-    dark:bg-darkBg/80 dark:border-textDark/20 dark:placeholder-textDark/50"
-/>
-      </div>
+  <SubHero 
+    title="Frequently Asked Questions" 
+    description="Find answers to common questions about taskzeno. Use the search below to quickly find what you’re looking for." 
+  />
 
-      {/* FAQ List */}
-      <div className="space-y-4">
-        {filteredFaqs.length > 0 ? (
-          filteredFaqs.map((faq, i) => (
-            // Framer Motion removed, standard div used with CSS hover effects
-            <div
-              key={i}
-              className={`
-                rounded-2xl shadow-lg overflow-hidden transition-all duration-300 transform 
-                
-                /* Glassmorphism Theming */
-                bg-lightBg/60 backdrop-blur-md border border-textLight/10
-                dark:bg-darkBg/60 dark:border-textDark/10
-              `}
-            >
-              <button
-                onClick={() => toggleFAQ(i)}
-                className="w-full flex justify-between items-center px-6 py-4 text-left font-semibold focus:outline-none
-                  text-textLight dark:text-textDark"
-              >
-               {i+1}. {" "} {faq.question}
-                <FiChevronDown
-                  className={`transition-transform duration-300 ${openIndex === i ? "rotate-180" : ""}`}
-                />
-              </button>
-              
-              {/* Answer Content (Using CSS max-height for accordion effect) */}
-              <div
-                className={`
-                  px-6 pb-4 text-base leading-relaxed pl-12 pr-2 overflow-hidden transition-all duration-500 ease-in-out
-                  ${openIndex === i ? 'max-h-96 opacity-100 pt-2' : 'max-h-0 opacity-0'}
-                  /* Answer Text Theming */
-                  text-textLight/80 dark:text-textDark/80
-                `}
-              >
+  {/* Search Bar */}
+  <div className="relative max-w-2xl mx-auto mt-12 mb-16">
+    <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
+
+    <input
+      type="text"
+      value={query}
+      onChange={e => setQuery(e.target.value)}
+      placeholder="Search your question..."
+      className="w-full pl-12 pr-6 py-4 rounded-full 
+        bg-white dark:bg-gray-900
+        border border-gray-200 dark:border-gray-700
+        shadow-sm
+        focus:ring-2 focus:ring-primary focus:border-primary
+        outline-none transition-all duration-300"
+    />
+  </div>
+
+  {/* FAQ List */}
+  <div className="space-y-6">
+    {filteredFaqs.length > 0 ? (
+      filteredFaqs.map((faq, i) => (
+        <div
+          key={i}
+          className="group rounded-2xl border border-gray-200 dark:border-gray-700 
+          bg-white dark:bg-gray-900
+          shadow-sm hover:shadow-xl transition-all duration-300"
+        >
+
+          {/* Question */}
+          <button
+            onClick={() => toggleFAQ(i)}
+            className="w-full flex justify-between items-center px-6 py-5 text-left"
+          >
+            <span className="text-lg font-semibold text-gray-800 dark:text-gray-100 group-hover:text-primary transition">
+              {i + 1}. {faq.question}
+            </span>
+
+            <FiChevronDown
+              className={`text-xl text-gray-500 transition-transform duration-300 ${
+                openIndex === i ? "rotate-180 text-primary" : ""
+              }`}
+            />
+          </button>
+
+          {/* Answer */}
+          <div
+            className={`grid transition-all duration-500 ease-in-out ${
+              openIndex === i
+                ? "grid-rows-[1fr] opacity-100"
+                : "grid-rows-[0fr] opacity-0"
+            }`}
+          >
+            <div className="overflow-hidden">
+              <p className="px-6 pb-6 text-gray-600 dark:text-gray-400 leading-relaxed">
                 {faq.answer}
-              </div>
+              </p>
             </div>
-          ))
-        ) : (
-          // No Results Theming
-          <p className="text-center text-textLight/70 dark:text-textDark/70">No results found for “{query}”</p>
-        )}
-      </div>
-    </section>
+          </div>
+
+        </div>
+      ))
+    ) : (
+      <p className="text-center text-gray-500 dark:text-gray-400">
+        No results found for “{query}”
+      </p>
+    )}
+  </div>
+
+</section>
   )
 }

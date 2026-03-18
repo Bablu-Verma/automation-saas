@@ -126,27 +126,22 @@ export default function AutomationDetailPage() {
   };
 
   // --- Theme Variables ---
-  const textPrimary = `text-textLight dark:text-textDark`;
-  const textSecondary = `text-textLight/70 dark:text-textDark/70`;
-  const textFaded = `text-textLight/50 dark:text-textDark/50`;
-  const textInfoPrimary = `text-textLight dark:text-textDark`; // Boldest info text
+const textPrimary = `text-textLight dark:text-textDark`;
+const textSecondary = `text-textLight/70 dark:text-textDark/70`;
+const textFaded = `text-textLight/50 dark:text-textDark/50`;
+const textInfoPrimary = `text-textLight dark:text-textDark`;
 
-  const cardClasses = `
-    rounded-2xl p-6 shadow-lg transition-colors duration-500
-    
-    /* Light Mode Glassmorphism */
-    bg-lightBg/80 backdrop-blur-lg border border-textLight/10
-    
-    /* Dark Mode Glassmorphism */
-    dark:bg-darkBg/80 dark:border-textDark/10
-  `;
-  const subCardClasses = `
-    p-3 rounded-xl transition-colors duration-300
-    /* Light Mode */
-    bg-lightBg/60 border border-textLight/10
-    /* Dark Mode */
-    dark:bg-darkBg/60 dark:border-textDark/10
-  `;
+const cardClasses = `
+  rounded-xl p-6
+  bg-lightBg dark:bg-darkBg
+  border border-textLight/10 dark:border-textDark/10
+`;
+
+const subCardClasses = `
+  p-4 rounded-lg
+  bg-lightBg dark:bg-darkBg
+  border border-textLight/10 dark:border-textDark/10
+`;
 
 
   if (loading)
@@ -274,7 +269,7 @@ export default function AutomationDetailPage() {
                 <span
                   key={index}
                   // Themed trigger tags (using primary brand color)
-                  className="px-3 py-1 text-xs tracking-wider font-medium capitalize rounded-full bg-primary/10 text-primary border border-primary/20 shadow-sm"
+                  className="px-3 py-1 text-xs tracking-wider font-medium capitalize rounded-full bg-primary/10 text-primary border border-primary/20 "
                 >
                   {trigger}
                 </span>
@@ -286,7 +281,7 @@ export default function AutomationDetailPage() {
         </div>
 
         {/* System Status Section */}
-        <div className={`${subCardClasses} mb-6`}>
+        <div className={` mb-6`}>
           <div className="grid md:grid-cols-2 gap-8 items-start">
             {/* Status Information */}
             <div className="space-y-4">
@@ -382,7 +377,7 @@ export default function AutomationDetailPage() {
           {['NEED_PAYMENT', 'EXPIRED', 'EXPIRE_SOON'].includes(automation.systemStatus) && (
             <Link
               href={`/dashboard/payment?id=${automation._id}`}
-              className="px-6 py-2 rounded-full font-semibold flex items-center gap-2 transition-colors duration-300 bg-primary hover:bg-secondary text-white shadow-md"
+              className="px-6 py-2 rounded-full font-semibold flex items-center gap-2 transition-colors duration-300 bg-primary hover:bg-secondary text-white "
             >
               Make Payment
             </Link>
@@ -392,7 +387,7 @@ export default function AutomationDetailPage() {
           {automation.systemStatus === 'CONTACT_SUPPORT' && (
             <Link
               href="/contact"
-              className="px-6 py-2 rounded-full font-semibold flex items-center gap-2 transition-colors duration-300 bg-purple-500 hover:bg-purple-600 text-white shadow-md"
+              className="px-6 py-2 rounded-full font-semibold flex items-center gap-2 transition-colors duration-300 bg-purple-500 hover:bg-purple-600 text-white "
             >
               Contact Support
             </Link>

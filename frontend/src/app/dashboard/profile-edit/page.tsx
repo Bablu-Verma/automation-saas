@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// Framer Motion removed from imports
 import { FiUser, FiPhone, FiMapPin, FiBriefcase, FiSave } from "react-icons/fi";
 import axios from "axios";
 import { user_profile_update_api } from "@/api";
@@ -11,7 +10,6 @@ import { IUser } from "@/types";
 import toast from "react-hot-toast";
 import { login } from "@/redux-store/slice/userSlice";
 import { setClientCookie } from "@/helpers/client";
-
 
 export default function EditProfile() {
   const dispatch = useDispatch();
@@ -27,8 +25,6 @@ export default function EditProfile() {
 
   const [loading, setLoading] = useState(false);
 
-
-  // 🔹 Prefill form with Redux user data
   useEffect(() => {
     if (user) {
       setForm({
@@ -60,127 +56,126 @@ export default function EditProfile() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // ✅ Send token
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      console.log(data)
-      dispatch(login({ user: data.user, token: data.token }))
-      setClientCookie("token", data.token, 60 * 24 * 5)
-      setClientCookie("user", JSON.stringify(data.user), 60 * 24 * 5)
+      dispatch(login({ user: data.user, token: data.token }));
+      setClientCookie("token", data.token, 60 * 24 * 5);
+      setClientCookie("user", JSON.stringify(data.user), 60 * 24 * 5);
+
       toast.success("Profile updated successfully");
-      
     } catch (err: any) {
-      console.error("Profile update failed:", err);
       toast.error("Failed to update profile");
     } finally {
       setLoading(false);
     }
   };
 
-
-  // --- Reusable Card Container Class (Glassmorphism) ---
+  // ✅ Simple container
   const cardClasses = `
-    rounded-2xl p-8 shadow-lg transition-colors duration-500
-    
-    /* Light Mode Glassmorphism */
-    bg-lightBg/80 backdrop-blur-md border border-textLight/10
-    
-    /* Dark Mode Glassmorphism */
-    dark:bg-darkBg/80 dark:border-textDark/10
+    p-6
+    border border-black/5 dark:border-white/10
+    rounded-xl
+    bg-lightBg dark:bg-darkBg
   `;
 
-  // --- Reusable Input Container Class (Themed input look) ---
-  const inputContainerClasses = `
-    flex items-center rounded-xl px-4 py-2 transition border border-textLight/20 dark:border-textDark/20
-    
-    /* Light Mode */
-    bg-lightBg/50 
-    
-    /* Dark Mode */
-    dark:bg-darkBg/50
-    focus-within:ring-2 focus-within:ring-primary
+  // ✅ Simple input wrapper
+  const inputContainer = `
+    flex items-center gap-2
+    border border-black/10 dark:border-white/10
+    rounded-md px-3 py-2
+    bg-transparent
   `;
 
-  // --- Reusable Input Field Class ---
-  const inputFieldClasses = `
-    bg-transparent outline-none flex-1 text-textLight dark:text-textDark placeholder-textLight/60 dark:placeholder-textDark/60
+  const inputField = `
+    flex-1 bg-transparent outline-none
+    text-sm text-textLight dark:text-textDark
+    placeholder:text-textLight/50 dark:placeholder:text-textDark/50
   `;
 
   const textPrimary = `text-textLight dark:text-textDark`;
-  const textSecondary = `text-textLight/80 dark:text-textDark/80`;
-
+  const textSecondary = `text-textLight/70 dark:text-textDark/70`;
 
   return (
-    <div className="max-w-3xl pt-16 mx-auto">
-      {/* Profile Card (Framer Motion removed) */}
-      <div
-        className={cardClasses}
-      >
-        <h1 className={`text-3xl font-extrabold mb-6 ${textPrimary}`}>Edit Profile</h1>
+    <div className="max-w-2xl mx-auto pt-12">
+      <div className={cardClasses}>
+
+        <h1 className={`text-2xl font-semibold mb-6 ${textPrimary}`}>
+          Edit Profile
+        </h1>
+
         <form onSubmit={handleSubmit} className="space-y-5">
-          
+
           {/* Name */}
           <div>
-            <label className={`block mb-2 font-semibold ${textSecondary}`}>Name</label>
-            <div className={inputContainerClasses}>
-              <FiUser className="text-secondary mr-2" />
+            <label className={`block mb-1 text-sm ${textSecondary}`}>
+              Name
+            </label>
+            <div className={inputContainer}>
+              <FiUser size={16} className="text-textLight/60 dark:text-textDark/60" />
               <input
                 type="text"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 placeholder="Your full name"
-                className={inputFieldClasses}
+                className={inputField}
               />
             </div>
           </div>
 
           {/* Company */}
           <div>
-            <label className={`block mb-2 font-semibold ${textSecondary}`}>Company</label>
-            <div className={inputContainerClasses}>
-              <FiBriefcase className="text-secondary mr-2" />
+            <label className={`block mb-1 text-sm ${textSecondary}`}>
+              Company
+            </label>
+            <div className={inputContainer}>
+              <FiBriefcase size={16} className="text-textLight/60 dark:text-textDark/60" />
               <input
                 type="text"
                 name="company"
                 value={form.company}
                 onChange={handleChange}
                 placeholder="Company name"
-                className={inputFieldClasses}
+                className={inputField}
               />
             </div>
           </div>
 
           {/* Phone */}
           <div>
-            <label className={`block mb-2 font-semibold ${textSecondary}`}>Phone Number</label>
-            <div className={inputContainerClasses}>
-              <FiPhone className="text-secondary mr-2" />
+            <label className={`block mb-1 text-sm ${textSecondary}`}>
+              Phone Number
+            </label>
+            <div className={inputContainer}>
+              <FiPhone size={16} className="text-textLight/60 dark:text-textDark/60" />
               <input
                 type="text"
                 name="phoneNumber"
                 value={form.phoneNumber}
                 onChange={handleChange}
                 placeholder="Your phone number"
-                className={inputFieldClasses}
+                className={inputField}
               />
             </div>
           </div>
 
           {/* Address */}
           <div>
-            <label className={`block mb-2 font-semibold ${textSecondary}`}>Address</label>
-            <div className={inputContainerClasses}>
-              <FiMapPin className="text-secondary mr-2" />
+            <label className={`block mb-1 text-sm ${textSecondary}`}>
+              Address
+            </label>
+            <div className={inputContainer}>
+              <FiMapPin size={16} className="text-textLight/60 dark:text-textDark/60" />
               <input
                 type="text"
                 name="address"
                 value={form.address}
                 onChange={handleChange}
                 placeholder="Your address"
-                className={inputFieldClasses}
+                className={inputField}
               />
             </div>
           </div>
@@ -189,14 +184,12 @@ export default function EditProfile() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 max-w-[350px] rounded-full mx-auto font-semibold flex items-center justify-center gap-2 transition hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-white shadow-lg ${
-              loading
-                ? "bg-gray-600"
-                : "bg-gradient-to-r from-primary to-secondary hover:shadow-2xl"
-            }`}
+            className="mt-4 px-5 py-2 rounded-md bg-primary text-white text-sm font-medium 
+              hover:opacity-90 disabled:opacity-50"
           >
-            <FiSave /> {loading ? "Saving..." : "Save Changes"}
+            {loading ? "Saving..." : "Save Changes"}
           </button>
+
         </form>
       </div>
     </div>

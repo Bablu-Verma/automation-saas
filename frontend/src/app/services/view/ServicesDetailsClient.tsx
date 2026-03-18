@@ -53,7 +53,7 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
     Number(discount) > 0 ? Math.round(price - (price * Number(discount)) / 100) : price;
 
   return (
-    <section className="py-28 px-4 sm:px-6 max-w-7xl mx-auto transition-colors duration-500">
+    <section className="pt-28 px-4 sm:px-6 max-w-7xl mx-auto transition-colors duration-500">
 
       {/* Hero Section */}
       <div className="flex flex-col lg:flex-row gap-12 mb-16">
@@ -159,117 +159,185 @@ export default function ServiceDetailsClient({ initialWorkflow }: ServiceDetails
         </div>
       )}
 
-      {/* DOCUMENTATION LINK */}
-      <div className="mt-10 sm:pl-4 ">
-        <a
-          target="_blank"
-          href={`/services/docs?id=${workflow._id}`}
-          className="text-primary text-base md:text-lg hover:text-secondary py-1 flex items-center gap-2 underline"
+      
+{showPricing && (
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex justify-center items-center z-[50] animate-fadeIn px-4">
+
+    <div className="relative w-full max-w-6xl max-h-[90vh] overflow-hidden rounded-3xl shadow-2xl 
+      bg-white dark:bg-darkBg border border-gray-200 dark:border-gray-700">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center px-8 py-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-primary/10 to-secondary/10">
+
+        <div>
+          <h2 className="text-3xl font-bold text-textLight dark:text-textDark">
+            Choose Your Plan
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Flexible pricing built for scaling businesses
+          </p>
+        </div>
+
+        <button
+          onClick={() => setShowPricing(false)}
+          className="w-10 h-10 flex items-center justify-center rounded-full 
+          bg-primary text-white hover:scale-110 transition shadow-lg"
         >
-          <span>Read documentation</span> <FiExternalLink />
-        </a>
+          <IoClose className="text-xl" />
+        </button>
       </div>
 
-      {/* PRICING MODAL */}
-      {showPricing && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-[20] animate-fadeIn">
-          <div className="relative bg-white dark:bg-darkBg p-6 rounded-2xl w-[92vw] max-w-5xl shadow-2xl">
+      {/* BODY */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-8 overflow-y-auto max-h-[75vh]">
 
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-textLight dark:text-textDark">
-                Pricing Plans
-              </h2>
+        {workflow.pricingPlans.map((plan: any, i: number) => {
 
-              <button
-                onClick={() => setShowPricing(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/90 hover:bg-primary transition  shadow-lg"
-              >
-                <IoClose className="text-xl" />
-              </button>
-            </div>
+          const original = plan.monthlyPrice;
+          const discount = plan.discountPercent || 0;
+          const offer = original > 0
+            ? Math.round(original - (original * discount) / 100)
+            : 0;
 
-            <div className="grid md:grid-cols-2 gap-4 max-h-[75vh] overflow-y-auto pr-1">
-              {workflow.pricingPlans.map((plan: any, i: number) => {
-                const original = plan.monthlyPrice;
-                const discount = plan.discountPercent || 0;
-                const offer = original > 0 ? Math.round(original - (original * discount) / 100) : 0;
+          const isPopular = i === 1; // you can change logic
 
-                return (
-                  <div
-                    key={i}
-                    className="border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm bg-white/80 dark:bg-black/30 backdrop-blur hover:shadow-md hover:border-primary/50 transition-all"
-                  >
-                    <p className="font-bold text-lg text-primary">{plan.planName}</p>
+          return (
+            <div
+              key={i}
+              className={`
+                relative rounded-2xl p-6 border transition-all duration-300
+                shadow-md hover:shadow-xl hover:-translate-y-1
+                ${isPopular
+                  ? "border-primary bg-primary/5 dark:bg-primary/10"
+                  : "border-gray-200 dark:border-gray-700 bg-white dark:bg-black/30"
+                }
+              `}
+            >
 
-                    {/* Offer Pricing */}
-                    <p className="text-gray-700 dark:text-gray-300 mt-1">
-                      {original === 0 ? (
-                        <span className="font-semibold">Free</span>
-                      ) : (
-                        <>
-                         <span className="line-through">₹{original}</span>
-                          
-                          {discount > 0 && (
-                            <>
-                             <span className="ml-2 font-semibold text-primary">₹{offer}</span>
-                              <span className="text-primary">/ month</span>
-                              <span className="ml-2 text-green-500 font-semibold">
-                                {discount}% OFF
-                              </span>
-                            </>
-                          )}                         
-                        </>
-                      )}
-                    </p>
+              {/* Popular Badge */}
+              {isPopular && (
+                <span className="absolute -top-3 left-6 bg-primary text-white text-xs px-3 py-1 rounded-full shadow">
+                  Most Popular
+                </span>
+              )}
 
-                    <p className="text-gray-700 dark:text-gray-300">
-                      Limit:{" "}
-                      <span className="font-medium">
-                        {plan.usageLimit === -1 ? "Unlimited" : plan.usageLimit}
+              {/* Plan Name */}
+              <h3 className="text-xl font-bold text-primary mb-2">
+                {plan.planName}
+              </h3>
+
+              {/* Pricing */}
+              <div className="mb-4">
+                {original === 0 ? (
+                  <span className="text-3xl font-bold text-green-500">
+                    Free
+                  </span>
+                ) : (
+                  <div className="flex items-end gap-2">
+                    {discount > 0 && (
+                      <span className="line-through text-gray-400 text-lg">
+                        ₹{original}
                       </span>
-                    </p>
-
-                    <p className="text-gray-700 dark:text-gray-300 mb-2">
-                      Validity: <span className="font-medium">{plan.validityDays} days</span>
-                    </p>
-
-                    {plan.features?.length > 0 && (
-                      <ul className="list-disc ml-5 text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                        {plan.features.map((f: string, idx: number) => (
-                          <li key={idx}>{f}</li>
-                        ))}
-                      </ul>
                     )}
+
+                    <span className="text-3xl font-bold text-textLight dark:text-textDark">
+                      ₹{offer}
+                    </span>
+
+                    <span className="text-sm text-gray-500 mb-1">
+                      /month
+                    </span>
                   </div>
-                );
-              })}
+                )}
+
+                {discount > 0 && (
+                  <p className="text-sm text-green-500 font-semibold mt-1">
+                    Save {discount}% today
+                  </p>
+                )}
+              </div>
+
+              {/* Plan Details */}
+              <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400 mb-5">
+                <p>
+                  <span className="font-medium text-textLight dark:text-textDark">
+                    Usage:
+                  </span>{" "}
+                  {plan.usageLimit === -1 ? "Unlimited" : plan.usageLimit}
+                </p>
+
+                <p>
+                  <span className="font-medium text-textLight dark:text-textDark">
+                    Validity:
+                  </span>{" "}
+                  {plan.validityDays} days
+                </p>
+              </div>
+
+              {/* Features */}
+              {plan.features?.length > 0 && (
+                <ul className="space-y-2 text-sm mb-6">
+                  {plan.features.map((f: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-2 text-gray-600 dark:text-gray-400">
+                      <span className="text-primary mt-1">✓</span>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+           
+
             </div>
-          </div>
-        </div>
-      )}
+          );
+        })}
+      </div>
+    </div>
+  </div>
+)}
 
       <Features />
       <AppIntegrationSlider />
 
-      {/* CTA */}
-      <section className="pt-28 px-6 text-center">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-textLight dark:text-textDark">
-          Need Help Getting Started?
-        </h2>
+      <section className="relative pt-28 pb-24 px-6 text-center ">
 
-        <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-textLight/80 dark:text-textDark/80">
-          Not sure where to begin? Our experts will guide you — from setup to scaling your automation smoothly.
-        </p>
+ 
 
-        <div className="mt-8">
-          <Link
-            href="/contact"
-            className="inline-block px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-2xl transition duration-300 hover:scale-105 text-lg"
-          >
-            Get Free Consultation
-          </Link>
-        </div>
-      </section>
+  <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-textLight dark:text-textDark">
+    Need Help Getting Started?
+  </h2>
+
+  <p className="mt-6 text-lg md:text-xl max-w-2xl mx-auto text-textLight/80 dark:text-textDark/80">
+    Not sure where to begin? Our experts will guide you — from setup to scaling your automation smoothly.
+  </p>
+
+  <div className="mt-10 flex flex-wrap items-center justify-center gap-5">
+
+   
+    <Link
+      href="/contact"
+      className="px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary 
+                 text-white font-semibold shadow-md hover:shadow-xl 
+                 transition duration-300 hover:scale-105"
+    >
+      Get Free Consultation
+    </Link>
+
+   
+    <Link
+      target="_blank"
+      href={`/services/docs?id=${workflow._id}`}
+      className="px-8 py-3 rounded-full border border-textLight/30 dark:border-textDark/30
+                 text-textLight dark:text-textDark font-semibold
+                 hover:bg-textLight/5 dark:hover:bg-textDark/5
+                 transition duration-300"
+    >
+      Read Docs
+    </Link>
+
+  </div>
+
+</section>
+     
     </section>
   );
 }

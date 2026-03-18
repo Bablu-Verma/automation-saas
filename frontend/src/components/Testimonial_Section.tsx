@@ -24,7 +24,6 @@ export default function Testimonials() {
         Hear From Our Happy Clients
       </h2>
 
-      {/* Paragraph Theming (Framer Motion removed) */}
       <p
         className="mt-6 text-lg max-w-2xl transition-colors duration-500
         text-textLight/70 dark:text-textDark/70"
@@ -47,46 +46,37 @@ export default function Testimonials() {
         className="mt-12 "
       >
         {testimonials.map((t, i) => (
-          <SwiperSlide key={i} className="p-2">
-            {/* Card Theming (Framer Motion removed, using CSS for scale effect) */}
-            <div
-              className="relative p-10 rounded-3xl flex flex-col items-center text-center 
-                transition-all duration-300 shadow-md
-                
-                /* Light Mode Glassmorphism */
-                bg-lightBg/60 backdrop-blur-xl border border-textLight/10 
-                
-                /* Dark Mode Glassmorphism */
-                dark:bg-darkBg/60 dark:border-textDark/10
-              "
-            >
-              {/* Client Image Border (Note: Tailwind doesn't have native border-gradient, so we use a simple border) */}
-              <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-primary shadow-lg">
-                <Image
-                  src={t.image}
-                  alt={t.name}
-                  width={96}
-                  height={96}
-                  className="object-cover w-full h-full"
-                />
-              </div>
+         <SwiperSlide key={i} className="p-3">
+   <div
+    className="p-6 rounded-2xl flex flex-col items-center text-center 
+    bg-lightBg dark:bg-darkBg 
+    border border-black/5 dark:border-white/10
+     transition-all duration-300"
+  >
+    
+    <div className="w-20 h-20 rounded-full overflow-hidden mb-4">
+      <Image
+        src={t.image}
+        alt={t.name}
+        width={80}
+        height={80}
+        className="object-cover w-full h-full"
+      />
+    </div>
 
-              {/* Text Theming */}
-              <p className="italic font-normal text-lg md:text-xl max-w-xl 
-                text-textLight/90 dark:text-textDark/90 line-clamp-3">
-                “{t.text}”
-              </p>
-              
-              {/* Name Theming */}
-              <h4 className="mt-6 font-semibold text-lg md:text-xl 
-                text-textLight dark:text-textDark">
-                {t.name}
-              </h4>
-              
-              {/* Decorative Bar (Gradient remains) */}
-              <div className="absolute top-4 w-12 h-1 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
-            </div>
-          </SwiperSlide>
+    {/* Text */}
+    <p className="italic text-base 
+      text-textLight/80 dark:text-textDark/80">
+      “{t.text}”
+    </p>
+
+    {/* Name */}
+    <h4 className="mt-4 text-sm font-thin
+      text-textLight dark:text-textDark">
+      {t.name}
+    </h4>
+  </div>
+</SwiperSlide>
         ))}
       </Swiper>
     </section>

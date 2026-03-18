@@ -6,6 +6,7 @@ import { ServiceCard } from "@/components/ServiceCard"
 import { search_api } from "@/api"
 import axios from "axios"
 import { Workflow__ } from "../admin/service/list/page" // Assuming the type import is correct
+import SubHero from "@/components/SubHero"
 
 export default function SearchPage() {
   const [query, setQuery] = useState("")
@@ -70,24 +71,11 @@ export default function SearchPage() {
   `;
 
   return (
-    <section className="py-28 px-6 max-w-7xl mx-auto">
-      {/* Header (Framer Motion removed) */}
-      <div
-        className="text-center mb-12"
-      >
-        {/* H1 Theming */}
-        <h1 className="text-4xl md:text-5xl font-extrabold 
-          text-textLight dark:text-textDark transition-colors duration-500">
-          Search Services
-        </h1>
-        {/* Paragraph Theming */}
-        <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto
-          text-textLight/80 dark:text-textDark/80 transition-colors duration-500">
-          Find the automation solution you need. Start typing to search.
-        </p>
-      </div>
-
-      {/* Search Input + Reset */}
+    <section className="py-28 px-6 max-w-7xl mx-auto bg-lightBg dark:bg-darkBg transition-colors duration-500">
+     
+      <SubHero title="Search Automation" description="Find the automation solution you need. Start typing to search." />
+      
+      
       <div className="max-w-2xl mx-auto flex items-center gap-3">
         <input
           type="text"

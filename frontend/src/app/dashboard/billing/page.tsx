@@ -172,11 +172,9 @@ export default function BillingRequests() {
 
   const cardClasses = `
     p-6 rounded-2xl shadow-lg transition-all duration-300 transform 
-    
-    /* Light Mode Glassmorphism */
+
     bg-lightBg/80 backdrop-blur-lg border border-textLight/10
     
-    /* Dark Mode Glassmorphism */
     dark:bg-darkBg/80 dark:border-textDark/10
     hover:shadow-[0_0_20px_rgba(230,82,31,0.2)] 
     
@@ -268,8 +266,7 @@ export default function BillingRequests() {
             currentPage={page}
             totalPages={totalPages}
             onPageChange={setPage}
-            showPageNumbers={true}
-            compact={false}
+            
           />
         </>
       )}

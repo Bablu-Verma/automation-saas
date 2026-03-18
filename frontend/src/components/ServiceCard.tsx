@@ -9,86 +9,112 @@ export type ServiceCardProps = {
 }
 
 export function ServiceCard({ workflows }: ServiceCardProps) {
+  const basePlan = workflows.pricingPlans.find(p => p.planName === "BASE")
+  const trialPlan = workflows.pricingPlans.find(p => p.planName === "TRIAL")
 
-  const basePlan = workflows.pricingPlans.find(p => p.planName === "BASE");
-  const trialPlan = workflows.pricingPlans.find(p => p.planName === "TRIAL");
+  const price = basePlan?.monthlyPrice || 0
+  const discount = basePlan?.discountPercent || 0
 
-  const price = basePlan?.monthlyPrice || 0;
-  const discount = basePlan?.discountPercent || 0;
-
-  const finalPrice = discount > 0 
-    ? Math.round(price - (price * discount) / 100)
-    : price;
+  const finalPrice =
+    discount > 0
+      ? Math.round(price - (price * discount) / 100)
+      : price
 
   return (
-
     <div
       className="
-        rounded-2xl overflow-hidden relative flex flex-col group 
-        transition-all duration-300 transform 
-        shadow-lg hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.01] 
-        
-        /* Light Mode */
-        bg-lightBg border-textLight/10 border
-        
-        /* Dark Mode */
-        dark:bg-darkBg dark:border-textDark/10
+        group rounded-2xl overflow-hidden border transition-all duration-300
+        bg-white border-gray-200 shadow-sm
+        dark:bg-neutral-900 dark:border-neutral-800
+        hover:shadow-lg hover:-translate-y-1
       "
     >
-      {/* Service Image */}
-      <div className="relative w-full h-48">
+      {/* Image */}
+      <div className="relative w-full h-48 overflow-hidden">
         <Image
           src={workflows.serviceImage || "/placeholder.png"}
           alt={workflows.name}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
+
+        {/* Subtle Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-70" />
+
+        {/* Discount Badge */}
+        {discount > 0 && (
+          <span className="absolute top-4 left-4 text-xs font-semibold bg-white text-primary px-3 py-1 rounded-full shadow">
+            {discount}% OFF
+          </span>
+        )}
       </div>
-      <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-xl text-left capitalize font-semibold mb-3 
-          text-textLight dark:text-textDark"
-        >
+
+      {/* Content */}
+      <div className="p-4 flex flex-col h-full">
+
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           {workflows.name}
         </h3>
-        <div className="flex justify-between items-center pb-6">
+
+        {/* Pricing */}
+        <div className="mt-4  flex items-end justify-between">
+
           <div>
-            {discount > 0 ? (
-              <>
-               <div className="flex justify-start items-center gap-2">
-               
-                <p className="text-xl md:text-2xl line-through text-gray-500">
-                  ₹{price}
-                </p>
-                 <p className="text-xl md:text-2xl font-bold text-primary">
-                  ₹{finalPrice}
-                  <span className="text-base font-medium text-textLight/70 dark:text-textDark/70"> /Month</span>
-                </p>
-               </div>
-                <span className="text-xs absolute top-2 left-2 font-semibold bg-green-500 text-white px-2 py-1 rounded-full">
-                  {discount}% OFF
-                </span>
-              </>
-            ) : (
-              <p className="text-xl md:text-2xl text-primary">
+            {discount > 0 && (
+              <p className="text-base line-through text-gray-400">
                 ₹{price}
-                <span className="text-base font-medium text-textLight/70 dark:text-textDark/70"> /Month</span>
               </p>
             )}
+
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">
+              ₹{finalPrice}
+              <span className="text-base font-medium text-gray-500 dark:text-gray-400">
+                {" "} /month
+              </span>
+            </p>
           </div>
-          <p className="text-base text-gray-500">
-            <span className="font-semibold">
-              {trialPlan?.validityDays || 7} days free trial
-            </span>
+
+          <p className="text-base text-gray-500 dark:text-gray-400">
+            {trialPlan?.validityDays || 7} days trial
           </p>
         </div>
-        <Link
-          href={`/services/view?id=${workflows.slug}`}
-          className="inline-block w-fit px-5 py-2 rounded-full text-sm font-semibold 
-            bg-gradient-to-r from-primary to-secondary text-white 
-            shadow hover:shadow-lg transition transform hover:scale-[1.03]">
-          Learn More
-        </Link>
 
+       <div className="mt-6 flex items-center gap-3">
+
+  {/* Primary Button */}
+  <Link
+    href={`/services/view?id=${workflows.slug}`}
+    className="
+      inline-flex items-center justify-center
+      px-7 py-2.5 rounded-full
+      text-sm font-semibold text-white
+      bg-gradient-to-r from-primary to-secondary
+      shadow-md transition-all duration-300
+      hover:shadow-lg hover:scale-[1.03]
+      active:scale-[0.98]
+    "
+  >
+    Learn More
+  </Link>
+
+  {/* Secondary Button */}
+  <a
+   target="_blank"
+    href={`/services/docs?id=${workflows._id}`}
+    className="
+      inline-flex items-center justify-center
+      px-7 py-2.5 rounded-full
+      text-sm font-semibold
+      border border-primary text-primary
+      transition-all duration-300
+      hover:bg-primary/10
+      dark:hover:bg-primary/20
+    "
+  >
+    View Docs
+  </a>
+
+</div>
       </div>
     </div>
   )
