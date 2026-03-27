@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 /* === 🎨 Global Style ==== */
+
 :root {
   /* Main brand colors */
   --primary: #E6521F;
@@ -17,7 +18,10 @@
   /* Universal selection color */
   --selection-bg: rgba(230, 82, 31, 0.25);
   --selection-text: #E6521F;
+
+
 }
+
 
 body {
   @apply min-h-screen;

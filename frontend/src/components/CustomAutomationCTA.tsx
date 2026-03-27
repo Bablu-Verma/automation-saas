@@ -6,7 +6,7 @@ import { FiArrowRight, FiMessageSquare } from "react-icons/fi"
 
 export default function CustomAutomationCTA() {
   return (
-    <section className="relative pt-24 px-4">
+    <section className="relative py-24 px-4">
 
       {/* Soft Background Glow */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 blur-3xl opacity-40" />
@@ -40,8 +40,8 @@ export default function CustomAutomationCTA() {
 
             {/* Description */}
             <p className="mt-6 text-lg text-gray-600 dark:text-gray-400">
-              Can’t find the exact workflow you’re looking for? 
-              Our team can build a bespoke automation tailored specifically 
+              Can’t find the exact workflow you’re looking for?
+              Our team can build a bespoke automation tailored specifically
               to your business needs.
             </p>
 
